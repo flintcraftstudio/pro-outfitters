@@ -1,0 +1,47 @@
+package view
+
+import (
+	"fmt"
+	"time"
+)
+
+templ AdminDashboard(displayName string, inquiriesThisMonth, unrespondedCount int, lastInquiryAt *time.Time) {
+	@AdminBase("Dashboard", displayName, dashboardBody(inquiriesThisMonth, unrespondedCount, lastInquiryAt))
+}
+
+templ dashboardBody(inquiriesThisMonth, unrespondedCount int, lastInquiryAt *time.Time) {
+	@adminPageHeading("Dashboard", "What's new since you last checked in.")
+	<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+		@statCard("Inquiries this month", fmt.Sprintf("%d", inquiriesThisMonth), "")
+		@statCard("Awaiting response", fmt.Sprintf("%d", unrespondedCount), "/admin/inquiries?filter=unresponded")
+		if lastInquiryAt != nil {
+			@statCard("Last inquiry", lastInquiryAt.Format("Jan 2, 3:04pm"), "")
+		} else {
+			@statCard("Last inquiry", "—", "")
+		}
+	</div>
+	<div class="mt-10 flex flex-wrap gap-3 text-[13px]">
+		<a
+			href="/admin/inquiries"
+			class="rounded-sm border border-ff-border2 bg-ff-panel px-5 py-2.5 text-ff-cream transition hover:border-ff-stone"
+		>View inbox</a>
+		<a
+			href="/admin/settings"
+			class="rounded-sm border border-ff-border2 bg-ff-panel px-5 py-2.5 text-ff-cream transition hover:border-ff-stone"
+		>Edit site settings</a>
+	</div>
+}
+
+templ statCard(label, value, href string) {
+	if href != "" {
+		<a href={ templ.SafeURL(href) } class="block rounded border border-ff-border2 bg-ff-panel p-5 transition hover:border-ff-stone">
+			<div class="text-[11px] font-medium uppercase tracking-[0.12em] text-ff-stone">{ label }</div>
+			<div class="mt-2 font-display text-[28px] font-medium text-ff-paper">{ value }</div>
+		</a>
+	} else {
+		<div class="rounded border border-ff-border2 bg-ff-panel p-5">
+			<div class="text-[11px] font-medium uppercase tracking-[0.12em] text-ff-stone">{ label }</div>
+			<div class="mt-2 font-display text-[28px] font-medium text-ff-paper">{ value }</div>
+		</div>
+	}
+}

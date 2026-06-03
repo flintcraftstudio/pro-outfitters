@@ -1,0 +1,134 @@
+package view
+
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/flintcraftstudio/standard-template/internal/store"
+)
+
+templ AdminInquiries(displayName string, filter store.InquiryFilter, items []store.InquiryListItem) {
+	@AdminBase("Inquiries", displayName, inquiriesBody(filter, items))
+}
+
+templ inquiriesBody(filter store.InquiryFilter, items []store.InquiryListItem) {
+	@adminPageHeading("Inquiries", "Submissions from the public contact form.")
+	<div class="mb-6 flex flex-wrap gap-2 text-[12px]">
+		@filterTab("All", "all", filter)
+		@filterTab("Unresponded", "unresponded", filter)
+		@filterTab("Responded", "responded", filter)
+		@filterTab("Archived", "archived", filter)
+	</div>
+	if len(items) == 0 {
+		<div class="rounded border border-ff-border2 bg-ff-panel p-8 text-center">
+			<p class="text-[13px] text-ff-stone">No inquiries match this filter.</p>
+		</div>
+	} else {
+		<ul class="divide-y divide-ff-border2 overflow-hidden rounded border border-ff-border2 bg-ff-panel">
+			for _, it := range items {
+				@inquiryRow(it)
+			}
+		</ul>
+	}
+}
+
+templ filterTab(label string, value string, current store.InquiryFilter) {
+	if string(current) == value || (current == "" && value == "all") {
+		<a
+			href={ templ.SafeURL("/admin/inquiries?filter=" + value) }
+			class="rounded-sm border border-ff-stone bg-ff-dark px-3 py-1.5 font-medium uppercase tracking-[0.12em] text-ff-paper"
+		>{ label }</a>
+	} else {
+		<a
+			href={ templ.SafeURL("/admin/inquiries?filter=" + value) }
+			class="rounded-sm border border-ff-border2 bg-ff-panel px-3 py-1.5 font-medium uppercase tracking-[0.12em] text-ff-stone hover:text-ff-cream"
+		>{ label }</a>
+	}
+}
+
+templ inquiryRow(it store.InquiryListItem) {
+	<li>
+		<a href={ templ.SafeURL("/admin/inquiries/" + strconv.FormatInt(it.ID, 10)) } class="flex items-start justify-between gap-4 px-5 py-4 transition hover:bg-ff-dark/40">
+			<div class="min-w-0 flex-1">
+				<div class="flex items-center gap-2 text-[13px]">
+					<span class="font-medium text-ff-paper">{ it.Name }</span>
+					<span class="text-ff-stone">{ it.Email }</span>
+					if it.Subject != "" {
+						<span class="text-ff-stone">·</span>
+						<span class="text-ff-stone">{ it.Subject }</span>
+					}
+				</div>
+				<p class="mt-1 truncate text-[13px] text-ff-stone">{ it.Preview }</p>
+			</div>
+			<div class="flex shrink-0 items-center gap-2 text-[11px] uppercase tracking-[0.12em]">
+				if it.Archived {
+					<span class="rounded-sm border border-ff-border2 px-2 py-0.5 text-ff-stone">Archived</span>
+				} else if it.Responded {
+					<span class="rounded-sm border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-emerald-400">Responded</span>
+				} else {
+					<span class="rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-400">New</span>
+				}
+				<span class="text-ff-stone">{ it.CreatedAt.Format("Jan 2") }</span>
+			</div>
+		</a>
+	</li>
+}
+
+templ AdminInquiryDetail(displayName string, inq store.Inquiry) {
+	@AdminBase(fmt.Sprintf("Inquiry #%d", inq.ID), displayName, inquiryDetailBody(inq))
+}
+
+templ inquiryDetailBody(inq store.Inquiry) {
+	<div class="mb-6">
+		<a href="/admin/inquiries" class="text-[12px] uppercase tracking-[0.12em] text-ff-stone hover:text-ff-paper">← Back to inbox</a>
+	</div>
+	<div class="rounded border border-ff-border2 bg-ff-panel p-6">
+		<div class="flex flex-wrap items-start justify-between gap-4">
+			<div>
+				<div class="text-[11px] font-medium uppercase tracking-[0.12em] text-ff-stone">Inquiry #{ strconv.FormatInt(inq.ID, 10) }</div>
+				<h2 class="mt-1 font-display text-[24px] font-medium tracking-tight text-ff-paper">{ inq.Name }</h2>
+				<p class="text-[13px] text-ff-stone">{ inq.Email }</p>
+				if inq.Phone.Valid && inq.Phone.String != "" {
+					<p class="text-[13px] text-ff-stone">{ inq.Phone.String }</p>
+				}
+				if inq.Subject != "" {
+					<p class="mt-2 text-[13px] text-ff-cream">Subject: { inq.Subject }</p>
+				}
+			</div>
+			<div class="text-right text-[12px] text-ff-stone">
+				{ inq.CreatedAt.Format("Jan 2, 2006 · 3:04 pm") }
+			</div>
+		</div>
+		<hr class="my-5 border-ff-border2"/>
+		<div class="whitespace-pre-wrap text-[14px] leading-relaxed text-ff-cream">{ inq.Message }</div>
+		<hr class="my-5 border-ff-border2"/>
+		<div class="flex flex-wrap gap-2 text-[12px]">
+			@inquiryActions(inq)
+		</div>
+	</div>
+}
+
+templ inquiryActions(inq store.Inquiry) {
+	if inq.RespondedAt.Valid {
+		<form method="post" action={ templ.SafeURL("/admin/inquiries/" + strconv.FormatInt(inq.ID, 10) + "/unrespond") }>
+			<button type="submit" class="rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2 uppercase tracking-[0.12em] text-ff-stone hover:text-ff-cream">Mark unresponded</button>
+		</form>
+	} else {
+		<form method="post" action={ templ.SafeURL("/admin/inquiries/" + strconv.FormatInt(inq.ID, 10) + "/respond") }>
+			<button type="submit" class="rounded-sm border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 uppercase tracking-[0.12em] text-emerald-400 hover:bg-emerald-500/20">Mark responded</button>
+		</form>
+	}
+	<a
+		href={ templ.SafeURL("mailto:" + inq.Email + "?subject=Re: your message") }
+		class="rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2 uppercase tracking-[0.12em] text-ff-cream hover:border-ff-stone"
+	>Reply by email</a>
+	if inq.ArchivedAt.Valid {
+		<form method="post" action={ templ.SafeURL("/admin/inquiries/" + strconv.FormatInt(inq.ID, 10) + "/unarchive") }>
+			<button type="submit" class="rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2 uppercase tracking-[0.12em] text-ff-stone hover:text-ff-cream">Unarchive</button>
+		</form>
+	} else {
+		<form method="post" action={ templ.SafeURL("/admin/inquiries/" + strconv.FormatInt(inq.ID, 10) + "/archive") } onsubmit="return confirm('Archive this inquiry?')">
+			<button type="submit" class="rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2 uppercase tracking-[0.12em] text-ff-stone hover:text-ff-cream">Archive</button>
+		</form>
+	}
+}

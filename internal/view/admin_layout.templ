@@ -1,0 +1,53 @@
+package view
+
+templ AdminBase(title, displayName string, body templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en" class="bg-ff-dark text-ff-cream">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="robots" content="noindex, nofollow"/>
+			<title>{ title } | { SiteName } admin</title>
+			<link rel="stylesheet" href="/static/css/site.css"/>
+			<script src="/static/js/htmx.min.js" defer></script>
+		</head>
+		<body class="min-h-screen font-body text-[15px] font-light antialiased">
+			@adminNav(displayName)
+			<main class="mx-auto max-w-6xl px-6 py-8 sm:px-12">
+				@body
+			</main>
+		</body>
+	</html>
+}
+
+templ adminNav(displayName string) {
+	<header class="border-b border-ff-border2 bg-ff-panel">
+		<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-12">
+			<div class="flex items-center gap-6">
+				<a href="/admin" class="font-display text-[18px] font-medium tracking-tight text-ff-paper">
+					{ SiteName }
+				</a>
+				<nav class="flex items-center gap-4 text-[13px] text-ff-stone">
+					<a href="/admin" class="hover:text-ff-paper">Dashboard</a>
+					<a href="/admin/inquiries" class="hover:text-ff-paper">Inquiries</a>
+					<a href="/admin/settings" class="hover:text-ff-paper">Settings</a>
+				</nav>
+			</div>
+			<div class="flex items-center gap-4 text-[13px]">
+				<span class="text-ff-stone">{ displayName }</span>
+				<form method="post" action="/logout">
+					<button type="submit" class="text-ff-stone hover:text-ff-paper">Sign out</button>
+				</form>
+			</div>
+		</div>
+	</header>
+}
+
+templ adminPageHeading(title, subtitle string) {
+	<div class="mb-8">
+		<h1 class="font-display text-[28px] font-medium tracking-tight text-ff-paper">{ title }</h1>
+		if subtitle != "" {
+			<p class="mt-1 text-[13px] text-ff-stone">{ subtitle }</p>
+		}
+	</div>
+}

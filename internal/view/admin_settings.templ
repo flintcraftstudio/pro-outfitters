@@ -1,0 +1,78 @@
+package view
+
+// SettingsFormData carries the form state for the admin settings page —
+// the input values, validation errors, and a "saved" flag the handler
+// flips after a successful POST to drive the green confirmation banner.
+type SettingsFormData struct {
+	Saved        bool
+	Errors       map[string]string
+	ContactEmail string
+	ContactPhone string
+	Tagline      string
+}
+
+templ AdminSettings(displayName string, data SettingsFormData) {
+	@AdminBase("Settings", displayName, settingsBody(data))
+}
+
+templ settingsBody(data SettingsFormData) {
+	@adminPageHeading("Settings", "Public-site values you can change without a redeploy.")
+	if data.Saved {
+		<div class="mb-6 rounded border border-emerald-500/40 bg-emerald-500/10 p-3">
+			<p class="text-[13px] text-emerald-400">Saved.</p>
+		</div>
+	}
+	<form method="post" action="/admin/settings" class="max-w-xl space-y-5 rounded border border-ff-border2 bg-ff-panel p-6">
+		if data.Errors["form"] != "" {
+			<div class="rounded border border-red-500/40 bg-red-500/10 p-3">
+				<p class="text-[13px] text-red-400">{ data.Errors["form"] }</p>
+			</div>
+		}
+		<div>
+			<label for="contact_email" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Contact email</label>
+			<p class="mb-2 text-[12px] text-ff-stone">Where new contact-form notifications get delivered.</p>
+			<input
+				type="email"
+				id="contact_email"
+				name="contact_email"
+				value={ data.ContactEmail }
+				class="w-full rounded-sm border border-ff-border2 bg-ff-dark px-4 py-2.5 text-[15px] font-light text-ff-cream outline-none transition focus:border-[#5b7ec473]"
+			/>
+			if data.Errors["contact_email"] != "" {
+				<p class="mt-1 text-[11px] text-red-400">{ data.Errors["contact_email"] }</p>
+			}
+		</div>
+		<div>
+			<label for="contact_phone" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Contact phone</label>
+			<p class="mb-2 text-[12px] text-ff-stone">Optional. Shown publicly if set.</p>
+			<input
+				type="tel"
+				id="contact_phone"
+				name="contact_phone"
+				value={ data.ContactPhone }
+				class="w-full rounded-sm border border-ff-border2 bg-ff-dark px-4 py-2.5 text-[15px] font-light text-ff-cream outline-none transition focus:border-[#5b7ec473]"
+			/>
+		</div>
+		<div>
+			<label for="tagline" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Tagline</label>
+			<p class="mb-2 text-[12px] text-ff-stone">Short subtitle shown beneath the site name. Up to 200 characters.</p>
+			<input
+				type="text"
+				id="tagline"
+				name="tagline"
+				value={ data.Tagline }
+				maxlength="200"
+				class="w-full rounded-sm border border-ff-border2 bg-ff-dark px-4 py-2.5 text-[15px] font-light text-ff-cream outline-none transition focus:border-[#5b7ec473]"
+			/>
+			if data.Errors["tagline"] != "" {
+				<p class="mt-1 text-[11px] text-red-400">{ data.Errors["tagline"] }</p>
+			}
+		</div>
+		<button
+			type="submit"
+			class="rounded-sm bg-ff-dusk px-[26px] py-[13px] text-[12px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-ff-dusk-hover active:scale-[0.98]"
+		>
+			Save changes
+		</button>
+	</form>
+}

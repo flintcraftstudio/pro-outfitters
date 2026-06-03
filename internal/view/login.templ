@@ -1,0 +1,108 @@
+package view
+
+templ LoginPage(errMsg, email string) {
+	@Base("Sign in", "Admin sign-in.", loginContent(errMsg, email))
+}
+
+templ loginContent(errMsg, email string) {
+	<section class="flex min-h-screen items-center justify-center px-6 py-12">
+		<div class="w-full max-w-sm">
+			<div class="mb-6 text-center">
+				<h1 class="font-display text-[28px] font-medium tracking-tight text-ff-paper">{ SiteName }</h1>
+				<p class="mt-1 text-[13px] text-ff-stone">Admin sign-in</p>
+			</div>
+			<div class="rounded border border-ff-border2 bg-ff-panel p-6">
+				@LoginForm(errMsg, email)
+			</div>
+		</div>
+	</section>
+}
+
+templ LoginForm(errMsg, email string) {
+	<form hx-post="/login" hx-swap="outerHTML" class="space-y-5">
+		if errMsg != "" {
+			<div class="rounded border border-red-500/40 bg-red-500/10 p-3">
+				<p class="text-[13px] text-red-400">{ errMsg }</p>
+			</div>
+		}
+		<p class="text-[13px] text-ff-stone">
+			Enter your email and we'll send you a one-time sign-in link.
+		</p>
+		<div>
+			<label for="email" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Email</label>
+			<input
+				type="email"
+				id="email"
+				name="email"
+				value={ email }
+				required
+				autocomplete="email"
+				class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
+			/>
+		</div>
+		<button
+			type="submit"
+			class="w-full rounded-sm bg-ff-dusk px-[26px] py-[13px] text-[12px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-ff-dusk-hover active:scale-[0.98]"
+		>
+			Email me a sign-in link
+		</button>
+	</form>
+}
+
+templ LoginPageConfirmation(email string) {
+	@Base("Check your email", "Check your email for a sign-in link.", confirmationContent(email))
+}
+
+templ confirmationContent(email string) {
+	<section class="flex min-h-screen items-center justify-center px-6 py-12">
+		<div class="w-full max-w-sm">
+			<div class="mb-6 text-center">
+				<h1 class="font-display text-[28px] font-medium tracking-tight text-ff-paper">{ SiteName }</h1>
+				<p class="mt-1 text-[13px] text-ff-stone">Admin sign-in</p>
+			</div>
+			<div class="rounded border border-ff-border2 bg-ff-panel p-6">
+				@LoginCheckEmail(email)
+			</div>
+		</div>
+	</section>
+}
+
+templ LoginCheckEmail(email string) {
+	<div class="space-y-3">
+		<p class="text-[15px] font-medium text-ff-paper">Check your inbox.</p>
+		<p class="text-[13px] text-ff-stone">
+			If <span class="text-ff-cream">{ email }</span> is registered, a sign-in link is on its way. The link is good for 15 minutes.
+		</p>
+		<p class="text-[13px] text-ff-stone">
+			Didn't receive it? Check spam, or
+			<a href="/login" class="text-ff-paper underline-offset-4 hover:underline">try again</a>.
+		</p>
+	</div>
+}
+
+templ LoginLinkInvalid() {
+	@Base("Sign-in link expired", "The sign-in link is no longer valid.", invalidLinkContent())
+}
+
+templ invalidLinkContent() {
+	<section class="flex min-h-screen items-center justify-center px-6 py-12">
+		<div class="w-full max-w-sm">
+			<div class="mb-6 text-center">
+				<h1 class="font-display text-[28px] font-medium tracking-tight text-ff-paper">{ SiteName }</h1>
+				<p class="mt-1 text-[13px] text-ff-stone">Admin sign-in</p>
+			</div>
+			<div class="rounded border border-ff-border2 bg-ff-panel p-6 space-y-4">
+				<p class="text-[15px] font-medium text-ff-paper">This link isn't valid anymore.</p>
+				<p class="text-[13px] text-ff-stone">
+					Sign-in links expire after 15 minutes and only work once. Request a fresh one to continue.
+				</p>
+				<a
+					href="/login"
+					class="block w-full rounded-sm bg-ff-dusk px-[26px] py-[13px] text-center text-[12px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-ff-dusk-hover"
+				>
+					Back to sign-in
+				</a>
+			</div>
+		</div>
+	</section>
+}
