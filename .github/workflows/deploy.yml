@@ -43,13 +43,28 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
 
+    env:
+      # Directory on the VPS containing docker-compose.yml. Override with a
+      # VPS_APP_DIR secret; defaults to where the first deploy landed.
+      APP_DIR: ${{ secrets.VPS_APP_DIR || '/opt/pro-outfitters' }}
+
     steps:
       - name: Deploy to VPS
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh -o StrictHostKeyChecking=no \
+
+          # Pipe the registry token over stdin so it never lands in the
+          # remote process args. The remote shell reads it as $TOKEN, logs
+          # in to ghcr, pulls the freshly-pushed image, and recreates the
+          # container. Pruning drops the now-dangling old image.
+          echo "${{ secrets.GITHUB_TOKEN }}" | ssh -o StrictHostKeyChecking=no \
               -i ~/.ssh/deploy_key \
               ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-              "echo deployed"
+              "TOKEN=\$(cat) && \
+               echo \"\$TOKEN\" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin && \
+               cd ${{ env.APP_DIR }} && \
+               docker compose pull && \
+               docker compose up -d --force-recreate && \
+               docker image prune -f"
