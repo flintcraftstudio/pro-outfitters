@@ -1,12 +1,80 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   ::selection {
-    background: rgba(91, 126, 196, 0.35);
-    color: #edf0f7;
+    background: rgba(63, 97, 117, 0.22);
+    color: #1a1815;
+  }
+}
+
+@layer components {
+  /* ---- Sticky nav: transparent over hero → paper blur once scrolled --- */
+  .po-nav {
+    transition: background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    border-bottom: 1px solid transparent;
+  }
+  /* state: over hero — light text on imagery */
+  .po-nav[data-state="top"] {
+    color: #f3eee5;
+  }
+  .po-nav[data-state="top"] .po-nav-link {
+    color: #f3eee5;
+  }
+  /* state: scrolled — translucent paper backdrop, ink text */
+  .po-nav[data-state="scrolled"] {
+    background: rgba(250, 247, 241, 0.86);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: #e4ddd0;
+    color: #1a1815;
+  }
+  .po-nav[data-state="scrolled"] .po-nav-link {
+    color: #423d36;
+  }
+  /* Over the hero, the nav CTA is a quiet outline so the hero's own filled
+     primary is the single, unmistakable call to action. Once scrolled onto
+     paper the nav CTA returns to its default filled-ink primary. */
+  .po-nav[data-state="top"] .po-btn-primary {
+    background: transparent;
+    color: #f3eee5;
+    border-color: rgba(243, 238, 229, 0.5);
+  }
+  .po-nav[data-state="top"] .po-btn-primary:hover {
+    background: rgba(243, 238, 229, 0.1);
+    border-color: #f3eee5;
+    color: #f3eee5;
+  }
+
+  /* ---- Gentle reveal on scroll-in ------------------------------------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

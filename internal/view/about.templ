@@ -1,0 +1,52 @@
+package view
+
+templ AboutPage() {
+	@Base("About", "Pro Outfitters has guided anglers and hunters through Montana since 1970 — owner-operated, conservation-minded, and built on five decades of earned access.", aboutContent())
+}
+
+templ aboutContent() {
+	@subpageHeader("Since 1970", "Five decades on Montana water", "")
+	<section class="bg-po-paper py-[clamp(2.5rem,6vh,4rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="max-w-measure">
+				<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Pro Outfitters has been guiding anglers and hunters through Montana since 1970. The premise then is the premise now: great fishing and hunting come down to choices, and we make those choices easy. Exceptional guides, chef-prepared meals, and lodging that balances comfort with a real connection to the country you came to see.</p>
+				<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">A trip is an investment in what you value — friendship, family, the quiet of wild places. Every Pro lodge is owner-operated and involved in keeping the waters we fish and the lands we hunt healthy for the next season and the next generation. We aim to offer an authentic taste of the Montana before.</p>
+			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[0.85fr_1.15fr]">
+				<div>
+					<img src="/static/img/about-brandon.jpg" alt="Brandon Boedecker, owner of Pro Outfitters" class="aspect-[4/5] w-full rounded-sm object-cover"/>
+				</div>
+				<div class="max-w-measure">
+					@eyebrow("The owner", "gold")
+					<h2 class="my-4 font-display text-[clamp(1.9rem,3.6vw,2.6rem)] font-normal leading-[1.15] tracking-[-0.015em] text-po-ink">Meet Brandon Boedecker</h2>
+					<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">A guide for 27 years and the owner of Pro Outfitters for the last 20. You'll find him rowing boats on the Smith through spring and summer, and chasing wild birds behind his dogs at Sharptail Lodge come fall.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal mb-[clamp(2.5rem,5vw,3.5rem)]">
+				@sectionHead("The team", "The people you'll meet")
+			</div>
+			<div class="grid gap-x-[clamp(2rem,5vw,4rem)] gap-y-10 md:grid-cols-2">
+				for _, m := range Team {
+					@teamMember(m)
+				}
+			</div>
+		</div>
+	</section>
+	@closingInquiry()
+}
+
+templ teamMember(m TeamMember) {
+	<div class="reveal border-t border-po-border pt-6">
+		<h3 class="font-display text-[1.4rem] font-medium leading-[1.2] text-po-ink">{ m.Name }</h3>
+		@eyebrow(m.Role, "gold")
+		<p class="mt-3 max-w-measure text-[1rem] leading-[1.6] text-po-gray">{ m.Bio }</p>
+	</div>
+}

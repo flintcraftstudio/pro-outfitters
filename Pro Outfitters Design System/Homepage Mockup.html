@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pro Outfitters — Montana, the way it was meant to be fished</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================== TOKENS (inlined for portability) ============================== */
+:root{
+  --paper:#FAF7F1; --paper-deep:#F3EEE4; --surface:#FEFCF8;
+  --ink:#1A1815; --ink-soft:#423D36; --gray:#6E665B; --gray-light:#9A9285;
+  --border:#E4DDD0; --border-strong:#CFC6B6;
+  --accent:#3F6175; --accent-deep:#2E4B5C; --accent-wash:#DCE7ED;
+  --gold:#A58F58; --gold-deep:#8A7745;
+  --on-dark:#F3EEE5; --on-dark-soft:#C9C2B5; --ground-dark:#14120F;
+  --font-display:'Newsreader',Georgia,serif;
+  --font-sans:'Libre Franklin',system-ui,sans-serif;
+  --tracking-eyebrow:0.18em; --tracking-tight:-0.015em;
+  --container:75rem; --measure:38rem;
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ============================== PRIMITIVES ============================== */
+.container{max-width:var(--container);margin:0 auto;padding:0 clamp(1.5rem,5vw,4rem)}
+.eyebrow{font-size:.8125rem;font-weight:600;text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);color:var(--gray-light)}
+.eyebrow--gold{color:var(--gold-deep)}
+.eyebrow--light{color:var(--on-dark-soft)}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:var(--tracking-tight);line-height:1.12}
+.lead{font-family:var(--font-display);font-weight:300;font-size:clamp(1.25rem,2.1vw,1.5rem);line-height:1.5;color:var(--ink-soft)}
+.gold-rule{width:46px;height:1px;background:var(--gold);border:0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-sans);font-size:.875rem;font-weight:600;letter-spacing:.05em;
+  border-radius:2px;cursor:pointer;transition:all .18s var(--ease-out);border:1px solid transparent;white-space:nowrap}
+.btn--primary{background:var(--ink);color:var(--on-dark);border-color:var(--ink);padding:.95rem 1.7rem}
+.btn--primary:hover{background:var(--gold-deep);border-color:var(--gold-deep)}
+.btn--ghost{background:transparent;color:var(--on-dark);border-color:rgba(243,238,229,.45);padding:.95rem 1.7rem}
+.btn--ghost:hover{border-color:var(--on-dark);background:rgba(243,238,229,.08)}
+.btn--secondary{background:transparent;color:var(--ink);border-color:var(--border-strong);padding:.95rem 1.7rem}
+.btn--secondary:hover{border-color:var(--ink)}
+.link-arrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.8125rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--accent)}
+.link-arrow svg{transition:transform .25s var(--ease-out)}
+.link-arrow:hover svg{transform:translateX(4px)}
+.link-arrow span{border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .2s}
+.link-arrow:hover span{border-bottom-color:currentColor}
+
+/* photographic placeholder */
+.photo{position:relative;overflow:hidden;background:linear-gradient(155deg,#7c8a82 0%,#4b5a55 45%,#2f3c39 100%);isolation:isolate}
+.photo[data-tone="warm"]{background:linear-gradient(150deg,#caa86f 0%,#9c7c52 40%,#5d4e3a 100%)}
+.photo[data-tone="river"]{background:linear-gradient(160deg,#8fa1a3 0%,#5d7176 45%,#3a4a4d 100%)}
+.photo[data-tone="field"]{background:linear-gradient(150deg,#bcae84 0%,#8a8259 45%,#54513a 100%)}
+.photo[data-tone="dusk"]{background:linear-gradient(165deg,#9a8f7e 0%,#5e564b 40%,#23201b 100%)}
+.photo .cap{position:absolute;left:1.1rem;bottom:1rem;z-index:2;font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.photo .cap::before{content:"";display:inline-block;width:18px;height:1px;background:rgba(255,255,255,.7);margin-right:.55rem;vertical-align:middle}
+
+/* ============================== NAV ============================== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s var(--ease-out),box-shadow .35s var(--ease-out),border-color .35s var(--ease-out);border-bottom:1px solid transparent}
+.nav__inner{max-width:var(--container);margin:0 auto;padding:1.15rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.wordmark{display:inline-flex;flex-direction:column;gap:.28rem;line-height:1}
+.wordmark .top{font-family:var(--font-display);font-size:1.3rem;font-weight:500;letter-spacing:.05em}
+.wordmark .rule{display:flex;align-items:center;gap:.5rem;width:100%}
+.wordmark .rule .ln{flex:1;height:1px;background:var(--gold)}
+.wordmark .rule .est{font-family:var(--font-sans);font-size:.5rem;font-weight:600;letter-spacing:.22em;color:var(--gold-deep);white-space:nowrap}
+.nav__links{display:flex;align-items:center;gap:2.1rem}
+.nav__links a{font-size:.875rem;font-weight:500;letter-spacing:.01em;position:relative;padding:.2rem 0;transition:color .2s}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:currentColor;transition:width .25s var(--ease-out)}
+.nav__links a:hover::after{width:100%}
+.nav__right{display:flex;align-items:center;gap:1.6rem}
+/* state: over hero (transparent, light text) */
+.nav[data-state="top"]{color:var(--on-dark)}
+.nav[data-state="top"] .wordmark .rule .est,.nav[data-state="top"] .wordmark .rule .ln{filter:none}
+.nav[data-state="top"] .est{color:var(--gold)}
+.nav[data-state="top"] .btn--primary{background:var(--on-dark);color:var(--ink);border-color:var(--on-dark)}
+.nav[data-state="top"] .btn--primary:hover{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+/* state: scrolled (paper blur, ink text) */
+.nav[data-state="scrolled"]{background:rgba(250,247,241,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--border);color:var(--ink)}
+.nav__toggle{display:none;background:none;border:0;color:inherit;cursor:pointer}
+
+/* ============================== HERO ============================== */
+.hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;color:var(--on-dark);isolation:isolate}
+.hero .photo{position:absolute;inset:0;z-index:0}
+.hero__scrim{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(16,14,11,.42) 0%,rgba(16,14,11,.08) 30%,rgba(16,14,11,.20) 62%,rgba(16,14,11,.72) 100%)}
+.hero__inner{position:relative;z-index:2;width:100%;padding-bottom:clamp(3rem,7vh,6rem);padding-top:8rem}
+.hero h1{font-size:clamp(2.9rem,6.4vw,5.6rem);line-height:1.02;max-width:16ch;color:var(--on-dark);text-wrap:balance}
+.hero .lead{color:var(--on-dark-soft);max-width:46ch;margin-top:1.6rem}
+.hero__actions{margin-top:2.4rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.hero__credential{margin-bottom:1.6rem}
+
+/* ============================== SECTION RHYTHM ============================== */
+section{position:relative}
+.band{padding-block:clamp(5rem,11vh,10rem)}
+.band--alt{background:var(--paper-deep)}
+.band--dark{background:var(--ground-dark);color:var(--on-dark)}
+.section-head{max-width:var(--measure)}
+.section-head .eyebrow{margin-bottom:1.1rem}
+.section-head .gold-rule{margin-bottom:1.4rem}
+.section-head h2{font-size:clamp(2.1rem,4.4vw,3.25rem)}
+
+/* STORY teaser — asymmetric */
+.story{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2.5rem,6vw,6rem);align-items:center}
+.story__media{position:relative}
+.story__media .photo{aspect-ratio:4/5}
+.story__media .tag{position:absolute;top:-1px;left:-1px;background:var(--paper);padding:.7rem 1rem;font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep)}
+.story__body h2{font-size:clamp(2rem,4vw,3rem);margin:1.2rem 0 1.6rem;max-width:18ch}
+.story__body p{max-width:46ch;margin-bottom:1.4rem}
+
+/* EXPERIENCES — two equal */
+.exp{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,3vw,2.5rem)}
+.exp__card{display:flex;flex-direction:column}
+.exp__card .photo{aspect-ratio:5/4}
+.exp__card .body{padding-top:1.5rem}
+.exp__card .body .eyebrow{margin-bottom:.7rem}
+.exp__card h3{font-size:clamp(1.6rem,2.6vw,2.1rem);margin-bottom:.7rem}
+.exp__card p{font-size:1.0625rem;max-width:40ch;margin-bottom:1.2rem;color:var(--gray)}
+
+/* LODGES */
+.lodges__head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.lodge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.25rem,2.5vw,2rem)}
+.lodge{background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .3s var(--ease-out),transform .4s var(--ease-out)}
+.lodge:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+.lodge .photo{aspect-ratio:4/3}
+.lodge:hover .photo{}
+.lodge .body{padding:1.6rem 1.5rem 1.7rem}
+.lodge .meta{display:flex;gap:1rem;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:.8rem}
+.lodge .meta span{position:relative;padding-right:1rem}
+.lodge .meta span:not(:last-child)::after{content:"";position:absolute;right:0;top:50%;width:1px;height:11px;background:var(--border-strong);transform:translateY(-50%)}
+.lodge h3{font-size:1.4rem;margin-bottom:.6rem}
+.lodge p{font-size:.9375rem;line-height:1.55;color:var(--gray);margin-bottom:1.2rem}
+
+/* CREDIBILITY band */
+.cred{display:grid;grid-template-columns:auto 1fr;gap:clamp(2.5rem,6vw,6rem);align-items:center}
+.cred__statement{max-width:24ch}
+.cred__statement .eyebrow{color:var(--on-dark-soft);margin-bottom:1rem}
+.cred__statement p{font-family:var(--font-display);font-weight:300;font-size:clamp(1.4rem,2.4vw,1.9rem);line-height:1.35;color:var(--on-dark)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat{padding:0 clamp(1rem,2.2vw,2rem);border-left:1px solid rgba(243,238,229,.16)}
+.stat:first-child{padding-left:0;border-left:0}
+.stat .n{font-family:var(--font-display);font-weight:300;font-size:clamp(2.4rem,4vw,3.4rem);line-height:1;color:var(--on-dark)}
+.stat .c{font-size:.75rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--on-dark-soft);margin-top:.9rem;line-height:1.4}
+
+/* STEWARDSHIP */
+.steward{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(2.5rem,6vw,6rem);align-items:center}
+.steward__media .photo{aspect-ratio:1/1}
+.steward__body{max-width:44ch}
+.steward__body h2{font-size:clamp(1.9rem,3.6vw,2.8rem);margin:1.2rem 0 1.5rem;max-width:16ch}
+.steward__body p{margin-bottom:1.3rem}
+.steward__partners{display:flex;gap:2rem;align-items:center;margin-top:2rem;padding-top:1.6rem;border-top:1px solid var(--border)}
+.partner{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+
+/* TESTIMONIAL */
+.quote-band{text-align:center}
+.quote-band .container{max-width:54rem}
+.quote-band blockquote{font-family:var(--font-display);font-weight:300;font-style:italic;font-size:clamp(1.7rem,3.6vw,2.9rem);line-height:1.32;letter-spacing:-.01em;color:var(--ink);text-wrap:balance}
+.quote-band .mark{font-family:var(--font-display);font-size:5rem;line-height:0;color:var(--gold);height:2.2rem;display:block;margin-bottom:1rem}
+.quote-band cite{display:block;margin-top:2rem;font-style:normal;font-size:.8125rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--gray-light)}
+
+/* CLOSING CTA */
+.closing{position:relative;color:var(--on-dark);text-align:center;overflow:hidden}
+.closing{isolation:isolate}
+.closing .photo{position:absolute;inset:0;z-index:0}
+.closing__scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(16,14,11,.66),rgba(16,14,11,.78))}
+.closing .inner{position:relative;z-index:2;padding-block:clamp(6rem,14vh,11rem)}
+.closing h2{font-size:clamp(2.3rem,5vw,4rem);color:var(--on-dark);max-width:18ch;margin:1.2rem auto 1.6rem;text-wrap:balance}
+.closing p{color:var(--on-dark-soft);max-width:40ch;margin:0 auto 2.4rem}
+.closing__actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* FOOTER */
+.footer{background:var(--ground-dark);color:var(--on-dark-soft);padding-block:clamp(3.5rem,7vh,5.5rem)}
+.footer__top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2.5rem;padding-bottom:3rem;border-bottom:1px solid rgba(243,238,229,.12)}
+.footer .wordmark .top{color:var(--on-dark)}
+.footer__brand p{font-size:.9375rem;color:var(--on-dark-soft);max-width:32ch;margin-top:1.4rem}
+.footer h4{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-light);margin-bottom:1.2rem;font-family:var(--font-sans)}
+.footer ul{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.footer ul a{font-size:.9375rem;color:var(--on-dark-soft);transition:color .2s}
+.footer ul a:hover{color:var(--on-dark)}
+.footer__contact a{display:flex;gap:.6rem;align-items:flex-start;font-size:.9375rem;color:var(--on-dark-soft);margin-bottom:.8rem;transition:color .2s}
+.footer__contact a:hover{color:var(--on-dark)}
+.footer__contact svg{flex:0 0 auto;margin-top:3px;opacity:.7}
+.footer__bottom{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;padding-top:2rem;flex-wrap:wrap}
+.footer__affil{display:flex;gap:1.6rem;align-items:center;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-light)}
+.footer__affil .gmark{color:var(--gold)}
+.footer__social{display:flex;gap:1rem}
+.footer__social a{width:38px;height:38px;border:1px solid rgba(243,238,229,.2);border-radius:2px;display:flex;align-items:center;justify-content:center;color:var(--on-dark-soft);transition:all .2s}
+.footer__social a:hover{border-color:var(--gold);color:var(--gold)}
+.footer__legal{font-size:.8125rem;color:var(--gray-light)}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+/* ============================== RESPONSIVE ============================== */
+@media (max-width:920px){
+  .story,.exp,.cred,.steward,.footer__top{grid-template-columns:1fr}
+  .lodge-grid{grid-template-columns:1fr 1fr}
+  .cred{gap:2.5rem}
+  .stats{gap:0}
+  .nav__links{display:none}
+}
+@media (max-width:600px){
+  .nav__links{display:none}
+  .nav__toggle{display:inline-flex}
+  .lodge-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr;gap:1.5rem 0}
+  .stat{padding:1.2rem 0 0;border-left:0;border-top:1px solid rgba(243,238,229,.16)}
+  .stat:first-child,.stat:nth-child(2){border-top:0;padding-top:0}
+  .footer__top{grid-template-columns:1fr 1fr}
+  .hero__actions{flex-direction:column;align-items:stretch}
+  .hero__actions .btn{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================== NAV ============================== -->
+<nav class="nav" id="nav" data-state="top">
+  <div class="nav__inner">
+    <a href="#top" class="wordmark" aria-label="Pro Outfitters, established 1970">
+      <span class="top">PRO&nbsp;OUTFITTERS</span>
+      <span class="rule"><span class="ln"></span><span class="est">EST. 1970</span><span class="ln"></span></span>
+    </a>
+    <div class="nav__links">
+      <a href="#fishing">Fly Fishing</a>
+      <a href="#hunting">Bird Hunting</a>
+      <a href="#lodges">The Lodges</a>
+      <a href="#stewardship">Stewardship</a>
+    </div>
+    <div class="nav__right">
+      <a href="#plan" class="btn btn--primary">Plan Your Trip</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================== HERO ============================== -->
+<header class="hero" id="top">
+  <div class="photo" data-tone="dusk" data-shot></div>
+  <div class="hero__scrim"></div>
+  <div class="hero__inner container">
+    <p class="eyebrow eyebrow--light hero__credential">Est. 1970&nbsp;&nbsp;·&nbsp;&nbsp;Orvis-Endorsed&nbsp;&nbsp;·&nbsp;&nbsp;Montana</p>
+    <h1>Montana, the way it was meant to be fished.</h1>
+    <p class="lead">Owner-operated since 1970. Guided float trips, upland wingshooting, and three lodges on water worth protecting.</p>
+    <div class="hero__actions">
+      <a href="#plan" class="btn btn--primary">Plan Your Trip</a>
+      <a href="#story" class="btn btn--ghost">Our Story</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== STORY TEASER ============================== -->
+<section class="band band--alt" id="story">
+  <div class="container">
+    <div class="story reveal">
+      <div class="story__media">
+        <div class="photo" data-tone="warm" data-shot="Archival — the founding camp on the Missouri, early 1970s"></div>
+        <span class="tag">Since 1970</span>
+      </div>
+      <div class="story__body">
+        <p class="eyebrow eyebrow--gold">Owner-operated</p>
+        <h2>An authentic taste of Montana before.</h2>
+        <p>We've spent fifty years earning access to water most people never see — and learning when to leave it alone. What began as one guide and one drift boat is still run by the family that started it.</p>
+        <p>No call centers. No franchised veneer. The person who plans your week is the person you'll meet at the put-in.</p>
+        <a href="#story" class="link-arrow"><span>Read our story</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== EXPERIENCES ============================== -->
+<section class="band" id="experiences">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom:clamp(2.5rem,5vw,4rem)">
+      <hr class="gold-rule">
+      <p class="eyebrow">Two ways to spend a Montana day</p>
+      <h2>Fly fishing &amp; bird hunting.</h2>
+    </div>
+    <div class="exp">
+      <article class="exp__card reveal" id="fishing">
+        <div class="photo" data-tone="river" data-shot="Drift boat on the Missouri, golden hour"></div>
+        <div class="body">
+          <p class="eyebrow eyebrow--gold">Fly Fishing</p>
+          <h3>Trout water, read by people who live on it.</h3>
+          <p>Wade and float the Missouri, the Blackfoot, and tailwaters that fish all season. Guides who'll tell you the truth about the hatch.</p>
+          <a href="#fishing" class="link-arrow"><span>Explore fly fishing</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+        </div>
+      </article>
+      <article class="exp__card reveal" id="hunting">
+        <div class="photo" data-tone="field" data-shot="Dogs on point, autumn prairie"></div>
+        <div class="body">
+          <p class="eyebrow eyebrow--gold">Bird Hunting</p>
+          <h3>Upland miles behind a good dog.</h3>
+          <p>Sharptail, Hun, and pheasant over big country. Mornings that start in frost and end with the truck a long, satisfied walk away.</p>
+          <a href="#hunting" class="link-arrow"><span>Explore wingshooting</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== THE LODGES ============================== -->
+<section class="band band--alt" id="lodges">
+  <div class="container">
+    <div class="lodges__head reveal">
+      <div class="section-head" style="margin-bottom:0">
+        <hr class="gold-rule">
+        <p class="eyebrow">The Lodges</p>
+        <h2>Three places to wake up on the water.</h2>
+      </div>
+      <a href="#lodges" class="link-arrow" style="margin-bottom:.6rem"><span>All lodges</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+    </div>
+    <div class="lodge-grid">
+      <article class="lodge reveal">
+        <div class="photo" data-tone="dusk" data-shot="North Fork Crossing"></div>
+        <div class="body">
+          <div class="meta"><span>Est. 1992</span><span>Missouri River</span></div>
+          <h3>North Fork Crossing Lodge</h3>
+          <p>Tailwater out the front door and a long porch built for the end of the day.</p>
+          <a href="#lodges" class="link-arrow"><span>Explore</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+        </div>
+      </article>
+      <article class="lodge reveal">
+        <div class="photo" data-tone="field" data-shot="Sharptail Lodge"></div>
+        <div class="body">
+          <div class="meta"><span>Est. 2004</span><span>Upland country</span></div>
+          <h3>Sharptail Lodge</h3>
+          <p>Prairie at the doorstep and kennels by the mudroom. Built around the hunt.</p>
+          <a href="#lodges" class="link-arrow"><span>Explore</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+        </div>
+      </article>
+      <article class="lodge reveal">
+        <div class="photo" data-tone="river" data-shot="The Yurt at Craig"></div>
+        <div class="body">
+          <div class="meta"><span>Est. 2015</span><span>Craig, MT</span></div>
+          <h3>The Yurt at Craig</h3>
+          <p>A spare, quiet base steps from the river — for anglers who want nothing between them and the water.</p>
+          <a href="#lodges" class="link-arrow"><span>Explore</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 17 17 7M17 7H9M17 7v8"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CREDIBILITY BAND ============================== -->
+<section class="band band--dark">
+  <div class="container">
+    <div class="cred reveal">
+      <div class="cred__statement">
+        <p class="eyebrow eyebrow--light">Earned, not advertised</p>
+        <p>Half a century on the same rivers tends to show.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">1970</div><div class="c">Established</div></div>
+        <div class="stat"><div class="n">50+</div><div class="c">Seasons guided</div></div>
+        <div class="stat"><div class="n">3</div><div class="c">Owner-run lodges</div></div>
+        <div class="stat"><div class="n">Orvis</div><div class="c">Endorsed outfitter</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== STEWARDSHIP ============================== -->
+<section class="band" id="stewardship">
+  <div class="container">
+    <div class="steward reveal">
+      <div class="steward__media">
+        <div class="photo" data-tone="river" data-shot="Releasing a wild trout"></div>
+      </div>
+      <div class="steward__body">
+        <p class="eyebrow eyebrow--gold">Stewardship</p>
+        <h2>You can't sell a river twice.</h2>
+        <p>The water that makes a trip worth taking is the same water we intend to hand to the next fifty years. We fish like we plan to keep it.</p>
+        <p>We partner with Trout Unlimited on habitat and cold-water restoration across the watersheds we guide, and we limit the days we run so the rivers never feel crowded.</p>
+        <div class="steward__partners">
+          <span class="partner">Trout Unlimited partner</span>
+          <span class="partner">Catch &amp; release waters</span>
+          <span class="partner">Limited daily access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TESTIMONIAL ============================== -->
+<section class="band band--alt quote-band">
+  <div class="container reveal">
+    <span class="mark">&ldquo;</span>
+    <blockquote>The fishing was extraordinary. But what I remember is how quiet it was — like we'd been let in on something the rest of the country forgot.</blockquote>
+    <cite>— Guest, North Fork Crossing · returning since 2016</cite>
+  </div>
+</section>
+
+<!-- ============================== CLOSING CTA ============================== -->
+<section class="closing" id="plan">
+  <div class="photo" data-tone="dusk" data-shot></div>
+  <div class="closing__scrim"></div>
+  <div class="inner container">
+    <p class="eyebrow eyebrow--light">Plan your trip</p>
+    <h2>Tell us what kind of week you're after.</h2>
+    <p>Every trip is planned by hand. Share your dates and what you're hoping for, and one of the family will be in touch.</p>
+    <div class="closing__actions">
+      <a href="#plan" class="btn btn--primary">Begin an Inquiry</a>
+      <a href="tel:+14065550170" class="btn btn--ghost">Call the lodge</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#top" class="wordmark">
+          <span class="top">PRO&nbsp;OUTFITTERS</span>
+          <span class="rule"><span class="ln"></span><span class="est">EST. 1970</span><span class="ln"></span></span>
+        </a>
+        <p>Owner-operated fly fishing &amp; bird hunting in Montana. Orvis-endorsed since the rivers were quieter.</p>
+      </div>
+      <div>
+        <h4>Experiences</h4>
+        <ul>
+          <li><a href="#fishing">Fly Fishing</a></li>
+          <li><a href="#hunting">Bird Hunting</a></li>
+          <li><a href="#lodges">The Lodges</a></li>
+          <li><a href="#stewardship">Stewardship</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#plan">Plan a Trip</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">Rates &amp; Seasons</a></li>
+        </ul>
+      </div>
+      <div class="footer__contact">
+        <h4>Contact</h4>
+        <a href="tel:+14065550170"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg><span>(406) 555-0170</span></a>
+        <a href="mailto:trips@prooutfitters.com"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span>trips@prooutfitters.com</span></a>
+        <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Craig, Montana</span></a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__affil">
+        <span class="gmark">Orvis-Endorsed Outfitter</span>
+        <span>Trout Unlimited Partner</span>
+      </div>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.5 7a2.8 2.8 0 0 0-2-2C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 1 12a29 29 0 0 0 .5 5 2.8 2.8 0 0 0 2 2c1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-5 29 29 0 0 0-.5-5Z"/><path d="m10 15 5-3-5-3Z" fill="currentColor"/></svg></a>
+      </div>
+      <p class="footer__legal">© 1970–2026 Pro Outfitters, Montana. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav: transparent over hero, paper-blur once scrolled past the fold.
+  (function(){
+    var nav = document.getElementById('nav');
+    var hero = document.querySelector('.hero');
+    function onScroll(){
+      var threshold = hero ? hero.offsetHeight - 90 : 120;
+      nav.dataset.state = window.scrollY > threshold ? 'scrolled' : 'top';
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+  })();
+
+  // Gentle reveal on scroll-in
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });
+    },{threshold:.16, rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  })();
+</script>
+</body>
+</html>

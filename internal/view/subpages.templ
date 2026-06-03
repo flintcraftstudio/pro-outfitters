@@ -1,0 +1,60 @@
+package view
+
+// detailHero — a full-bleed image hero for interior pages. Marked
+// data-hero so the nav sits transparent (light) over it, then turns to
+// paper-blur once scrolled past.
+templ detailHero(eyebrowLabel, headline, img, alt string) {
+	<header data-hero class="relative isolate flex min-h-[68vh] items-end text-po-on-dark">
+		<img src={ "/static/img/" + img } alt={ alt } class="absolute inset-0 -z-10 h-full w-full object-cover"/>
+		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.40)_0%,rgba(16,14,11,0.10)_35%,rgba(16,14,11,0.30)_70%,rgba(16,14,11,0.78)_100%)]"></div>
+		<div class="mx-auto w-full max-w-container px-6 pb-[clamp(2.5rem,6vh,5rem)] pt-32 sm:px-12">
+			@eyebrow(eyebrowLabel, "light")
+			<h1 class="mt-5 max-w-[18ch] text-balance font-display text-[clamp(2.4rem,5.4vw,4.5rem)] font-normal leading-[1.05] tracking-[-0.015em] text-po-on-dark">{ headline }</h1>
+		</div>
+	</header>
+}
+
+// detailBlock — the bordered label → value spec sheet on lodge/trip pages.
+templ detailBlock(items []DetailItem) {
+	<div class="rounded-sm border border-po-border bg-po-surface p-7">
+		<dl class="flex flex-col gap-5">
+			for i, it := range items {
+				<div
+					if i > 0 {
+						class="border-t border-po-border pt-5"
+					}
+				>
+					<dt class="mb-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.13em] text-po-gold-deep">{ it.Label }</dt>
+					<dd class="text-[1.0625rem] leading-[1.5] text-po-ink-soft">{ it.Value }</dd>
+				</div>
+			}
+		</dl>
+	</div>
+}
+
+// gallery — a simple two-up photo grid.
+templ gallery(images []GalleryImage) {
+	<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2">
+		for _, im := range images {
+			<img src={ "/static/img/" + im.Src } alt={ im.Alt } class="aspect-[4/3] w-full rounded-sm object-cover"/>
+		}
+	</div>
+}
+
+// closingInquiry — the reusable dark "Plan your trip" band for the bottom
+// of interior pages.
+templ closingInquiry() {
+	<section class="relative isolate overflow-hidden text-center text-po-on-dark">
+		<img src="/static/img/fishing-alt1.jpg" alt="A Montana river at golden hour" class="absolute inset-0 -z-10 h-full w-full object-cover"/>
+		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.66),rgba(16,14,11,0.80))]"></div>
+		<div class="mx-auto max-w-container px-6 py-[clamp(5rem,12vh,9rem)] sm:px-12">
+			@eyebrow("Plan your trip", "light")
+			<h2 class="mx-auto my-5 max-w-[18ch] text-balance font-display text-[clamp(2.1rem,4.5vw,3.5rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-on-dark">The best trips start with a conversation.</h2>
+			<p class="mx-auto mb-10 max-w-[40ch] text-po-on-dark-soft">Tell us a little about what you're hoping for — the water or the birds, your dates, your group — and we'll help you put the right trip together.</p>
+			<div class="flex flex-wrap justify-center gap-4">
+				@btnPrimary("Plan Your Trip", "/contact")
+				@btnGhost("Call the office", BrandPhoneHref)
+			</div>
+		</div>
+	</section>
+}

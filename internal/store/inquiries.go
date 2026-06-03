@@ -16,15 +16,18 @@ import (
 // The rest of the app only checks .Valid on these fields (to show
 // status badges and filter tabs); the exact moment is never read.
 type Inquiry struct {
-	ID          int64
-	Name        string
-	Email       string
-	Phone       sql.NullString
-	Subject     string
-	Message     string
-	RespondedAt sql.NullString
-	ArchivedAt  sql.NullString
-	CreatedAt   time.Time
+	ID             int64
+	Name           string
+	Email          string
+	Phone          sql.NullString
+	Subject        string
+	Message        string
+	Interest       string
+	PreferredDates string
+	GroupSize      string
+	RespondedAt    sql.NullString
+	ArchivedAt     sql.NullString
+	CreatedAt      time.Time
 }
 
 type InquiryInput struct {
@@ -33,6 +36,11 @@ type InquiryInput struct {
 	Phone   string
 	Subject string
 	Message string
+	// Pro Outfitters "Plan Your Trip" fields. Empty for submissions from
+	// a plain contact form.
+	Interest       string
+	PreferredDates string
+	GroupSize      string
 }
 
 // InquiryFilter picks which subset of inquiries the inbox returns.
@@ -54,14 +62,17 @@ var ErrInquiryNotFound = errors.New("inquiry not found")
 
 func (s *Store) CreateInquiry(ctx context.Context, in InquiryInput) (int64, error) {
 	res, err := s.db.ExecContext(ctx, `
-		INSERT INTO inquiries (name, email, phone, subject, message)
-		VALUES (?, ?, ?, ?, ?)
+		INSERT INTO inquiries (name, email, phone, subject, message, interest, preferred_dates, group_size)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	`,
 		strings.TrimSpace(in.Name),
 		strings.TrimSpace(in.Email),
 		nullableText(in.Phone),
 		strings.TrimSpace(in.Subject),
 		in.Message,
+		strings.TrimSpace(in.Interest),
+		strings.TrimSpace(in.PreferredDates),
+		strings.TrimSpace(in.GroupSize),
 	)
 	if err != nil {
 		return 0, err
@@ -135,10 +146,12 @@ func (s *Store) GetInquiry(ctx context.Context, id int64) (*Inquiry, error) {
 	var createdStr string
 	err := s.db.QueryRowContext(ctx, `
 		SELECT id, name, email, phone, subject, message,
+		       interest, preferred_dates, group_size,
 		       responded_at, archived_at, created_at
 		FROM inquiries WHERE id = ?
 	`, id).Scan(
 		&it.ID, &it.Name, &it.Email, &it.Phone, &it.Subject, &it.Message,
+		&it.Interest, &it.PreferredDates, &it.GroupSize,
 		&it.RespondedAt, &it.ArchivedAt, &createdStr,
 	)
 	if errors.Is(err, sql.ErrNoRows) {

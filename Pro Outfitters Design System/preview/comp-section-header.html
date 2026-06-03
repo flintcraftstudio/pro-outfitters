@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);padding:24px 28px;}
+  .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--gray-light);margin-bottom:16px}
+  /* button system */
+  .btn{font-family:var(--font-sans);font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;
+    border-radius:var(--radius-sm);transition:all var(--dur-fast) var(--ease-out);text-decoration:none;display:inline-flex;align-items:center;gap:9px}
+  .btn--primary{background:var(--ink);color:var(--text-on-dark);border:1px solid var(--ink);padding:14px 26px}
+  .btn--primary:hover{background:var(--gold-deep);border-color:var(--gold-deep)}
+  .btn--secondary{background:transparent;color:var(--ink);border:1px solid var(--border-strong);padding:14px 26px}
+  .btn--secondary:hover{border-color:var(--ink)}
+  .btn--text{background:none;border:0;color:var(--accent);padding:6px 0;text-transform:uppercase;font-size:12px;letter-spacing:.14em}
+  .btn--text span{border-bottom:1px solid transparent;transition:border-color var(--dur-fast)}
+  .btn--text:hover span{border-bottom-color:currentColor}
+  .gold-rule{width:46px;height:1px;background:var(--gold);margin-bottom:18px}
+</style></head><body><div class="lbl">Section header pattern</div>
+<div class="gold-rule"></div>
+<div class="ds-eyebrow" style="margin-bottom:14px">The Lodges</div>
+<div class="ds-h2" style="font-size:32px;max-width:30rem">Three places to wake up on the water.</div></body></html>

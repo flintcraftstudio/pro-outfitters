@@ -5,21 +5,21 @@ templ NotFoundPage() {
 }
 
 templ notFoundContent() {
-	<section class="flex min-h-[70vh] items-center justify-center px-6">
+	<section class="flex min-h-screen items-center justify-center bg-po-paper px-6 pt-24">
 		<div class="text-center">
-			<p class="text-[11px] font-medium uppercase tracking-[0.2em] text-ff-dusk">404</p>
-			<h1 class="mt-4 font-display text-[42px] font-medium leading-tight tracking-tight text-ff-paper sm:text-[68px]">
-				Page not found
+			<div class="flex justify-center">
+				@eyebrow("404", "gold")
+			</div>
+			<h1 class="mt-4 font-display text-[clamp(2.5rem,6vw,4.5rem)] font-normal leading-[1.1] tracking-[-0.015em] text-po-ink">
+				This water isn't on our map.
 			</h1>
-			<p class="mx-auto mt-6 max-w-md text-[15px] font-light leading-relaxed text-ff-ash">
-				The page you're looking for doesn't exist or has been moved.
+			<p class="mx-auto mt-6 max-w-md text-[1.0625rem] leading-[1.6] text-po-gray">
+				The page you're looking for doesn't exist or has been moved. Let's get you back to dry ground.
 			</p>
-			<a
-				href="/"
-				class="mt-10 inline-block rounded-sm bg-ff-dusk px-[26px] py-[13px] text-[12px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-ff-dusk-hover active:scale-[0.98]"
-			>
-				Back to home
-			</a>
+			<div class="mt-10 flex flex-wrap justify-center gap-4">
+				@btnPrimary("Back to home", "/")
+				@btnSecondary("Plan your trip", "/contact")
+			</div>
 		</div>
 	</section>
 }

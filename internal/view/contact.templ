@@ -1,103 +1,170 @@
 package view
 
 templ ContactPage(errors map[string]string, values map[string]string, success bool) {
-	@Base("Contact", "Get in touch with us.", contactContent(errors, values, success))
+	@Base("Plan Your Trip", "Tell us what you're after — the water or the birds, your dates, your group — and we'll help you put the right Montana trip together.", contactContent(errors, values, success))
 }
 
 templ contactContent(errors map[string]string, values map[string]string, success bool) {
-	<section class="py-24 sm:py-[80px]">
-		<div class="mx-auto max-w-5xl px-6 sm:px-12">
-			@eyebrow("Say hello")
-			<h1 class="mb-10 font-display text-[36px] font-medium tracking-tight text-ff-paper">Contact</h1>
-			<div class="max-w-lg">
-				@ContactForm(errors, values, success)
+	@subpageHeader("Let's build your trip", "Tell us what you're after", "Whether it's your first float or your fifteenth season with us, the best trips start with a conversation. Tell us a little about what you're hoping for — the water or the birds, your dates, your group — and we'll help you put the right trip together.")
+	<section class="bg-po-paper py-[clamp(3rem,7vh,5rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid items-stretch gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.2fr_0.8fr]">
+				<div>
+					@ContactForm(errors, values, success)
+				</div>
+				<aside class="md:border-l md:border-po-border md:pl-[clamp(2rem,4vw,3.5rem)]">
+					@contactDetails()
+				</aside>
 			</div>
 		</div>
 	</section>
 }
 
+templ contactDetails() {
+	<div class="flex h-full flex-col gap-8">
+		<div>
+			@eyebrow("Call the office", "gold")
+			<a href={ templ.SafeURL(BrandPhoneHref) } class="mt-2 inline-block font-display text-[1.5rem] font-normal text-po-ink transition-colors hover:text-po-accent">{ BrandPhone }</a>
+		</div>
+		<div>
+			@eyebrow("Mail", "gold")
+			<p class="mt-2 text-[1rem] text-po-ink-soft">{ BrandMailAddress }</p>
+		</div>
+		<div>
+			@eyebrow("Follow", "gold")
+			<p class="mt-2 text-[1rem] text-po-ink-soft">
+				<a href={ templ.SafeURL(BrandFacebook) } class="transition-colors hover:text-po-accent">Facebook</a>
+				<span class="px-1.5 text-po-gray-light">·</span>
+				<a href={ templ.SafeURL(BrandInstagram) } class="transition-colors hover:text-po-accent">Instagram { BrandInstagramHandle }</a>
+			</p>
+		</div>
+		<div class="mt-auto border-t border-po-border pt-6">
+			<p class="text-[0.8125rem] leading-[1.6] text-po-gray">{ BrandLicense }</p>
+			<p class="mt-2 text-[0.8125rem] leading-[1.6] text-po-gray">{ BrandPermitNote }</p>
+			<div class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-po-gray">
+				<span class="text-po-gold-deep">Orvis Endorsed</span>
+				<span>Trout Unlimited</span>
+			</div>
+		</div>
+	</div>
+}
+
 templ ContactForm(errors map[string]string, values map[string]string, success bool) {
-	<form hx-post="/contact" hx-swap="outerHTML" class="space-y-5">
+	<form hx-post="/contact" hx-swap="outerHTML" hx-disabled-elt="find button[type='submit']" class="group space-y-6">
 		if success {
-			<div class="rounded border border-ff-dusk-mid bg-ff-panel p-6">
-				<p class="text-[15px] font-normal text-ff-ice">Thanks! We'll be in touch soon.</p>
+			<div class="rounded-sm border border-po-border-strong bg-po-surface p-8" role="status">
+				@eyebrow("Inquiry received", "gold")
+				<p class="mt-3 font-display text-[1.5rem] font-normal leading-[1.3] text-po-ink">Thank you — your inquiry is in.</p>
+				<p class="mt-3 text-[1rem] leading-[1.6] text-po-gray">One of the family will be in touch shortly to start planning your trip. If it's urgent, give the office a call at <a href={ templ.SafeURL(BrandPhoneHref) } class="text-po-accent hover:text-po-accent-deep">{ BrandPhone }</a>.</p>
 			</div>
 		} else {
 			if errors["form"] != "" {
-				<div class="rounded border border-red-500/40 bg-red-500/10 p-4">
-					<p class="text-[13px] text-red-400">{ errors["form"] }</p>
+				<div role="alert" class="rounded-sm border border-red-700/40 bg-red-700/5 p-4">
+					<p class="text-[0.875rem] text-red-700">{ errors["form"] }</p>
+				</div>
+			} else if len(errors) > 0 {
+				<div role="alert" class="rounded-sm border border-red-700/40 bg-red-700/5 p-4">
+					<p class="text-[0.875rem] text-red-700">Please review the highlighted fields below.</p>
 				</div>
 			}
-			<div>
-				<label for="name" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Name</label>
-				<input
-					type="text"
-					id="name"
-					name="name"
-					value={ values["name"] }
-					class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
-					placeholder="Your name"
-				/>
-				if errors["name"] != "" {
-					<p class="mt-1 text-[11px] text-red-400">{ errors["name"] }</p>
-				}
+			<div class="grid gap-6 sm:grid-cols-2">
+				@field("name", "Name", "text", "Your name", "name", true, values, errors)
+				@field("email", "Email", "email", "you@example.com", "email", true, values, errors)
+			</div>
+			@interestField(values, errors)
+			<div class="grid gap-6 sm:grid-cols-3">
+				@field("phone", "Phone", "tel", "", "tel", false, values, errors)
+				@field("preferred_dates", "Preferred dates or season", "text", "e.g. late September", "", false, values, errors)
+				@field("group_size", "Group size", "text", "e.g. 4 anglers", "", false, values, errors)
 			</div>
 			<div>
-				<label for="email" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Email</label>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					value={ values["email"] }
-					class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
-					placeholder="you@example.com"
-				/>
-				if errors["email"] != "" {
-					<p class="mt-1 text-[11px] text-red-400">{ errors["email"] }</p>
-				}
-			</div>
-			<div>
-				<label for="phone" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Phone <span class="text-ff-stone">(optional)</span></label>
-				<input
-					type="tel"
-					id="phone"
-					name="phone"
-					value={ values["phone"] }
-					class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
-				/>
-			</div>
-			<div>
-				<label for="subject" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Subject <span class="text-ff-stone">(optional)</span></label>
-				<input
-					type="text"
-					id="subject"
-					name="subject"
-					value={ values["subject"] }
-					class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
-				/>
-			</div>
-			<div>
-				<label for="message" class="mb-1.5 block text-[13px] font-medium text-ff-cream">Message</label>
+				@fieldLabel("message", "Anything else we should know", true)
 				<textarea
 					id="message"
 					name="message"
 					rows="5"
-					class="w-full rounded-sm border border-ff-border2 bg-ff-panel px-4 py-2.5 text-[15px] font-light text-ff-cream placeholder-ff-stone outline-none transition focus:border-[#5b7ec473]"
-					placeholder="Tell us about your project..."
+					class={ fieldClass }
+					placeholder="Water or birds, experience level, anything we can plan around…"
 				>{ values["message"] }</textarea>
-				if errors["message"] != "" {
-					<p class="mt-1 text-[11px] text-red-400">{ errors["message"] }</p>
-				}
 			</div>
 			if TurnstileSiteKey != "" {
-				<div class="cf-turnstile" data-sitekey={ TurnstileSiteKey } data-theme="dark"></div>
+				<div class="cf-turnstile" data-sitekey={ TurnstileSiteKey } data-theme="light"></div>
 			}
-			<button
-				type="submit"
-				class="rounded-sm bg-ff-dusk px-[26px] py-[13px] text-[12px] font-medium uppercase tracking-[0.12em] text-white transition hover:bg-ff-dusk-hover active:scale-[0.98]"
-			>
-				Send message
-			</button>
+			<div class="pt-1">
+				<button
+					type="submit"
+					class="inline-flex items-center justify-center rounded-sm border border-po-ink bg-po-ink px-8 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-200 ease-editorial hover:border-po-gold-deep hover:bg-po-gold-deep disabled:opacity-70"
+				>
+					<span class="group-[.htmx-request]:hidden">Send inquiry</span>
+					<span class="hidden group-[.htmx-request]:inline">Sending…</span>
+				</button>
+			</div>
 		}
 	</form>
+}
+
+templ fieldLabel(name, label string, optional bool) {
+	<label for={ name } class="mb-1.5 block text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-po-ink-soft">
+		{ label }
+		if optional {
+			<span class="font-normal normal-case tracking-normal text-po-gray-light"> (optional)</span>
+		}
+	</label>
+}
+
+// field renders a labeled text input. required drives both the (optional)
+// label hint and the HTML required attribute; autocomplete is omitted when
+// empty.
+templ field(name, label, inputType, placeholder, autocomplete string, required bool, values, errors map[string]string) {
+	<div class="flex h-full flex-col">
+		@fieldLabel(name, label, !required)
+		<input
+			type={ inputType }
+			id={ name }
+			name={ name }
+			value={ values[name] }
+			placeholder={ placeholder }
+			if autocomplete != "" {
+				autocomplete={ autocomplete }
+			}
+			required?={ required }
+			if errors[name] != "" {
+				aria-invalid="true"
+				aria-describedby={ name + "-error" }
+			}
+			class={ fieldClass + " mt-auto" }
+		/>
+		if errors[name] != "" {
+			<p id={ name + "-error" } class="mt-1.5 text-[0.75rem] text-red-700">{ errors[name] }</p>
+		}
+	</div>
+}
+
+templ interestField(values, errors map[string]string) {
+	<div>
+		@fieldLabel("interest", "What interests you?", false)
+		<div class="relative">
+			<select
+				id="interest"
+				name="interest"
+				required
+				if errors["interest"] != "" {
+					aria-invalid="true"
+					aria-describedby="interest-error"
+				}
+				class={ selectClass }
+			>
+				<option value="" disabled selected?={ values["interest"] == "" }>Select one…</option>
+				for _, opt := range InquiryInterests {
+					<option value={ opt } selected?={ values["interest"] == opt }>{ opt }</option>
+				}
+			</select>
+			<svg class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-po-gold-deep" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<path d="m6 9 6 6 6-6"></path>
+			</svg>
+		</div>
+		if errors["interest"] != "" {
+			<p id="interest-error" class="mt-1.5 text-[0.75rem] text-red-700">{ errors["interest"] }</p>
+		}
+	</div>
 }

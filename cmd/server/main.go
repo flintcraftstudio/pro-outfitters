@@ -112,6 +112,10 @@ func main() {
 
 	// Public pages.
 	mux.Handle("GET /{$}", handler.Home())
+	mux.Handle("GET /lodges", handler.Lodges())
+	mux.Handle("GET /lodges/{slug}", handler.Lodge())
+	mux.Handle("GET /smith-river", handler.SmithRiver())
+	mux.Handle("GET /about", handler.About())
 	mux.Handle("GET /contact", handler.Contact())
 	mux.Handle("POST /contact", handler.ContactSubmit(handler.ContactDeps{
 		Store:     st,

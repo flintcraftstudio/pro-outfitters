@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pro Outfitters — Website UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="Primitives.jsx"></script>
+<script type="text/babel" src="Sections.jsx"></script>
+<script type="text/babel" src="InquiryModal.jsx"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+function App() {
+  const [inquiry, setInquiry] = useState(false);
+  const openInquiry = () => setInquiry(true);
+
+  return (
+    <React.Fragment>
+      <Nav over onPlan={openInquiry} />
+      <Hero onPlan={openInquiry} />
+
+      {/* Experiences — two equal */}
+      <section className="k-band" id="experiences">
+        <div className="container">
+          <SectionHead eyebrow="Two ways to spend a Montana day" title="Fly fishing & bird hunting." />
+          <div className="k-grid-2">
+            <ExperienceCard id="fishing" tone="river" eyebrow="Fly Fishing"
+              title="Trout water, read by people who live on it."
+              body="Wade and float the Missouri, the Blackfoot, and tailwaters that fish all season. Guides who'll tell you the truth about the hatch."
+              link="Explore fly fishing" />
+            <ExperienceCard id="hunting" tone="field" eyebrow="Bird Hunting"
+              title="Upland miles behind a good dog."
+              body="Sharptail, Hun, and pheasant over big country. Mornings that start in frost and end with the truck a long, satisfied walk away."
+              link="Explore wingshooting" />
+          </div>
+        </div>
+      </section>
+
+      {/* Lodges */}
+      <section className="k-band alt" id="lodges">
+        <div className="container">
+          <SectionHead eyebrow="The Lodges" title="Three places to wake up on the water." />
+          <div className="k-grid-3">
+            <LodgeCard tone="dusk" meta={["Est. 1992", "Missouri River"]} title="North Fork Crossing Lodge"
+              body="Tailwater out the front door and a long porch built for the end of the day." />
+            <LodgeCard tone="field" meta={["Est. 2004", "Upland country"]} title="Sharptail Lodge"
+              body="Prairie at the doorstep and kennels by the mudroom. Built around the hunt." />
+            <LodgeCard tone="river" meta={["Est. 2015", "Craig, MT"]} title="The Yurt at Craig"
+              body="A spare, quiet base steps from the river — nothing between you and the water." />
+          </div>
+        </div>
+      </section>
+
+      <StatBand />
+
+      <PullQuote cite="— Guest, North Fork Crossing · returning since 2016">
+        The fishing was extraordinary. But what I remember is how quiet it was — like we'd been let in on something the rest of the country forgot.
+      </PullQuote>
+
+      {/* Closing CTA */}
+      <section id="plan" style={{ position: "relative", color: "var(--on-dark)", textAlign: "center", overflow: "hidden", isolation: "isolate" }}>
+        <Photo tone="dusk" style={{ position: "absolute", inset: 0, zIndex: 0 }} />
+        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(180deg,rgba(16,14,11,.66),rgba(16,14,11,.78))" }} />
+        <div className="container" style={{ position: "relative", zIndex: 2, paddingBlock: "clamp(5rem,12vh,8rem)" }}>
+          <Eyebrow tone="light">Plan your trip</Eyebrow>
+          <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(2.2rem,5vw,3.6rem)", letterSpacing: "-.015em", color: "var(--on-dark)", maxWidth: "18ch", margin: "1rem auto 1.4rem" }}>
+            Tell us what kind of week you're after.
+          </h2>
+          <p style={{ color: "var(--on-dark-soft)", maxWidth: "40ch", margin: "0 auto 2.2rem" }}>
+            Every trip is planned by hand. Share your dates and what you're hoping for, and one of the family will be in touch.
+          </p>
+          <Button variant="primary" onClick={openInquiry}>Begin an Inquiry</Button>
+        </div>
+      </section>
+
+      {inquiry ? <InquiryModal onClose={() => setInquiry(false)} /> : null}
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

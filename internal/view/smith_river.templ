@@ -1,0 +1,42 @@
+package view
+
+templ SmithRiverPage() {
+	@Base("Smith River", "A sixty-one-mile wilderness float through a thousand-foot limestone canyon — the only river in Montana where every float is regulated by limited permit.", smithRiverContent())
+}
+
+templ smithRiverContent() {
+	@detailHero("The trip every angler should take once", "Sixty-one miles. One way in, one way out.", "smith-hero.jpg", "A scenic float on the Smith River")
+	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
+				<div class="reveal max-w-measure">
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">The Smith is a sixty-one-mile wilderness float with a single public put-in at the headwaters and a single take-out at the end. It begins in the mountains, runs through a thousand-foot limestone canyon, and spills out onto the prairie. It is the only river in Montana where every recreational float is regulated by limited permit — and the only way through is by boat.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">That permit lottery is exactly why the fishing stays low-pressure and the canyon stays pristine. We've guided the Smith for close to forty years, and our seasoned guides know every inch of it — experience that pays off on every trip.</p>
+					<p class="text-[0.9375rem] italic leading-[1.6] text-po-gray">{ BrandPermitNote }</p>
+				</div>
+				<div class="reveal">
+					@detailBlock([]DetailItem{
+						{Label: "Distance", Value: "61 miles — one put-in, one take-out"},
+						{Label: "Access", Value: "Montana's only fully permit-regulated float; books far in advance through the state lottery"},
+						{Label: "Guided since", Value: "Close to forty years on the Smith"},
+					})
+					<div class="mt-7 flex flex-wrap gap-3">
+						@btnPrimary("Plan Your Trip", "/contact")
+						@btnSecondary("Packing list", "/contact")
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal">
+				@gallery([]GalleryImage{
+					{Src: "smith-trout.jpg", Alt: "A Smith River trout"},
+					{Src: "smith-wading.jpg", Alt: "Wade fishing the Smith River"},
+				})
+			</div>
+		</div>
+	</section>
+	@closingInquiry()
+}

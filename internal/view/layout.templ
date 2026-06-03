@@ -2,7 +2,7 @@ package view
 
 templ Base(title, description string, body templ.Component) {
 	<!DOCTYPE html>
-	<html lang="en" class="bg-ff-dark text-ff-cream">
+	<html lang="en" class="bg-po-paper text-po-ink">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,14 +23,13 @@ templ Base(title, description string, body templ.Component) {
 			<script src="/static/js/htmx.min.js" defer></script>
 			<script src="/static/js/alpine.min.js" defer></script>
 		</head>
-		<body class="min-h-screen font-body text-[15px] font-light antialiased">
-			<canvas id="firefly-canvas" class="pointer-events-none fixed inset-0 z-[5] h-full w-full"></canvas>
+		<body class="min-h-screen bg-po-paper font-body text-[1.125rem] font-normal leading-[1.65] text-po-gray antialiased">
 			@Nav()
 			<main>
 				@body
 			</main>
 			@Footer()
-			<script src="/static/js/fireflies.js" defer></script>
+			<script src="/static/js/site.js" defer></script>
 		</body>
 	</html>
 }

@@ -1,0 +1,63 @@
+package view
+
+// ---- Lodges overview -----------------------------------------------------
+templ LodgesPage() {
+	@Base("The Lodges", "Three owner-operated Montana lodges — North Fork Crossing, Sharptail, and The Yurt at Craig. Stay at one, or move between them on a single trip.", lodgesContent())
+}
+
+templ lodgesContent() {
+	@subpageHeader("Where you stay", "Three places to call camp", "")
+	<section class="bg-po-paper pt-10 sm:pt-12">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<p class="max-w-measure">Every Pro Outfitters lodge sits on different water, holds a different character, and runs on the same standard: seasoned guides, food worth lingering over, and an unhurried pace that makes the hours off the water as good as the ones on it. Stay at one, or move between them on a single trip.</p>
+		</div>
+	</section>
+	<section class="bg-po-paper py-[clamp(3rem,7vh,5rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2 lg:grid-cols-3">
+				for _, l := range Lodges() {
+					@lodgeCard(l)
+				}
+			</div>
+		</div>
+	</section>
+	@closingInquiry()
+}
+
+// ---- Lodge detail --------------------------------------------------------
+templ LodgePage(l Lodge) {
+	@Base(l.Name, l.CardBlurb, lodgeContent(l))
+}
+
+templ lodgeContent(l Lodge) {
+	@detailHero(l.Eyebrow, l.Headline, l.Hero, l.Name)
+	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
+				<div class="reveal max-w-measure">
+					for _, p := range l.Body {
+						<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft last:mb-0">{ p }</p>
+					}
+				</div>
+				<div class="reveal">
+					@detailBlock(l.Details)
+					<div class="mt-7 flex flex-wrap gap-3">
+						for _, c := range l.CTAs {
+							@cta(c)
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	if len(l.Gallery) > 0 {
+		<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
+			<div class="mx-auto max-w-container px-6 sm:px-12">
+				<div class="reveal">
+					@gallery(l.Gallery)
+				</div>
+			</div>
+		</section>
+	}
+	@closingInquiry()
+}

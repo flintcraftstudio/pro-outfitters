@@ -3,10 +3,46 @@ package view
 import "fmt"
 
 templ Footer() {
-	<footer class="border-t border-ff-border">
-		<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-8 text-[13px] text-ff-stone sm:px-12">
-			<p>&copy; { fmt.Sprint(Year()) } { SiteName }</p>
-			<p class="text-ff-ash">fireflysoftware.dev</p>
+	<footer class="bg-po-ground-dark py-[clamp(3.5rem,7vh,5.5rem)] text-po-on-dark-soft">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-10 border-b border-white/10 pb-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+				<div class="text-po-on-dark">
+					@wordmark()
+					<p class="mt-5 max-w-[32ch] text-[0.9375rem] text-po-on-dark-soft">Owner-operated fly fishing &amp; bird hunting in Montana. Orvis-endorsed since the rivers were quieter.</p>
+				</div>
+				<div>
+					<h4 class="mb-5 font-body text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-po-gray-light">Experiences</h4>
+					<ul class="flex flex-col gap-3 text-[0.9375rem]">
+						<li><a href="/lodges" class="transition-colors hover:text-po-on-dark">The Lodges</a></li>
+						<li><a href="/smith-river" class="transition-colors hover:text-po-on-dark">Smith River</a></li>
+						<li><a href="/lodges/sharptail" class="transition-colors hover:text-po-on-dark">Bird Hunting</a></li>
+						<li><a href="/lodges/north-fork-crossing" class="transition-colors hover:text-po-on-dark">Fly Fishing</a></li>
+					</ul>
+				</div>
+				<div>
+					<h4 class="mb-5 font-body text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-po-gray-light">Company</h4>
+					<ul class="flex flex-col gap-3 text-[0.9375rem]">
+						<li><a href="/about" class="transition-colors hover:text-po-on-dark">Our Story</a></li>
+						<li><a href="/contact" class="transition-colors hover:text-po-on-dark">Plan a Trip</a></li>
+						<li><a href="/lodges" class="transition-colors hover:text-po-on-dark">Rates &amp; Seasons</a></li>
+					</ul>
+				</div>
+				<div>
+					<h4 class="mb-5 font-body text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-po-gray-light">Contact</h4>
+					<div class="flex flex-col gap-3 text-[0.9375rem]">
+						<a href={ templ.SafeURL(BrandPhoneHref) } class="transition-colors hover:text-po-on-dark">{ BrandPhone }</a>
+						<a href={ templ.SafeURL(BrandInstagram) } class="transition-colors hover:text-po-on-dark">Instagram { BrandInstagramHandle }</a>
+						<p class="text-po-on-dark-soft">{ BrandMailAddress }</p>
+					</div>
+				</div>
+			</div>
+			<div class="flex flex-wrap items-center justify-between gap-6 pt-8">
+				<div class="flex flex-wrap items-center gap-6 text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-po-gray-light">
+					<span class="text-po-gold">Orvis-Endorsed Outfitter</span>
+					<span>Trout Unlimited Partner</span>
+				</div>
+				<p class="text-[0.8125rem] text-po-gray-light">&copy; 1970&ndash;{ fmt.Sprint(Year()) } { SiteName }, Montana. All rights reserved.</p>
+			</div>
 		</div>
 	</footer>
 }

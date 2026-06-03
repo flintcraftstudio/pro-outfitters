@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);padding:24px 28px;}
+  .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--gray-light);margin-bottom:16px}
+  .meta{font-size:11px;color:var(--gray-light)}
+  .row{display:flex;gap:20px}.b{width:88px;height:64px;background:var(--surface);border:1px solid var(--border-strong)}
+.cap{font-size:11px;color:var(--gray);margin-top:8px;text-align:center}
+</style></head><body><div class="lbl">Corner radii · near-square</div><div class="row">
+<div><div class="b" style="border-radius:0"></div><div class="cap">--radius-none<br>0</div></div><div><div class="b" style="border-radius:2px"></div><div class="cap">--radius-sm<br>2px</div></div><div><div class="b" style="border-radius:4px"></div><div class="cap">--radius-md<br>4px</div></div>
+<div><div class="b" style="border-radius:999px;width:120px"></div><div class="cap">--radius-pill<br>buttons rare</div></div>
+</div></body></html>

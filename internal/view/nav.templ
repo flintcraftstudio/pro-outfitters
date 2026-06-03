@@ -1,15 +1,19 @@
 package view
 
 templ Nav() {
-	<nav class="border-b border-ff-border bg-[#0f1117eb] backdrop-blur-[12px]">
-		<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 sm:px-12">
-			<a href="/" class="text-[15px] font-normal tracking-tight text-ff-cream">{ SiteName }</a>
-			<div class="flex items-center gap-8 text-[12px] font-medium uppercase tracking-[0.08em]">
-				<a href="/" class="text-ff-ash transition hover:text-ff-cream">Home</a>
-				<a
-					href="/contact"
-					class="rounded-sm border border-ff-dusk-lo px-4 py-2 text-ff-ice transition hover:border-ff-dusk hover:bg-ff-dusk-lo hover:text-ff-paper"
-				>Contact</a>
+	<nav id="nav" class="po-nav fixed inset-x-0 top-0 z-50" data-state="top">
+		<div class="mx-auto flex max-w-container items-center justify-between gap-8 px-6 py-[1.15rem] sm:px-12">
+			@wordmark()
+			<div class="hidden items-center gap-9 md:flex">
+				for _, l := range PrimaryNav {
+					<a href={ templ.SafeURL(l.Href) } class="po-nav-link group relative py-0.5 text-[0.875rem] font-medium tracking-[0.01em] transition-colors">
+						{ l.Label }
+						<span class="absolute -bottom-0.5 left-0 h-px w-0 bg-current transition-all duration-300 ease-editorial group-hover:w-full"></span>
+					</a>
+				}
+			</div>
+			<div class="flex items-center">
+				@btnPrimary("Plan Your Trip", "/contact")
 			</div>
 		</div>
 	</nav>

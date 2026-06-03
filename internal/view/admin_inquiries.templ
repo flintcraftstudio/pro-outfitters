@@ -91,20 +91,42 @@ templ inquiryDetailBody(inq store.Inquiry) {
 				if inq.Phone.Valid && inq.Phone.String != "" {
 					<p class="text-[13px] text-ff-stone">{ inq.Phone.String }</p>
 				}
-				if inq.Subject != "" {
-					<p class="mt-2 text-[13px] text-ff-cream">Subject: { inq.Subject }</p>
-				}
 			</div>
 			<div class="text-right text-[12px] text-ff-stone">
 				{ inq.CreatedAt.Format("Jan 2, 2006 · 3:04 pm") }
 			</div>
 		</div>
+		if inq.Interest != "" || inq.PreferredDates != "" || inq.GroupSize != "" {
+			<hr class="my-5 border-ff-border2"/>
+			<dl class="grid gap-4 sm:grid-cols-3">
+				if inq.Interest != "" {
+					@adminDetailItem("Interest", inq.Interest)
+				}
+				if inq.PreferredDates != "" {
+					@adminDetailItem("Preferred dates", inq.PreferredDates)
+				}
+				if inq.GroupSize != "" {
+					@adminDetailItem("Group size", inq.GroupSize)
+				}
+			</dl>
+		}
 		<hr class="my-5 border-ff-border2"/>
-		<div class="whitespace-pre-wrap text-[14px] leading-relaxed text-ff-cream">{ inq.Message }</div>
+		if inq.Message != "" {
+			<div class="whitespace-pre-wrap text-[14px] leading-relaxed text-ff-cream">{ inq.Message }</div>
+		} else {
+			<p class="text-[13px] italic text-ff-stone">No additional message.</p>
+		}
 		<hr class="my-5 border-ff-border2"/>
 		<div class="flex flex-wrap gap-2 text-[12px]">
 			@inquiryActions(inq)
 		</div>
+	</div>
+}
+
+templ adminDetailItem(label, value string) {
+	<div>
+		<dt class="text-[11px] font-medium uppercase tracking-[0.12em] text-ff-stone">{ label }</dt>
+		<dd class="mt-1 text-[14px] text-ff-cream">{ value }</dd>
 	</div>
 }
 

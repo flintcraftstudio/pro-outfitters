@@ -1,0 +1,109 @@
+package view
+
+// Wordmark — the "PRO OUTFITTERS" lockup with a hairline gold rule and the
+// EST. 1970 tick. Text inherits currentColor so it works on paper or dark
+// grounds; the rule and tick stay heritage gold.
+templ wordmark() {
+	<a href="/" class="inline-flex flex-col gap-1 leading-none" aria-label="Pro Outfitters, established 1970">
+		<span class="font-display text-[1.3rem] font-medium tracking-[0.05em]">PRO&nbsp;OUTFITTERS</span>
+		<span class="flex w-full items-center gap-2">
+			<span class="h-px flex-1 bg-po-gold"></span>
+			<span class="whitespace-nowrap font-body text-[0.5rem] font-semibold tracking-[0.22em] text-po-gold">EST. 1970</span>
+			<span class="h-px flex-1 bg-po-gold"></span>
+		</span>
+	</a>
+}
+
+// eyebrow — letter-spaced uppercase label. variant: "" (tertiary gray),
+// "gold" (heritage gold), "light" (for dark grounds).
+templ eyebrow(label, variant string) {
+	switch variant {
+		case "gold":
+			<p class="text-[0.8125rem] font-semibold uppercase tracking-eyebrow text-po-gold-deep">{ label }</p>
+		case "light":
+			<p class="text-[0.8125rem] font-semibold uppercase tracking-eyebrow text-po-on-dark-soft">{ label }</p>
+		default:
+			<p class="text-[0.8125rem] font-semibold uppercase tracking-eyebrow text-po-gray-light">{ label }</p>
+	}
+}
+
+// goldRule — the brand's signature non-icon ornament: a short hairline.
+templ goldRule() {
+	<hr class="h-px w-12 border-0 bg-po-gold"/>
+}
+
+// arrowUpRight — the directional affordance used in link-arrows.
+templ arrowUpRight() {
+	<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="transition-transform duration-300 ease-editorial group-hover:translate-x-1">
+		<path d="M7 17 17 7M17 7H9M17 7v8"></path>
+	</svg>
+}
+
+// linkArrow — uppercase text link with an animated arrow.
+templ linkArrow(label, href string) {
+	<a href={ templ.SafeURL(href) } class="group inline-flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-po-accent transition-colors hover:text-po-accent-deep">
+		<span class="border-b border-transparent pb-0.5 transition-colors group-hover:border-current">{ label }</span>
+		@arrowUpRight()
+	</a>
+}
+
+// btnPrimary — filled ink button (inverts over the hero via .po-nav rules
+// or on dark sections). Used for the global "Plan Your Trip" CTA.
+templ btnPrimary(label, href string) {
+	<a href={ templ.SafeURL(href) } class="po-btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-ink bg-po-ink px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-200 ease-editorial hover:border-po-gold-deep hover:bg-po-gold-deep">{ label }</a>
+}
+
+// btnPrimaryLight — paper-filled primary for dark photographic grounds
+// (the hero). Reads with full contrast over imagery where the ink-filled
+// primary would disappear into the scrim. Deliberately omits the
+// .po-btn-primary class so the nav's over-hero rules don't restyle it.
+templ btnPrimaryLight(label, href string) {
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark bg-po-on-dark px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-200 ease-editorial hover:border-po-gold hover:bg-po-gold">{ label }</a>
+}
+
+// btnSecondary — outlined ink button on paper.
+templ btnSecondary(label, href string) {
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-border-strong bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-200 ease-editorial hover:border-po-ink">{ label }</a>
+}
+
+// btnGhost — outlined button for dark grounds (hero, closing CTA).
+templ btnGhost(label, href string) {
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark/40 bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-200 ease-editorial hover:border-po-on-dark hover:bg-po-on-dark/10">{ label }</a>
+}
+
+// cta renders any CTA, choosing the right button style.
+templ cta(c CTA) {
+	if c.Primary {
+		@btnPrimary(c.Label, c.Href)
+	} else {
+		@btnSecondary(c.Label, c.Href)
+	}
+}
+
+// sectionHead — the recurring eyebrow → headline pattern (gold rule above).
+templ sectionHead(eyebrowLabel, headline string) {
+	<div class="max-w-measure">
+		@goldRule()
+		<div class="mt-5"></div>
+		@eyebrow(eyebrowLabel, "")
+		<h2 class="mt-4 font-display text-[clamp(2.1rem,4.4vw,3.25rem)] font-normal leading-[1.18] tracking-[-0.015em] text-po-ink">{ headline }</h2>
+	</div>
+}
+
+// subpageHeader — the standard top-of-page header for interior pages, with
+// enough top padding to clear the fixed nav.
+templ subpageHeader(eyebrowLabel, headline, lead string) {
+	<header class="bg-po-paper pt-32 sm:pt-40">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="max-w-measure">
+				@goldRule()
+				<div class="mt-5"></div>
+				@eyebrow(eyebrowLabel, "gold")
+				<h1 class="mt-4 font-display text-[clamp(2.4rem,5vw,3.75rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-ink">{ headline }</h1>
+				if lead != "" {
+					<p class="mt-6 font-display text-[clamp(1.25rem,2.1vw,1.5rem)] font-light leading-[1.5] text-po-ink-soft">{ lead }</p>
+				}
+			</div>
+		</div>
+	</header>
+}

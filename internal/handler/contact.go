@@ -42,11 +42,13 @@ func ContactSubmit(deps ContactDeps) http.HandlerFunc {
 		}
 
 		values := map[string]string{
-			"name":    strings.TrimSpace(r.FormValue("name")),
-			"email":   strings.TrimSpace(r.FormValue("email")),
-			"phone":   strings.TrimSpace(r.FormValue("phone")),
-			"subject": strings.TrimSpace(r.FormValue("subject")),
-			"message": strings.TrimSpace(r.FormValue("message")),
+			"name":            strings.TrimSpace(r.FormValue("name")),
+			"email":           strings.TrimSpace(r.FormValue("email")),
+			"phone":           strings.TrimSpace(r.FormValue("phone")),
+			"interest":        strings.TrimSpace(r.FormValue("interest")),
+			"preferred_dates": strings.TrimSpace(r.FormValue("preferred_dates")),
+			"group_size":      strings.TrimSpace(r.FormValue("group_size")),
+			"message":         strings.TrimSpace(r.FormValue("message")),
 		}
 
 		errs := validateContact(values)
@@ -66,11 +68,16 @@ func ContactSubmit(deps ContactDeps) http.HandlerFunc {
 		}
 
 		input := store.InquiryInput{
-			Name:    values["name"],
-			Email:   values["email"],
-			Phone:   values["phone"],
-			Subject: values["subject"],
-			Message: values["message"],
+			Name:  values["name"],
+			Email: values["email"],
+			Phone: values["phone"],
+			// Subject mirrors the interest so the admin inbox and the
+			// notification email surface what the guest is after.
+			Subject:        values["interest"],
+			Message:        values["message"],
+			Interest:       values["interest"],
+			PreferredDates: values["preferred_dates"],
+			GroupSize:      values["group_size"],
 		}
 		id, err := deps.Store.CreateInquiry(r.Context(), input)
 		if err != nil {
@@ -103,8 +110,8 @@ func validateContact(values map[string]string) map[string]string {
 	} else if !strings.Contains(values["email"], "@") {
 		errs["email"] = "Enter a valid email address."
 	}
-	if values["message"] == "" {
-		errs["message"] = "Message is required."
+	if values["interest"] == "" {
+		errs["interest"] = "Let us know what you're interested in."
 	}
 	return errs
 }
@@ -124,16 +131,23 @@ func sendInquiryNotification(mailer email.Sender, appName, notifyEmail string, i
 	defer cancel()
 
 	subject := fmt.Sprintf("New inquiry from %s", in.Name)
-	if in.Subject != "" {
-		subject = fmt.Sprintf("New inquiry: %s", in.Subject)
+	if in.Interest != "" {
+		subject = fmt.Sprintf("New inquiry: %s", in.Interest)
 	}
 	body := fmt.Sprintf(
-		"New inquiry #%d on %s.\n\n"+
-			"From:    %s <%s>\n"+
-			"Phone:   %s\n"+
-			"Subject: %s\n\n"+
-			"-- Message --\n\n%s\n",
-		id, appName, in.Name, in.Email, defaultStr(in.Phone, "—"), defaultStr(in.Subject, "—"), in.Message,
+		"New trip inquiry #%d on %s.\n\n"+
+			"From:        %s <%s>\n"+
+			"Phone:       %s\n"+
+			"Interest:    %s\n"+
+			"Dates:       %s\n"+
+			"Group size:  %s\n\n"+
+			"-- Anything else --\n\n%s\n",
+		id, appName, in.Name, in.Email,
+		defaultStr(in.Phone, "—"),
+		defaultStr(in.Interest, "—"),
+		defaultStr(in.PreferredDates, "—"),
+		defaultStr(in.GroupSize, "—"),
+		defaultStr(in.Message, "—"),
 	)
 
 	msg := email.Message{
