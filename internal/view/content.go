@@ -180,18 +180,20 @@ func LodgeBySlug(slug string) (Lodge, bool) {
 	return Lodge{}, false
 }
 
-// TeamMember is one person on the About page.
+// TeamMember is one person on the About page. Photo is a filename under
+// /static/img (a square headshot); the .avif/.webp siblings are derived.
 type TeamMember struct {
-	Name string
-	Role string
-	Bio  string
+	Name  string
+	Role  string
+	Bio   string
+	Photo string
 }
 
 // Team is the Pro Outfitters roster, per the content spec.
 var Team = []TeamMember{
-	{Name: "Elli Ortloff", Role: "Office Manager", Bio: "Happiest camping with her son or out at the lake, Elli has spent years adventuring across Montana and can't think of a better way to spend her days than helping other people find adventures of their own."},
-	{Name: "Joel Loran", Role: "Fishing Guide", Bio: "Guiding for 27 years. Lives in Missoula with his wife Andrea and their kids Jacob and Ava; guides spring and summer, teaches high school history in the Bitterroot the rest of the year."},
-	{Name: "Pat Kane", Role: "Fishing & Bird Hunting Guide", Bio: "Guiding for 25 years. Lives in Missoula with his wife Karen and their kids Shannon and Seamus; rivers in spring and summer, birds in the fall."},
-	{Name: "Michael Carlucci", Role: "Chef, Smith River & Lodges", Bio: "From a food-obsessed Italian family, Michael started out in the family business in NYC and has cooked for Pro Outfitters since 2000."},
-	{Name: "Keith Kelly", Role: "Chef, North Fork Crossing Lodge", Bio: "Originally from Bourbon County, Keith has led culinary programs at premier lodges across the American West. His elevated take on rustic, wild, locally sourced cooking makes dinner its own reason to come back."},
+	{Name: "Elli Ortloff", Role: "Office Manager", Photo: "team-elli.jpg", Bio: "Happiest camping with her son or out at the lake, Elli has spent years adventuring across Montana and can't think of a better way to spend her days than helping other people find adventures of their own."},
+	{Name: "Joel Loran", Role: "Fishing Guide", Photo: "team-joel.jpg", Bio: "Guiding for 27 years. Lives in Missoula with his wife Andrea and their kids Jacob and Ava; guides spring and summer, teaches high school history in the Bitterroot the rest of the year."},
+	{Name: "Pat Kane", Role: "Fishing & Bird Hunting Guide", Photo: "team-pat.jpg", Bio: "Guiding for 25 years. Lives in Missoula with his wife Karen and their kids Shannon and Seamus; rivers in spring and summer, birds in the fall."},
+	{Name: "Michael Carlucci", Role: "Chef, Smith River & Lodges", Photo: "team-michael.jpg", Bio: "From a food-obsessed Italian family, Michael started out in the family business in NYC and has cooked for Pro Outfitters since 2000."},
+	{Name: "Keith Kelly", Role: "Chef, North Fork Crossing Lodge", Photo: "team-keith.jpg", Bio: "Originally from Bourbon County, Keith has led culinary programs at premier lodges across the American West. His elevated take on rustic, wild, locally sourced cooking makes dinner its own reason to come back."},
 }
