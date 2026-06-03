@@ -107,8 +107,10 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Static files.
-	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+	// Static files. Cache-Control is set per asset class so repeat visits
+	// don't re-download fonts/images; the unhashed CSS/JS get a short TTL so
+	// a deploy propagates quickly.
+	mux.Handle("GET /static/", http.StripPrefix("/static/", cacheStatic(http.FileServer(http.Dir("web/static")))))
 
 	// Public pages.
 	mux.Handle("GET /{$}", handler.Home())
@@ -239,4 +241,24 @@ func loadEnv(path string) error {
 		}
 	}
 	return nil
+}
+
+// cacheStatic wraps a static file handler and stamps a Cache-Control header
+// chosen by file extension. Fonts and images are content-stable and get a
+// one-year lifetime; the unhashed CSS/JS change on every deploy, so they get
+// a short TTL to bound how long a client can serve stale assets.
+func cacheStatic(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch strings.ToLower(filepath.Ext(r.URL.Path)) {
+		case ".woff2", ".woff", ".ttf", ".otf":
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		case ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico":
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+		case ".css", ".js":
+			w.Header().Set("Cache-Control", "public, max-age=3600")
+		default:
+			w.Header().Set("Cache-Control", "public, max-age=3600")
+		}
+		next.ServeHTTP(w, r)
+	})
 }

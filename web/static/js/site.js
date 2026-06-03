@@ -4,20 +4,29 @@
 
 (function () {
   var nav = document.getElementById("nav");
-  if (nav) {
-    var hero = document.querySelector("[data-hero]");
-    function onScroll() {
-      var threshold = hero ? hero.offsetHeight - 90 : 120;
-      nav.dataset.state = window.scrollY > threshold ? "scrolled" : "top";
-    }
-    // Pages without a hero start in the scrolled (ink-on-paper) state.
-    if (!hero) {
-      nav.dataset.state = "scrolled";
-    } else {
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-    }
+  if (!nav) return;
+  var hero = document.querySelector("[data-hero]");
+  // Pages without a hero start in the scrolled (ink-on-paper) state.
+  if (!hero) {
+    nav.dataset.state = "scrolled";
+    return;
   }
+  // Cache the threshold so the scroll handler never reads layout geometry
+  // (offsetHeight) — reading it per scroll event forces a reflow. Recompute
+  // only when the hero's height can actually change: on resize and once
+  // fonts/images have settled after load.
+  var threshold = hero.offsetHeight - 90;
+  function recompute() {
+    threshold = hero.offsetHeight - 90;
+    onScroll();
+  }
+  function onScroll() {
+    nav.dataset.state = window.scrollY > threshold ? "scrolled" : "top";
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", recompute, { passive: true });
+  window.addEventListener("load", recompute);
 })();
 
 (function () {
