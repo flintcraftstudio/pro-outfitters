@@ -6,7 +6,7 @@ package view
 templ detailHero(eyebrowLabel, headline, img, alt string) {
 	<header data-hero class="relative isolate flex min-h-[68vh] items-end text-po-on-dark">
 		@bleedPicture("/static/img/"+img, alt, "absolute inset-0 -z-10 h-full w-full object-cover", true)
-		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.40)_0%,rgba(16,14,11,0.10)_35%,rgba(16,14,11,0.30)_70%,rgba(16,14,11,0.78)_100%)]"></div>
+		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.40)_0%,rgba(16,14,11,0.10)_35%,rgba(16,14,11,0.55)_70%,rgba(16,14,11,0.84)_100%)]"></div>
 		<div class="mx-auto w-full max-w-container px-6 pb-[clamp(2.5rem,6vh,5rem)] pt-32 sm:px-12">
 			@eyebrow(eyebrowLabel, "light")
 			<h1 class="mt-5 max-w-[18ch] text-balance font-display text-[clamp(2.4rem,5.4vw,4.5rem)] font-normal leading-[1.05] tracking-[-0.015em] text-po-on-dark">{ headline }</h1>
