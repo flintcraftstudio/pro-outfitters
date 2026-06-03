@@ -49,6 +49,7 @@ func main() {
 	view.GtagID = cfg.GtagID
 	view.PixelID = cfg.PixelID
 	view.TurnstileSiteKey = cfg.TurnstileSiteKey
+	view.BaseURL = cfg.AppBaseURL
 	if cfg.GtagID == "" {
 		slog.Info("GTAG_ID not set, Google Analytics disabled")
 	}

@@ -13,6 +13,14 @@ var (
 	TurnstileSiteKey string
 )
 
+// BaseURL is the site's canonical origin (e.g. https://example.com), set
+// once at startup from config.AppBaseURL. Used to build absolute URLs for
+// Open Graph / Twitter Card tags, which scrapers require to be absolute.
+var BaseURL string
+
+// OGImage is the path (under BaseURL) to the default social share image.
+const OGImage = "/static/img/hero-fishing-1200w.jpg"
+
 // Year returns the current year for copyright notices.
 func Year() int {
 	return time.Now().Year()
