@@ -19,6 +19,11 @@ templ Base(title, description string, body templ.Component) {
 			if TurnstileSiteKey != "" {
 				<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 			}
+			<!-- Self-hosted fonts (see tailwind/input.css). Preload the two
+			     above-the-fold latin faces so text paints without waiting on
+			     the stylesheet to be parsed first. -->
+			<link rel="preload" href="/static/fonts/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin/>
+			<link rel="preload" href="/static/fonts/librefranklin-latin-normal.woff2" as="font" type="font/woff2" crossorigin/>
 			<link rel="stylesheet" href="/static/css/site.css"/>
 			<script src="/static/js/htmx.min.js" defer></script>
 			<script src="/static/js/alpine.min.js" defer></script>
