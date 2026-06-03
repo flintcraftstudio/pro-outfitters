@@ -112,6 +112,32 @@ func main() {
 	// a deploy propagates quickly.
 	mux.Handle("GET /static/", http.StripPrefix("/static/", cacheStatic(http.FileServer(http.Dir("web/static")))))
 
+	// Favicon + PWA manifest assets. Browsers and crawlers request these at
+	// the site root (/favicon.ico, /apple-touch-icon.png) regardless of the
+	// <link> tags, and the manifest's own icon srcs are root-relative — so
+	// serve them at their conventional root paths. The files live under
+	// web/static/favicon so the existing web/ COPY ships them.
+	for urlPath, name := range map[string]string{
+		"/favicon.ico":                  "favicon.ico",
+		"/favicon.svg":                  "favicon.svg",
+		"/favicon-96x96.png":            "favicon-96x96.png",
+		"/apple-touch-icon.png":         "apple-touch-icon.png",
+		"/site.webmanifest":             "site.webmanifest",
+		"/web-app-manifest-192x192.png": "web-app-manifest-192x192.png",
+		"/web-app-manifest-512x512.png": "web-app-manifest-512x512.png",
+	} {
+		file := filepath.Join("web/static/favicon", name)
+		mux.HandleFunc("GET "+urlPath, func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Cache-Control", "public, max-age=604800")
+			// Go doesn't know the .webmanifest extension; set the spec type
+			// so ServeFile won't sniff it to text/plain.
+			if strings.HasSuffix(name, ".webmanifest") {
+				w.Header().Set("Content-Type", "application/manifest+json")
+			}
+			http.ServeFile(w, r, file)
+		})
+	}
+
 	// Public pages.
 	mux.Handle("GET /{$}", handler.Home())
 	mux.Handle("GET /lodges", handler.Lodges())
