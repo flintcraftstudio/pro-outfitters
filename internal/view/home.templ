@@ -18,7 +18,7 @@ templ homeContent() {
 // ---- Hero ----------------------------------------------------------------
 templ homeHero() {
 	<header data-hero class="relative isolate flex min-h-screen items-end text-po-on-dark">
-		<img src="/static/img/hero-fishing.jpg" alt="A drift boat float trip on a Montana river" fetchpriority="high" decoding="async" class="absolute inset-0 -z-20 h-full w-full object-cover"/>
+		@bleedPicture("/static/img/hero-fishing.jpg", "A drift boat float trip on a Montana river", "absolute inset-0 -z-20 h-full w-full object-cover", true)
 		<!-- Protection gradients tuned to this bright, high-key image: a
 		     bottom-anchored vertical scrim carries the text block, a light top
 		     darkening keeps the nav legible over pale sky, and a left
@@ -43,7 +43,7 @@ templ homeStory() {
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[1.05fr_0.95fr]">
 				<div class="relative">
-					<img src="/static/img/story-flybox.jpg" alt="A guide's fly box, an editorial close-up" class="aspect-[4/5] w-full rounded-sm object-cover"/>
+					@picture("/static/img/story-flybox.jpg", "A guide's fly box, an editorial close-up", "aspect-[4/5] w-full rounded-sm object-cover")
 					<span class="absolute -left-px -top-px bg-po-paper px-4 py-3 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-po-gold-deep">Since 1970</span>
 				</div>
 				<div>
@@ -75,7 +75,7 @@ templ homeExperiences() {
 
 templ experienceCard(id, img, alt, label, headline, body, linkLabel, href string) {
 	<article id={ id } class="reveal flex flex-col">
-		<img src={ "/static/img/" + img } alt={ alt } class="aspect-[5/4] w-full rounded-sm object-cover"/>
+		@picture("/static/img/"+img, alt, "aspect-[5/4] w-full rounded-sm object-cover")
 		<div class="pt-6">
 			@eyebrow(label, "gold")
 			<h3 class="mb-3 mt-3 font-display text-[clamp(1.6rem,2.6vw,2.1rem)] font-medium leading-[1.2] text-po-ink">{ headline }</h3>
@@ -107,7 +107,7 @@ templ homeLodges() {
 templ lodgeCard(l Lodge) {
 	<article class="reveal group flex flex-col overflow-hidden rounded-sm border border-po-border bg-po-surface transition-all duration-300 ease-editorial hover:-translate-y-1 hover:border-po-border-strong">
 		<div class="overflow-hidden">
-			<img src={ "/static/img/" + l.CardImage } alt={ l.Name } class="aspect-[4/3] w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]"/>
+			@picture("/static/img/"+l.CardImage, l.Name, "aspect-[4/3] w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]")
 		</div>
 		<div class="flex flex-1 flex-col px-6 pb-7 pt-6">
 			<div class="mb-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-po-gold-deep">
@@ -157,7 +157,7 @@ templ homeStewardship() {
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[0.95fr_1.05fr]">
 				<div>
-					<img src="/static/img/steward-smith.jpg" alt="The Smith River canyon" class="aspect-square w-full rounded-sm object-cover"/>
+					@picture("/static/img/steward-smith.jpg", "The Smith River canyon", "aspect-square w-full rounded-sm object-cover")
 				</div>
 				<div class="max-w-[44ch]">
 					@eyebrow("Stewardship", "gold")
@@ -189,7 +189,7 @@ templ homeTestimonial() {
 // ---- Closing CTA ---------------------------------------------------------
 templ homeClosing() {
 	<section class="relative isolate overflow-hidden text-center text-po-on-dark">
-		<img src="/static/img/fishing-alt2.jpg" alt="A wild Montana trout" class="absolute inset-0 -z-10 h-full w-full object-cover"/>
+		@bleedPicture("/static/img/fishing-alt2.jpg", "A wild Montana trout", "absolute inset-0 -z-10 h-full w-full object-cover", false)
 		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.66),rgba(16,14,11,0.78))]"></div>
 		<div class="mx-auto max-w-container px-6 py-[clamp(6rem,14vh,11rem)] sm:px-12">
 			@eyebrow("Plan your trip", "light")

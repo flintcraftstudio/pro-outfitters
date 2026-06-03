@@ -5,7 +5,7 @@ package view
 // paper-blur once scrolled past.
 templ detailHero(eyebrowLabel, headline, img, alt string) {
 	<header data-hero class="relative isolate flex min-h-[68vh] items-end text-po-on-dark">
-		<img src={ "/static/img/" + img } alt={ alt } class="absolute inset-0 -z-10 h-full w-full object-cover"/>
+		@bleedPicture("/static/img/"+img, alt, "absolute inset-0 -z-10 h-full w-full object-cover", true)
 		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.40)_0%,rgba(16,14,11,0.10)_35%,rgba(16,14,11,0.30)_70%,rgba(16,14,11,0.78)_100%)]"></div>
 		<div class="mx-auto w-full max-w-container px-6 pb-[clamp(2.5rem,6vh,5rem)] pt-32 sm:px-12">
 			@eyebrow(eyebrowLabel, "light")
@@ -36,7 +36,7 @@ templ detailBlock(items []DetailItem) {
 templ gallery(images []GalleryImage) {
 	<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2">
 		for _, im := range images {
-			<img src={ "/static/img/" + im.Src } alt={ im.Alt } class="aspect-[4/3] w-full rounded-sm object-cover"/>
+			@picture("/static/img/"+im.Src, im.Alt, "aspect-[4/3] w-full rounded-sm object-cover")
 		}
 	</div>
 }
@@ -45,7 +45,7 @@ templ gallery(images []GalleryImage) {
 // of interior pages.
 templ closingInquiry() {
 	<section class="relative isolate overflow-hidden text-center text-po-on-dark">
-		<img src="/static/img/fishing-alt1.jpg" alt="A Montana river at golden hour" class="absolute inset-0 -z-10 h-full w-full object-cover"/>
+		@bleedPicture("/static/img/fishing-alt1.jpg", "A Montana river at golden hour", "absolute inset-0 -z-10 h-full w-full object-cover", false)
 		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.66),rgba(16,14,11,0.80))]"></div>
 		<div class="mx-auto max-w-container px-6 py-[clamp(5rem,12vh,9rem)] sm:px-12">
 			@eyebrow("Plan your trip", "light")

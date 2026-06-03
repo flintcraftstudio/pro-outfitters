@@ -1,0 +1,38 @@
+package view
+
+// picture — a content image as a <picture> with AVIF and WebP sources and the
+// original JPG as fallback. `src` is the full /static/img/foo.jpg path; the
+// AVIF/WebP siblings are derived from it. `class` lands on the inner <img>, and
+// the <picture> uses display:contents so those layout classes resolve against
+// the real parent (grid cell, flex item) exactly as a bare <img> would.
+templ picture(src, alt, class string) {
+	<picture class="contents">
+		<source srcset={ imgVariant(src, ".avif") } type="image/avif"/>
+		<source srcset={ imgVariant(src, ".webp") } type="image/webp"/>
+		<img src={ src } alt={ alt } class={ class } loading="lazy" decoding="async"/>
+	</picture>
+}
+
+// bleedPicture — a full-bleed image with responsive AVIF/WebP/JPG srcsets at
+// 100vw. Pass eager=true for the page's LCP hero (fetchpriority=high, eager);
+// false for below-the-fold bands so they don't compete with the hero.
+templ bleedPicture(src, alt, class string, eager bool) {
+	<picture class="contents">
+		<source type="image/avif" srcset={ imgSrcset(src, ".avif") } sizes="100vw"/>
+		<source type="image/webp" srcset={ imgSrcset(src, ".webp") } sizes="100vw"/>
+		<img
+			src={ src }
+			srcset={ imgSrcset(src, "") }
+			sizes="100vw"
+			alt={ alt }
+			class={ class }
+			decoding="async"
+			if eager {
+				fetchpriority="high"
+				loading="eager"
+			} else {
+				loading="lazy"
+			}
+		/>
+	</picture>
+}
