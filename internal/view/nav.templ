@@ -1,7 +1,7 @@
 package view
 
 templ Nav() {
-	<nav id="nav" class="po-nav fixed inset-x-0 top-0 z-50" data-state="top">
+	<nav id="nav" x-data="{ open: false }" class="po-nav fixed inset-x-0 top-0 z-50" data-state="top">
 		<div class="mx-auto flex max-w-container items-center justify-between gap-8 px-6 py-[1.15rem] sm:px-12">
 			@wordmark()
 			<div class="hidden items-center gap-9 md:flex">
@@ -12,8 +12,52 @@ templ Nav() {
 					</a>
 				}
 			</div>
-			<div class="flex items-center">
-				@btnPrimary("Plan Your Trip", "/contact")
+			<div class="flex items-center gap-2">
+				<div class="hidden md:flex">
+					@btnPrimary("Plan Your Trip", "/contact")
+				</div>
+				<button
+					type="button"
+					class="-mr-2 inline-flex items-center justify-center p-2 text-current transition-colors md:hidden"
+					aria-label="Toggle navigation menu"
+					:aria-expanded="open"
+					@click="open = !open"
+				>
+					<svg x-show="!open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+						<path d="M3 6h18M3 12h18M3 18h18"></path>
+					</svg>
+					<svg x-show="open" x-cloak width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+						<path d="M6 6l12 12M18 6L6 18"></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+		<!-- Mobile menu panel -->
+		<div
+			x-show="open"
+			x-cloak
+			x-transition:enter="transition-all duration-300 ease-editorial"
+			x-transition:enter-start="opacity-0 -translate-y-2"
+			x-transition:enter-end="opacity-100 translate-y-0"
+			x-transition:leave="transition-all duration-200 ease-editorial"
+			x-transition:leave-start="opacity-100 translate-y-0"
+			x-transition:leave-end="opacity-0 -translate-y-2"
+			@click.outside="open = false"
+			class="po-mobile-menu border-t border-po-border bg-po-paper md:hidden"
+		>
+			<div class="mx-auto flex max-w-container flex-col gap-1 px-6 py-4 sm:px-12">
+				for _, l := range PrimaryNav {
+					<a
+						href={ templ.SafeURL(l.Href) }
+						@click="open = false"
+						class="border-b border-po-border py-3 text-[1rem] font-medium tracking-[0.01em] text-po-ink transition-colors hover:text-po-accent"
+					>
+						{ l.Label }
+					</a>
+				}
+				<div class="pt-4">
+					@btnPrimary("Plan Your Trip", "/contact")
+				</div>
 			</div>
 		</div>
 	</nav>

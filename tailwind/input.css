@@ -12,6 +12,11 @@
     background: rgba(63, 97, 117, 0.22);
     color: #1a1815;
   }
+  /* Hide Alpine-cloaked elements until Alpine initializes, so the mobile
+     menu panel never flashes open on load. */
+  [x-cloak] {
+    display: none !important;
+  }
 }
 
 @layer components {
@@ -53,6 +58,19 @@
     background: rgba(243, 238, 229, 0.1);
     border-color: #f3eee5;
     color: #f3eee5;
+  }
+  /* The mobile menu panel sits on a paper background even while the nav is
+     over the hero, so its CTA must stay the default filled-ink primary
+     instead of inheriting the over-hero transparent outline (which would be
+     invisible on paper). */
+  .po-nav[data-state="top"] .po-mobile-menu .po-btn-primary {
+    background: #1a1815;
+    color: #f3eee5;
+    border-color: #1a1815;
+  }
+  .po-nav[data-state="top"] .po-mobile-menu .po-btn-primary:hover {
+    background: #8a7745;
+    border-color: #8a7745;
   }
 
   /* ---- Gentle reveal on scroll-in ------------------------------------- */
