@@ -137,6 +137,31 @@
     opacity: 1;
     transform: none;
   }
+
+  /* ---- Mobile hero pan ------------------------------------------------ */
+  /* On a tall phone viewport a centered object-cover crop lands on the
+     treeline and crops the drift boat out of frame. Below the `sm`
+     breakpoint we hold the left edge briefly, then drift slowly right and
+     settle on the boat. Desktop keeps the default centered crop, where the
+     full scene already fits. */
+  .po-hero-img {
+    object-position: center;
+  }
+  @media (max-width: 639.98px) {
+    .po-hero-img {
+      object-position: 0% 50%;
+      animation: po-hero-pan 11s cubic-bezier(0.33, 0, 0.2, 1) 0.5s forwards;
+    }
+  }
+}
+
+@keyframes po-hero-pan {
+  from {
+    object-position: 0% 50%;
+  }
+  to {
+    object-position: 100% 50%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -147,5 +172,14 @@
   }
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* Reduced motion: skip the pan but keep the boat in frame on mobile by
+   anchoring the crop to the right edge instead. */
+@media (prefers-reduced-motion: reduce) and (max-width: 639.98px) {
+  .po-hero-img {
+    animation: none;
+    object-position: 100% 50%;
   }
 }
