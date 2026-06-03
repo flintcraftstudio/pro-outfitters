@@ -34,15 +34,15 @@ templ goldRule() {
 
 // arrowUpRight — the directional affordance used in link-arrows.
 templ arrowUpRight() {
-	<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="transition-transform duration-300 ease-editorial group-hover:translate-x-1">
+	<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="transition-transform duration-[600ms] ease-editorial group-hover:translate-x-1">
 		<path d="M7 17 17 7M17 7H9M17 7v8"></path>
 	</svg>
 }
 
 // linkArrow — uppercase text link with an animated arrow.
 templ linkArrow(label, href string) {
-	<a href={ templ.SafeURL(href) } class="group inline-flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-po-accent transition-colors hover:text-po-accent-deep">
-		<span class="border-b border-transparent pb-0.5 transition-colors group-hover:border-current">{ label }</span>
+	<a href={ templ.SafeURL(href) } class="group inline-flex items-center gap-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-po-accent transition-colors duration-500 ease-editorial hover:text-po-accent-deep">
+		<span class="border-b border-transparent pb-0.5 transition-colors duration-500 ease-editorial group-hover:border-current">{ label }</span>
 		@arrowUpRight()
 	</a>
 }
@@ -50,7 +50,7 @@ templ linkArrow(label, href string) {
 // btnPrimary — filled ink button (inverts over the hero via .po-nav rules
 // or on dark sections). Used for the global "Plan Your Trip" CTA.
 templ btnPrimary(label, href string) {
-	<a href={ templ.SafeURL(href) } class="po-btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-ink bg-po-ink px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-200 ease-editorial hover:border-po-gold-deep hover:bg-po-gold-deep">{ label }</a>
+	<a href={ templ.SafeURL(href) } class="po-btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-ink bg-po-ink px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-[450ms] ease-editorial hover:border-po-gold-deep hover:bg-po-gold-deep">{ label }</a>
 }
 
 // btnPrimaryLight — paper-filled primary for dark photographic grounds
@@ -58,17 +58,17 @@ templ btnPrimary(label, href string) {
 // primary would disappear into the scrim. Deliberately omits the
 // .po-btn-primary class so the nav's over-hero rules don't restyle it.
 templ btnPrimaryLight(label, href string) {
-	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark bg-po-on-dark px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-200 ease-editorial hover:border-po-gold hover:bg-po-gold">{ label }</a>
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark bg-po-on-dark px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-[450ms] ease-editorial hover:border-po-gold hover:bg-po-gold">{ label }</a>
 }
 
 // btnSecondary — outlined ink button on paper.
 templ btnSecondary(label, href string) {
-	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-border-strong bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-200 ease-editorial hover:border-po-ink">{ label }</a>
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-border-strong bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-ink transition-all duration-[450ms] ease-editorial hover:border-po-ink">{ label }</a>
 }
 
 // btnGhost — outlined button for dark grounds (hero, closing CTA).
 templ btnGhost(label, href string) {
-	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark/40 bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-200 ease-editorial hover:border-po-on-dark hover:bg-po-on-dark/10">{ label }</a>
+	<a href={ templ.SafeURL(href) } class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-po-on-dark/40 bg-transparent px-7 py-[0.95rem] text-[0.875rem] font-semibold tracking-[0.05em] text-po-on-dark transition-all duration-[450ms] ease-editorial hover:border-po-on-dark hover:bg-po-on-dark/10">{ label }</a>
 }
 
 // cta renders any CTA, choosing the right button style.

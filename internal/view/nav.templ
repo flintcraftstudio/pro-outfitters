@@ -6,9 +6,9 @@ templ Nav() {
 			@wordmark()
 			<div class="hidden items-center gap-9 md:flex">
 				for _, l := range PrimaryNav {
-					<a href={ templ.SafeURL(l.Href) } class="po-nav-link group relative py-0.5 text-[0.875rem] font-medium tracking-[0.01em] transition-colors">
+					<a href={ templ.SafeURL(l.Href) } class="po-nav-link group relative py-0.5 text-[0.875rem] font-medium tracking-[0.01em] transition-colors duration-500 ease-editorial">
 						{ l.Label }
-						<span class="absolute -bottom-0.5 left-0 h-px w-0 bg-current transition-all duration-300 ease-editorial group-hover:w-full"></span>
+						<span class="absolute -bottom-0.5 left-0 h-px w-0 bg-current transition-all duration-700 ease-editorial group-hover:w-full"></span>
 					</a>
 				}
 			</div>
@@ -36,10 +36,10 @@ templ Nav() {
 		<div
 			x-show="open"
 			x-cloak
-			x-transition:enter="transition-all duration-300 ease-editorial"
+			x-transition:enter="transition-all duration-[600ms] ease-editorial"
 			x-transition:enter-start="opacity-0 -translate-y-2"
 			x-transition:enter-end="opacity-100 translate-y-0"
-			x-transition:leave="transition-all duration-200 ease-editorial"
+			x-transition:leave="transition-all duration-[450ms] ease-editorial"
 			x-transition:leave-start="opacity-100 translate-y-0"
 			x-transition:leave-end="opacity-0 -translate-y-2"
 			@click.outside="open = false"
@@ -50,7 +50,7 @@ templ Nav() {
 					<a
 						href={ templ.SafeURL(l.Href) }
 						@click="open = false"
-						class="border-b border-po-border py-3 text-[1rem] font-medium tracking-[0.01em] text-po-ink transition-colors hover:text-po-accent"
+						class="border-b border-po-border py-3 text-[1rem] font-medium tracking-[0.01em] text-po-ink transition-colors duration-500 ease-editorial hover:text-po-accent"
 					>
 						{ l.Label }
 					</a>

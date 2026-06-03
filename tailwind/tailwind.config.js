@@ -67,7 +67,11 @@ module.exports = {
         container: "75rem", // 1200px content max
       },
       transitionTimingFunction: {
-        editorial: "cubic-bezier(0.22, 1, 0.36, 1)",
+        // A gentle, symmetric ease (easeInOutSine). The old curve started at
+        // y=1, snapping each property most of the way instantly — which read
+        // as abrupt. This eases in and out evenly for a slow, "lazy river"
+        // glide. Pair it with the longer durations below.
+        editorial: "cubic-bezier(0.37, 0, 0.63, 1)",
       },
     },
   },

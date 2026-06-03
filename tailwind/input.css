@@ -75,10 +75,10 @@
 @layer components {
   /* ---- Sticky nav: transparent over hero → paper blur once scrolled --- */
   .po-nav {
-    transition: background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background 0.7s cubic-bezier(0.37, 0, 0.63, 1),
+      box-shadow 0.7s cubic-bezier(0.37, 0, 0.63, 1),
+      border-color 0.7s cubic-bezier(0.37, 0, 0.63, 1),
+      color 0.7s cubic-bezier(0.37, 0, 0.63, 1);
     border-bottom: 1px solid transparent;
   }
   /* state: over hero — light text on imagery */
@@ -130,8 +130,8 @@
   .reveal {
     opacity: 0;
     transform: translateY(22px);
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 1.1s cubic-bezier(0.37, 0, 0.63, 1),
+      transform 1.1s cubic-bezier(0.37, 0, 0.63, 1);
   }
   .reveal.in {
     opacity: 1;
