@@ -1,0 +1,97 @@
+package view
+
+// Experience overview pages — the equal-weight Fly Fishing and Bird Hunting
+// landing pages that sit above the lodge and trip pages. Proposed in the
+// content spec ("Not yet written") and stubbed here: structure and
+// cross-links are real; the editorial body is pending from the client.
+
+// ---- Fly Fishing ---------------------------------------------------------
+templ FlyFishingPage() {
+	@DraftBase("Fly Fishing", "Guided fly fishing in Montana with Pro Outfitters — float trips on the Smith, the Missouri, and the Blackfoot, with lodges on the water.", flyFishingContent())
+}
+
+templ flyFishingContent() {
+	// Hero image is a placeholder pick from existing assets.
+	@detailHero("Fly fishing · Montana", "Trout water, read by people who live on it.", "fishing-alt2.jpg", "A wild Montana trout")
+	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
+				<div class="reveal max-w-measure">
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Float trips and day trips on the Smith, the Missouri, and the Blackfoot, guided by people who have fished them for decades.</p>
+				</div>
+				<div class="reveal">
+					@draftNotice([]string{
+						"Overview copy: the kinds of trips offered (multi-day floats, day trips, lodge packages)",
+						"Each river's character, species, and best months",
+						"Guided day-trip details and how they're booked",
+					})
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal mb-[clamp(2.5rem,5vw,4rem)]">
+				@sectionHead("Where we fish", "Three rivers, two lodges.")
+			</div>
+			<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2 lg:grid-cols-3">
+				@linkCard("Featured trip", "Smith River", "A sixty-one-mile wilderness float through a thousand-foot limestone canyon. Permit-limited.", "/smith-river")
+				@linkCard("River", "Blackfoot River", "The water Norman Maclean wrote into A River Runs Through It.", "/blackfoot-river")
+				@linkCard("Families", "Kids Camp", "An Orvis-endorsed kids camp at North Fork Crossing Lodge.", "/kids-camp")
+				for _, l := range Lodges() {
+					if l.Slug != "sharptail" {
+						@lodgeCard(l)
+					}
+				}
+			</div>
+		</div>
+	</section>
+	@closingInquiry()
+}
+
+// ---- Bird Hunting --------------------------------------------------------
+templ BirdHuntingPage() {
+	@DraftBase("Bird Hunting", "Guided wild-bird hunting in Montana with Pro Outfitters — sharptail grouse, Hungarian partridge, and pheasant from Sharptail Lodge.", birdHuntingContent())
+}
+
+templ birdHuntingContent() {
+	// Hero duplicates the Sharptail lodge hero until a distinct image is
+	// chosen.
+	@detailHero("Bird hunting · Montana", "Upland miles behind a good dog.", "sharptail-hero.jpg", "Bird hunting in Montana's upland country")
+	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
+				<div class="reveal max-w-measure">
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Wild birds only: sharptail grouse and Hungarian partridge to open the season, ring-neck pheasant after the first week of October. Bring your own dog or hunt behind ours.</p>
+				</div>
+				<div class="reveal">
+					@detailBlock([]DetailItem{
+						{Label: "Species", Value: "Sharptail grouse, Hungarian partridge, ring-neck pheasant"},
+						{Label: "Season", Value: "September 1 through mid-November"},
+					})
+					<div class="mt-7">
+						@draftNotice([]string{
+							"Overview copy: the wild-bird-only approach, the dogs, a typical hunting day",
+							"Confirmed acreage figure to lead with",
+							"Licensing and what hunters need to arrange themselves",
+						})
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal mb-[clamp(2.5rem,5vw,4rem)]">
+				@sectionHead("Where we hunt", "One lodge, a lot of country.")
+			</div>
+			<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2 lg:grid-cols-3">
+				if l, ok := LodgeBySlug("sharptail"); ok {
+					@lodgeCard(l)
+				}
+				@linkCard("Before you go", "Bird hunting gear list", "What to pack for a hunt at Sharptail Lodge.", "/packing-lists/bird-hunting")
+			</div>
+		</div>
+	</section>
+	@closingInquiry()
+}

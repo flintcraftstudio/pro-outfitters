@@ -145,6 +145,12 @@ func main() {
 	mux.Handle("GET /lodges/{slug}", handler.Lodge())
 	mux.Handle("GET /smith-river", handler.SmithRiver())
 	mux.Handle("GET /about", handler.About())
+	// Draft pages (noindex, content pending from the client).
+	mux.Handle("GET /fly-fishing", handler.Page(view.FlyFishingPage()))
+	mux.Handle("GET /bird-hunting", handler.Page(view.BirdHuntingPage()))
+	mux.Handle("GET /kids-camp", handler.Page(view.KidsCampPage()))
+	mux.Handle("GET /blackfoot-river", handler.Page(view.BlackfootRiverPage()))
+	mux.Handle("GET /packing-lists/{slug}", handler.PackingList())
 	mux.Handle("GET /contact", handler.Contact())
 	mux.Handle("POST /contact", handler.ContactSubmit(handler.ContactDeps{
 		Store:     st,

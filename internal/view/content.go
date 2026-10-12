@@ -105,7 +105,7 @@ var lodges = []Lodge{
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
-			{Label: "Plan your trip", Href: "/contact"},
+			{Label: "Kids Camp", Href: "/kids-camp"},
 		},
 	},
 	{
@@ -134,7 +134,7 @@ var lodges = []Lodge{
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
-			{Label: "Plan your trip", Href: "/contact"},
+			{Label: "Gear list", Href: "/packing-lists/bird-hunting"},
 		},
 	},
 	{
@@ -196,4 +196,67 @@ var Team = []TeamMember{
 	{Name: "Pat Kane", Role: "Fishing & Bird Hunting Guide", Photo: "team-pat.jpg", Bio: "Guiding for 25 years. Lives in Missoula with his wife Karen and their kids Shannon and Seamus; rivers in spring and summer, birds in the fall."},
 	{Name: "Michael Carlucci", Role: "Chef, Smith River & Lodges", Photo: "team-michael.jpg", Bio: "From a food-obsessed Italian family, Michael started out in the family business in NYC and has cooked for Pro Outfitters since 2000."},
 	{Name: "Keith Kelly", Role: "Chef, North Fork Crossing Lodge", Photo: "team-keith.jpg", Bio: "Originally from Bourbon County, Keith has led culinary programs at premier lodges across the American West. His elevated take on rustic, wild, locally sourced cooking makes dinner its own reason to come back."},
+}
+
+// PackingSection is one titled group of items on a packing list.
+type PackingSection struct {
+	Title string
+	Items []string
+}
+
+// PackingList is a "what to bring" page. Sections is empty while the list
+// is pending from the client; the page then renders a draft notice.
+type PackingList struct {
+	Slug        string
+	Name        string
+	Eyebrow     string
+	Lead        string
+	Description string // meta description
+	LegacyURL   string // the list on the old WordPress site, for reference
+	Sections    []PackingSection
+	BackLabel   string
+	BackHref    string
+}
+
+var packingLists = []PackingList{
+	{
+		Slug:        "smith-river",
+		Name:        "Smith River packing list",
+		Eyebrow:     "Before you go",
+		Lead:        "What to bring for a multi-day float on the Smith.",
+		Description: "What to pack for a guided Smith River float trip with Pro Outfitters.",
+		LegacyURL:   "https://prooutfitters.com/smith-river-packing-list/",
+		BackLabel:   "Back to the Smith River",
+		BackHref:    "/smith-river",
+	},
+	{
+		Slug:        "kids-camp",
+		Name:        "Kids Camp: what to bring",
+		Eyebrow:     "Before you go",
+		Lead:        "What to pack for Kids Camp at North Fork Crossing Lodge.",
+		Description: "What to pack for the Pro Outfitters Kids Camp at North Fork Crossing Lodge.",
+		LegacyURL:   "https://prooutfitters.com/kids-camp-what-to-bring/",
+		BackLabel:   "Back to Kids Camp",
+		BackHref:    "/kids-camp",
+	},
+	{
+		Slug:        "bird-hunting",
+		Name:        "Bird hunting gear list",
+		Eyebrow:     "Before you go",
+		Lead:        "What to pack for a hunt at Sharptail Lodge.",
+		Description: "What to pack for a guided wild-bird hunt at Sharptail Lodge with Pro Outfitters.",
+		LegacyURL:   "https://prooutfitters.com/bird-hunting-equipment-list/",
+		BackLabel:   "Back to Sharptail Lodge",
+		BackHref:    "/lodges/sharptail",
+	},
+}
+
+// PackingListBySlug returns the packing list with the given slug, or false.
+func PackingListBySlug(slug string) (PackingList, bool) {
+	for _, p := range packingLists {
+		if p.Slug == slug {
+			return p, true
+		}
+	}
+	return PackingList{}, false
 }

@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/a-h/templ"
+
 	"github.com/flintcraftstudio/standard-template/internal/view"
 )
 
@@ -49,6 +51,33 @@ func SmithRiver() http.HandlerFunc {
 func About() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := view.AboutPage().Render(r.Context(), w); err != nil {
+			slog.Error("render error", "err", err)
+		}
+	}
+}
+
+// Page handles a fixed page with no request-dependent data.
+func Page(c templ.Component) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := c.Render(r.Context(), w); err != nil {
+			slog.Error("render error", "err", err)
+		}
+	}
+}
+
+// PackingList handles GET /packing-lists/{slug}. An unknown slug renders
+// the 404 page.
+func PackingList() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		p, ok := view.PackingListBySlug(r.PathValue("slug"))
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			if err := view.NotFoundPage().Render(r.Context(), w); err != nil {
+				slog.Error("render error", "err", err)
+			}
+			return
+		}
+		if err := view.PackingListPage(p).Render(r.Context(), w); err != nil {
 			slog.Error("render error", "err", err)
 		}
 	}
