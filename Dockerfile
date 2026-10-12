@@ -8,7 +8,9 @@ COPY . .
 # Generate templ first: the *_templ.go files must exist before Tailwind
 # runs, because tailwind/tailwind.config.js scans ./internal/view/**/*.go
 # to pick up class strings emitted by templ.
-RUN go install github.com/a-h/templ/cmd/templ@latest && \
+# The CLI is pinned to the templ version in go.mod: @latest drifts ahead of
+# both the runtime library and this image's Go toolchain.
+RUN go install github.com/a-h/templ/cmd/templ@$(go list -m -f '{{.Version}}' github.com/a-h/templ) && \
     templ generate
 
 # Build CSS. The -c flag is required: the config lives in tailwind/, not the
