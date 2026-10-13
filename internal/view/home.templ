@@ -17,19 +17,29 @@ templ homeContent() {
 
 // ---- Hero ----------------------------------------------------------------
 templ homeHero() {
-	<header data-hero class="relative isolate flex min-h-screen items-end text-po-on-dark">
-		@bleedPicture("/static/img/hero-fishing.jpg", "A drift boat float trip on a Montana river", "po-hero-img absolute inset-0 -z-20 h-full w-full object-cover", true)
-		<!-- Protection gradients tuned to this bright, high-key image: a
+	<!-- Phones stack the hero: a fixed crop framing the raft on top, the
+	     text on the dark ground below. A tall viewport only shows about a
+	     quarter of this wide image, and the raft sits in the lower third
+	     where an overlaid headline would cover it. From sm up the photo goes
+	     full-bleed behind the text as before. -->
+	<header data-hero class="relative isolate flex flex-col bg-po-ground-dark text-po-on-dark sm:min-h-screen sm:flex-row sm:items-end sm:bg-transparent">
+		<div class="relative h-[46svh] min-h-[18rem] w-full sm:absolute sm:inset-0 sm:-z-20 sm:h-full sm:min-h-0">
+			@bleedPicture("/static/img/hero-fishing.jpg", "A guided raft float on a Montana river", "po-hero-img absolute inset-0 h-full w-full object-cover", true)
+			<!-- Phone-only: a light top darkening for the nav, and a fade at
+			     the foot so the photo settles into the text panel. -->
+			<div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,14,11,0.45)_0%,rgba(16,14,11,0)_28%,rgba(16,14,11,0)_78%,rgba(20,18,15,1)_100%)] sm:hidden"></div>
+		</div>
+		<!-- sm+ protection gradients tuned to this bright, high-key image: a
 		     bottom-anchored vertical scrim carries the text block, a light top
 		     darkening keeps the nav legible over pale sky, and a left
 		     directional scrim covers the left-aligned text column. -->
-		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.45)_0%,rgba(16,14,11,0.08)_20%,rgba(16,14,11,0)_48%,rgba(16,14,11,0.60)_70%,rgba(16,14,11,0.92)_100%)]"></div>
-		<div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(16,14,11,0.45)_0%,rgba(16,14,11,0.12)_40%,rgba(16,14,11,0)_65%)]"></div>
-		<div class="mx-auto w-full max-w-container px-6 pb-[clamp(3rem,7vh,6rem)] pt-32 sm:px-12">
+		<div class="absolute inset-0 -z-10 hidden bg-[linear-gradient(180deg,rgba(16,14,11,0.45)_0%,rgba(16,14,11,0.08)_20%,rgba(16,14,11,0)_48%,rgba(16,14,11,0.60)_70%,rgba(16,14,11,0.92)_100%)] sm:block"></div>
+		<div class="absolute inset-0 -z-10 hidden bg-[linear-gradient(90deg,rgba(16,14,11,0.45)_0%,rgba(16,14,11,0.12)_40%,rgba(16,14,11,0)_65%)] sm:block"></div>
+		<div class="mx-auto w-full max-w-container px-6 pb-12 pt-6 sm:px-12 sm:pb-[clamp(3rem,7vh,6rem)] sm:pt-32">
 			@eyebrow("Est. 1970 · Orvis-Endorsed · Montana", "light")
-			<h1 class="mt-6 max-w-[16ch] text-balance font-display text-[clamp(2.9rem,6.4vw,5.6rem)] font-normal leading-[1.02] tracking-[-0.015em] text-po-on-dark [text-shadow:0_1px_24px_rgba(16,14,11,0.35)]">Montana, the way it was meant to be fished.</h1>
-			<p class="mt-6 max-w-[46ch] font-display text-[clamp(1.25rem,2.1vw,1.5rem)] font-light leading-[1.5] text-po-on-dark">Owner-operated since 1970. Guided float trips, upland wingshooting, and three lodges on water worth protecting.</p>
-			<div class="mt-10 flex flex-wrap items-center gap-4">
+			<h1 class="mt-4 max-w-[16ch] text-balance font-display text-[2.5rem] font-normal leading-[1.04] tracking-[-0.015em] text-po-on-dark sm:mt-6 sm:text-[clamp(2.9rem,6.4vw,5.6rem)] sm:leading-[1.02] sm:[text-shadow:0_1px_24px_rgba(16,14,11,0.35)]">Montana, the way it was meant to be fished.</h1>
+			<p class="mt-4 max-w-[46ch] font-display text-[1.125rem] font-light leading-[1.5] text-po-on-dark-soft sm:mt-6 sm:text-[clamp(1.25rem,2.1vw,1.5rem)] sm:text-po-on-dark">Owner-operated since 1970. Guided float trips, upland wingshooting, and three lodges on water worth protecting.</p>
+			<div class="mt-7 flex flex-wrap items-center gap-4 sm:mt-10">
 				@btnPrimaryLight("Plan Your Trip", "/contact")
 				@btnGhost("Our Story", "/about")
 			</div>
