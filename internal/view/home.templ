@@ -9,7 +9,6 @@ templ homeContent() {
 	@homeStory()
 	@homeExperiences()
 	@homeLodges()
-	@homeOwner()
 	@homeStewardship()
 	@homeTestimonial()
 	@homeClosing()
@@ -54,18 +53,27 @@ templ homeHero() {
 	</header>
 }
 
-// ---- Story teaser --------------------------------------------------------
+// ---- Story / owner ------------------------------------------------------
+// The first thing after the hero is the owner: a face, a name, and the
+// office number. That is the trust signal this audience acts on (most
+// guests book by phone).
 templ homeStory() {
 	<section class="bg-po-paper-deep py-[clamp(5rem,11vh,10rem)]">
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[1.05fr_0.95fr]">
-				<div>
-					@picture("/static/img/story-flybox.jpg", "A guide sorting flies from a fly box in the boat", "aspect-[4/5] w-full rounded-sm object-cover")
-				</div>
+				<figure>
+					@picture("/static/img/owner-brandon.jpg", "Brandon Boedecker holding a brown trout on the river", "aspect-[4/3] w-full rounded-sm object-cover")
+					<figcaption class="mt-4 text-[0.75rem] font-semibold uppercase tracking-[0.13em] text-po-gray">Brandon Boedecker, owner &amp; guide</figcaption>
+				</figure>
 				<div>
 					@eyebrow("Owner-operated", "gold")
 					<h2 class="my-5 max-w-[18ch] font-display text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-ink">An authentic taste of Montana before.</h2>
-					<p class="mb-7 max-w-[46ch]">We've spent fifty years earning access to water most people never see — and learning when to leave it alone.</p>
+					<p class="mb-5 max-w-[46ch]">We've spent fifty years earning access to water most people never see — and learning when to leave it alone.</p>
+					<p class="mb-8 max-w-[46ch]">Owner-operated means the owner is on the water. Brandon rows boats on the Smith through spring and summer, and chases wild birds behind his dogs at Sharptail Lodge come fall.</p>
+					<div class="mb-8 max-w-[46ch] border-t border-po-border pt-6">
+						@eyebrow("Call the office", "gold")
+						<a href={ templ.SafeURL(BrandPhoneHref) } class="mt-3 inline-block font-display text-[clamp(1.9rem,3.2vw,2.5rem)] font-light leading-none text-po-ink transition-colors duration-500 ease-editorial hover:text-po-accent">{ BrandPhone }</a>
+					</div>
 					@linkArrow("Read our story", "/about")
 				</div>
 			</div>
@@ -137,31 +145,6 @@ templ lodgeCard(l Lodge) {
 			</div>
 		</div>
 	</article>
-}
-
-// ---- Owner -------------------------------------------------------------
-// A face, a name, and the office number: the trust signal this audience
-// actually acts on (most guests book by phone). Replaces a stat band.
-templ homeOwner() {
-	<section class="bg-po-ground-dark py-[clamp(5rem,11vh,9rem)] text-po-on-dark">
-		<div class="mx-auto max-w-container px-6 sm:px-12">
-			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[0.95fr_1.05fr]">
-				<div>
-					@picture("/static/img/owner-brandon.jpg", "Brandon Boedecker holding a brown trout on the river", "aspect-[4/3] w-full rounded-sm object-cover")
-				</div>
-				<div class="max-w-[42ch]">
-					@eyebrow("Owner & guide", "light")
-					<h2 class="my-5 font-display text-[clamp(1.9rem,3.6vw,2.8rem)] font-normal leading-[1.15] tracking-[-0.015em] text-po-on-dark">Owner-operated means the owner is on the water.</h2>
-					<p class="text-po-on-dark-soft">Brandon Boedecker rows boats on the Smith through spring and summer, and chases wild birds behind his dogs at Sharptail Lodge come fall.</p>
-					<div class="mt-9 border-t border-white/15 pt-7">
-						@eyebrow("Call the office", "light")
-						<a href={ templ.SafeURL(BrandPhoneHref) } class="mt-3 inline-block font-display text-[clamp(2rem,3.6vw,2.75rem)] font-light leading-none text-po-on-dark transition-colors duration-500 ease-editorial hover:text-po-gold">{ BrandPhone }</a>
-						<p class="mt-5 text-[0.9375rem] text-po-on-dark-soft">Prefer to write? <a href="/contact" class="text-po-on-dark underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-po-gold">Plan your trip</a> online.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 }
 
 // ---- Stewardship ---------------------------------------------------------
