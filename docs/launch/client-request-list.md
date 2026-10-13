@@ -86,13 +86,14 @@ Logan / Firefly Software
 
 23. **Original photos.** The current photos are web-sized from 2014–2021 and look soft on large screens. Do you or your photographer have the full-size originals?
 24. **A new shoot.** If the originals are gone, is a shoot something you'd like to plan? It doesn't need to block launch. We can swap photos in afterward.
-25. **Logos.** Orvis Endorsed and Trout Unlimited logo files, if you have them, and confirmation you're allowed to display them.
+25. **A vertical hero.** A photo or a short clip (five to ten seconds) of a float, shot upright on a phone. Most visitors arrive on a phone, and a wide photo only shows a sliver there. This can come after launch.
+26. **Logos.** Orvis Endorsed and Trout Unlimited logo files, if you have them, and confirmation you're allowed to display them.
 
 ### 7. Accounts and access
 
-26. **Domain.** Who your domain is registered with, and access to its DNS settings (or the person who manages it).
-27. **Email.** Who hosts your email (Google, Microsoft, your web host?). I need to switch the website without touching your email.
-28. **Inquiry inbox.** Which email address or addresses should new trip inquiries go to?
-29. **Admin logins.** Who should be able to log in to read inquiries? I need their email addresses.
-30. **Analytics.** Do you have an existing Google Analytics account, Facebook/Meta business account, or Google Business Profile? Access to any of them.
-31. **Facebook page.** Confirm the link is facebook.com/prooutfitters.
+27. **Domain.** Who your domain is registered with, and access to its DNS settings (or the person who manages it).
+28. **Email.** Who hosts your email (Google, Microsoft, your web host?). I need to switch the website without touching your email.
+29. **Inquiry inbox.** Which email address or addresses should new trip inquiries go to?
+30. **Admin logins.** Who should be able to log in to read inquiries? I need their email addresses.
+31. **Analytics.** Do you have an existing Google Analytics account, Facebook/Meta business account, or Google Business Profile? Access to any of them.
+32. **Facebook page.** Confirm the link is facebook.com/prooutfitters.
