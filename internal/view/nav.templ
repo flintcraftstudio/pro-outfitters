@@ -12,9 +12,11 @@ templ Nav() {
 					</a>
 				}
 			</div>
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-2 md:gap-6">
+				<a href={ templ.SafeURL(BrandPhoneHref) } class="po-nav-link hidden text-[0.875rem] font-medium tracking-[0.01em] transition-colors duration-500 ease-editorial lg:inline" aria-label={ "Call the office at " + BrandPhone }>{ BrandPhone }</a>
+				<a href={ templ.SafeURL(BrandPhoneHref) } class="po-nav-link inline-flex min-h-11 items-center px-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-500 ease-editorial lg:hidden" aria-label={ "Call the office at " + BrandPhone }>Call</a>
 				<div class="hidden md:flex">
-					@btnPrimary("Plan Your Trip", "/contact")
+					@btnPrimary("Plan your trip", "/contact")
 				</div>
 				<button
 					type="button"
@@ -55,8 +57,9 @@ templ Nav() {
 						{ l.Label }
 					</a>
 				}
-				<div class="pt-4">
-					@btnPrimary("Plan Your Trip", "/contact")
+				<div class="grid gap-3 pt-4">
+					@btnPrimary("Call "+BrandPhone, BrandPhoneHref)
+					@btnSecondary("Plan your trip", "/contact")
 				</div>
 			</div>
 		</div>

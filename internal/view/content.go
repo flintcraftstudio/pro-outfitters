@@ -115,7 +115,7 @@ var lodges = []Lodge{
 		MetaTags:  []string{"Bird hunting", "Upland country"},
 		Headline:  "Wild birds, wide open country",
 		CardBlurb: "Glamping on a homesteaded ranch with 150,000+ huntable acres of wild bird country and Orvis-endorsed wingshooting.",
-		CardImage: "lodge-sharptail.jpg",
+		CardImage: "sharptail-yurts.jpg",
 		Hero:      "sharptail-hero.jpg",
 		Body: []string{
 			"Watch wild birds rise into a brilliant sky over more than 150,000 huntable acres of some of the most prolific wild bird habitat in America. Our guests hunt wild birds only — sharptail grouse and Hungarian partridge to open the season, ring-neck pheasant after the first week of October.",

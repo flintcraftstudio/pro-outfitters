@@ -163,3 +163,13 @@
   }
 }
 
+
+/* Visible keyboard focus everywhere (WCAG 2.4.7). currentColor keeps the
+   ring legible on both paper and dark/photographic grounds; form fields
+   keep their own ring treatment. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}

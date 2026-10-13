@@ -9,7 +9,7 @@ templ homeContent() {
 	@homeStory()
 	@homeExperiences()
 	@homeLodges()
-	@homeCredibility()
+	@homeOwner()
 	@homeStewardship()
 	@homeTestimonial()
 	@homeClosing()
@@ -38,10 +38,17 @@ templ homeHero() {
 		<div class="mx-auto w-full max-w-container px-6 pb-12 pt-6 sm:px-12 sm:pb-[clamp(3rem,7vh,6rem)] sm:pt-32">
 			@eyebrow("Est. 1970 · Orvis-Endorsed · Montana", "light")
 			<h1 class="mt-4 max-w-[16ch] text-balance font-display text-[2.5rem] font-normal leading-[1.04] tracking-[-0.015em] text-po-on-dark sm:mt-6 sm:text-[clamp(2.9rem,6.4vw,5.6rem)] sm:leading-[1.02] sm:[text-shadow:0_1px_24px_rgba(16,14,11,0.35)]">Montana, the way it was meant to be fished.</h1>
-			<p class="mt-4 max-w-[46ch] font-display text-[1.125rem] font-light leading-[1.5] text-po-on-dark-soft sm:mt-6 sm:text-[clamp(1.25rem,2.1vw,1.5rem)] sm:text-po-on-dark">Owner-operated since 1970. Guided float trips, upland wingshooting, and three lodges on water worth protecting.</p>
-			<div class="mt-7 flex flex-wrap items-center gap-4 sm:mt-10">
-				@btnPrimaryLight("Plan Your Trip", "/contact")
-				@btnGhost("Our Story", "/about")
+			<p class="mt-4 max-w-[46ch] font-display text-[1.125rem] font-light leading-[1.5] text-po-on-dark-soft sm:mt-6 sm:text-[clamp(1.25rem,2.1vw,1.5rem)] sm:text-po-on-dark">Guided float trips, upland wingshooting, and three owner-operated lodges on water worth protecting.</p>
+			<!-- Phones lead with the call (most guests book by phone, and two
+			     full buttons don't fit side by side); from sm up the inquiry
+			     is the filled primary and the number sits beside it. -->
+			<div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 sm:hidden">
+				@btnPrimaryLight("Call "+BrandPhone, BrandPhoneHref)
+				@linkArrowLight("Plan your trip", "/contact")
+			</div>
+			<div class="mt-10 hidden flex-wrap items-center gap-4 sm:flex">
+				@btnPrimaryLight("Plan your trip", "/contact")
+				@btnGhost("Call "+BrandPhone, BrandPhoneHref)
 			</div>
 		</div>
 	</header>
@@ -52,15 +59,13 @@ templ homeStory() {
 	<section class="bg-po-paper-deep py-[clamp(5rem,11vh,10rem)]">
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[1.05fr_0.95fr]">
-				<div class="relative">
-					@picture("/static/img/story-flybox.jpg", "A guide's fly box, an editorial close-up", "aspect-[4/5] w-full rounded-sm object-cover")
-					<span class="absolute -left-px -top-px bg-po-paper px-4 py-3 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-po-gold-deep">Since 1970</span>
+				<div>
+					@picture("/static/img/story-flybox.jpg", "A guide sorting flies from a fly box in the boat", "aspect-[4/5] w-full rounded-sm object-cover")
 				</div>
 				<div>
 					@eyebrow("Owner-operated", "gold")
 					<h2 class="my-5 max-w-[18ch] font-display text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-ink">An authentic taste of Montana before.</h2>
-					<p class="mb-5 max-w-[46ch]">We've spent fifty years earning access to water most people never see — and learning when to leave it alone. What began as one guide and one drift boat is still run by the family that started it.</p>
-					<p class="mb-7 max-w-[46ch]">No call centers. No franchised veneer. The person who plans your week is the person you'll meet at the put-in.</p>
+					<p class="mb-7 max-w-[46ch]">We've spent fifty years earning access to water most people never see — and learning when to leave it alone.</p>
 					@linkArrow("Read our story", "/about")
 				</div>
 			</div>
@@ -76,7 +81,7 @@ templ homeExperiences() {
 				@sectionHead("Two ways to spend a Montana day", "Fly fishing & bird hunting.")
 			</div>
 			<div class="grid gap-[clamp(1.5rem,3vw,2.5rem)] md:grid-cols-2">
-				@experienceCard("exp-fishing", "hero-fishing.jpg", "Drift boat on the Missouri, golden hour", "Fly Fishing", "Trout water, read by people who live on it.", "Wade and float the Missouri, the Blackfoot, and tailwaters that fish all season. Guides who'll tell you the truth about the hatch.", "Explore fly fishing", "/fly-fishing")
+				@experienceCard("exp-fishing", "fishing-alt1.jpg", "A guest with a fish on, rod bent, fishing from the raft", "Fly Fishing", "Trout water, read by people who live on it.", "Wade and float the Missouri, the Blackfoot, and tailwaters that fish all season. Guides who'll tell you the truth about the hatch.", "Explore fly fishing", "/fly-fishing")
 				@experienceCard("exp-hunting", "exp-hunting.jpg", "Dogs on point, autumn prairie", "Bird Hunting", "Upland miles behind a good dog.", "Sharptail, Hun, and pheasant over big country. Mornings that start in frost and end with the truck a long, satisfied walk away.", "Explore wingshooting", "/bird-hunting")
 			</div>
 		</div>
@@ -128,37 +133,35 @@ templ lodgeCard(l Lodge) {
 			<h3 class="mb-2 font-display text-[1.4rem] font-medium leading-[1.2] text-po-ink">{ l.Name }</h3>
 			<p class="mb-5 text-[0.9375rem] leading-[1.55] text-po-gray">{ l.CardBlurb }</p>
 			<div class="mt-auto">
-				@linkArrow("Explore", "/lodges/"+l.Slug)
+				@linkArrowSR("Explore", l.Name, "/lodges/"+l.Slug)
 			</div>
 		</div>
 	</article>
 }
 
-// ---- Credibility band ----------------------------------------------------
-templ homeCredibility() {
-	<section class="bg-po-ground-dark py-[clamp(5rem,11vh,10rem)] text-po-on-dark">
+// ---- Owner -------------------------------------------------------------
+// A face, a name, and the office number: the trust signal this audience
+// actually acts on (most guests book by phone). Replaces a stat band.
+templ homeOwner() {
+	<section class="bg-po-ground-dark py-[clamp(5rem,11vh,9rem)] text-po-on-dark">
 		<div class="mx-auto max-w-container px-6 sm:px-12">
-			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[auto_1fr]">
-				<div class="max-w-[24ch]">
-					@eyebrow("Earned, not advertised", "light")
-					<p class="mt-4 font-display text-[clamp(1.4rem,2.4vw,1.9rem)] font-light leading-[1.35] text-po-on-dark">Half a century on the same rivers tends to show.</p>
+			<div class="reveal grid items-center gap-[clamp(2.5rem,6vw,6rem)] md:grid-cols-[0.95fr_1.05fr]">
+				<div>
+					@picture("/static/img/owner-brandon.jpg", "Brandon Boedecker holding a brown trout on the river", "aspect-[4/3] w-full rounded-sm object-cover")
 				</div>
-				<div class="grid grid-cols-2 gap-y-8 sm:grid-cols-4 sm:gap-y-0">
-					@statBlock("1970", "Established")
-					@statBlock("50+", "Seasons guided")
-					@statBlock("3", "Owner-run lodges")
-					@statBlock("Orvis", "Endorsed outfitter")
+				<div class="max-w-[42ch]">
+					@eyebrow("Owner & guide", "light")
+					<h2 class="my-5 font-display text-[clamp(1.9rem,3.6vw,2.8rem)] font-normal leading-[1.15] tracking-[-0.015em] text-po-on-dark">Owner-operated means the owner is on the water.</h2>
+					<p class="text-po-on-dark-soft">Brandon Boedecker rows boats on the Smith through spring and summer, and chases wild birds behind his dogs at Sharptail Lodge come fall.</p>
+					<div class="mt-9 border-t border-white/15 pt-7">
+						@eyebrow("Call the office", "light")
+						<a href={ templ.SafeURL(BrandPhoneHref) } class="mt-3 inline-block font-display text-[clamp(2rem,3.6vw,2.75rem)] font-light leading-none text-po-on-dark transition-colors duration-500 ease-editorial hover:text-po-gold">{ BrandPhone }</a>
+						<p class="mt-5 text-[0.9375rem] text-po-on-dark-soft">Prefer to write? <a href="/contact" class="text-po-on-dark underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-po-gold">Plan your trip</a> online.</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-}
-
-templ statBlock(n, c string) {
-	<div class="border-po-on-dark/15 px-0 sm:border-l sm:px-[clamp(1rem,2.2vw,2rem)] sm:first:border-l-0 sm:first:pl-0">
-		<div class="font-display text-[clamp(2.4rem,4vw,3.4rem)] font-light leading-none text-po-on-dark">{ n }</div>
-		<div class="mt-4 text-[0.75rem] font-semibold uppercase leading-[1.4] tracking-[0.13em] text-po-on-dark-soft">{ c }</div>
-	</div>
 }
 
 // ---- Stewardship ---------------------------------------------------------
@@ -204,10 +207,10 @@ templ homeClosing() {
 		<div class="mx-auto max-w-container px-6 py-[clamp(6rem,14vh,11rem)] sm:px-12">
 			@eyebrow("Plan your trip", "light")
 			<h2 class="mx-auto my-5 max-w-[18ch] text-balance font-display text-[clamp(2.3rem,5vw,4rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-on-dark">Tell us what kind of week you're after.</h2>
-			<p class="mx-auto mb-10 max-w-[40ch] text-po-on-dark-soft">Every trip is planned by hand. Share your dates and what you're hoping for, and one of the family will be in touch.</p>
+			<p class="mx-auto mb-10 max-w-[40ch] text-po-on-dark-soft">Every trip is planned by hand. Call the office, or send your dates and what you're hoping for, and we'll take it from there.</p>
 			<div class="flex flex-wrap justify-center gap-4">
-				@btnPrimary("Begin an Inquiry", "/contact")
-				@btnGhost("Call the office", BrandPhoneHref)
+				@btnPrimaryLight("Call "+BrandPhone, BrandPhoneHref)
+				@btnGhost("Plan your trip", "/contact")
 			</div>
 		</div>
 	</section>
