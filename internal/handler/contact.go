@@ -41,6 +41,16 @@ func ContactSubmit(deps ContactDeps) http.HandlerFunc {
 			return
 		}
 
+		// Honeypot: a filled "website" field means a bot. Show the normal
+		// success state so it has no signal to adapt to, and save nothing.
+		if r.FormValue("website") != "" {
+			slog.Info("contact honeypot tripped", "ip", r.RemoteAddr)
+			if err := view.ContactForm(nil, nil, true).Render(r.Context(), w); err != nil {
+				slog.Error("render error", "err", err)
+			}
+			return
+		}
+
 		values := map[string]string{
 			"name":            strings.TrimSpace(r.FormValue("name")),
 			"email":           strings.TrimSpace(r.FormValue("email")),
@@ -97,6 +107,22 @@ func ContactSubmit(deps ContactDeps) http.HandlerFunc {
 		if err := view.ContactForm(nil, nil, true).Render(r.Context(), w); err != nil {
 			slog.Error("render error", "err", err)
 		}
+	}
+}
+
+// ContactRateLimited answers a throttled POST /contact. It renders the
+// form with a message (status 200, so htmx swaps it in) and points the
+// visitor to the phone, which is how most guests book anyway.
+func ContactRateLimited(w http.ResponseWriter, r *http.Request) {
+	slog.Info("contact rate limited", "ip", r.RemoteAddr, "xff", r.Header.Get("X-Forwarded-For"))
+	// Refill what they typed so a real visitor doesn't lose it.
+	values := make(map[string]string)
+	for _, k := range []string{"name", "email", "phone", "interest", "preferred_dates", "group_size", "message"} {
+		values[k] = strings.TrimSpace(r.FormValue(k))
+	}
+	errs := map[string]string{"form": "We've had several inquiries from you in a short time. Please call the office at " + view.BrandPhone + ", or try again in an hour."}
+	if err := view.ContactForm(errs, values, false).Render(r.Context(), w); err != nil {
+		slog.Error("render error", "err", err)
 	}
 }
 

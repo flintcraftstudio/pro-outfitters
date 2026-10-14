@@ -19,6 +19,12 @@ type RateLimitConfig struct {
 	TrustedProxies  int
 	KeyFunc         func(r *http.Request) string
 	CleanupInterval time.Duration
+
+	// OnLimit writes the response for a throttled request, after the
+	// Retry-After header is set. Nil means a plain-text 429. Set it when
+	// the caller is an htmx form: htmx won't swap a 4xx, so a bare 429
+	// leaves the visitor looking at a button that did nothing.
+	OnLimit http.HandlerFunc
 }
 
 // RateLimit returns middleware that throttles requests per client
@@ -52,6 +58,10 @@ func RateLimit(config RateLimitConfig) func(http.Handler) http.Handler {
 			if !limiter.Allow() {
 				retryAfter := int(math.Ceil(1.0 / float64(config.Rate)))
 				w.Header().Set("Retry-After", strconv.Itoa(retryAfter))
+				if config.OnLimit != nil {
+					config.OnLimit(w, r)
+					return
+				}
 				http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
 				return
 			}

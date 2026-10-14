@@ -87,6 +87,12 @@ templ ContactForm(errors map[string]string, values map[string]string, success bo
 					placeholder="Water or birds, experience level, anything we can plan around…"
 				>{ values["message"] }</textarea>
 			</div>
+			// Honeypot. Off-screen and out of the tab order, so people never
+			// fill it; form-filling bots usually do. See handler.ContactSubmit.
+			<div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+				<label for="website">Website</label>
+				<input type="text" id="website" name="website" tabindex="-1" autocomplete="off"/>
+			</div>
 			if TurnstileSiteKey != "" {
 				<div class="cf-turnstile" data-sitekey={ TurnstileSiteKey } data-theme="light"></div>
 			}

@@ -26,6 +26,7 @@ import (
 	"github.com/flintcraftstudio/standard-template/internal/view"
 
 	"github.com/pressly/goose/v3"
+	"golang.org/x/time/rate"
 	_ "modernc.org/sqlite"
 )
 
@@ -112,6 +113,25 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	// Per-IP limits on the two forms that send email. TrustedProxies is 1
+	// because Caddy sits in front and appends the client IP to
+	// X-Forwarded-For; with no header (local dev) RemoteAddr is used.
+	// Limits are in memory and reset on restart, which is fine at this
+	// scale. Contact allows a burst of 8 (validation retries count) and
+	// refills one every 10 minutes; login allows 5, then one a minute.
+	contactLimit := middleware.RateLimit(middleware.RateLimitConfig{
+		Rate:           rate.Every(10 * time.Minute),
+		Burst:          8,
+		TrustedProxies: 1,
+		OnLimit:        handler.ContactRateLimited,
+	})
+	loginLimit := middleware.RateLimit(middleware.RateLimitConfig{
+		Rate:           rate.Every(time.Minute),
+		Burst:          5,
+		TrustedProxies: 1,
+		OnLimit:        handler.LoginRateLimited,
+	})
+
 	// Static files. Cache-Control is set per asset class so repeat visits
 	// don't re-download fonts/images; the unhashed CSS/JS get a short TTL so
 	// a deploy propagates quickly.
@@ -160,12 +180,12 @@ func main() {
 	mux.Handle("GET /blackfoot-river", handler.Page(view.BlackfootRiverPage()))
 	mux.Handle("GET /packing-lists/{slug}", handler.PackingList())
 	mux.Handle("GET /contact", handler.Contact())
-	mux.Handle("POST /contact", handler.ContactSubmit(handler.ContactDeps{
+	mux.Handle("POST /contact", contactLimit(handler.ContactSubmit(handler.ContactDeps{
 		Store:     st,
 		Mailer:    mailer,
 		Turnstile: turnstileVerifier,
 		AppName:   cfg.AppName,
-	}))
+	})))
 
 	// Auth.
 	authDeps := handler.AuthDeps{
@@ -175,7 +195,7 @@ func main() {
 		AppName: cfg.AppName,
 	}
 	mux.Handle("GET /login", handler.LoginPage())
-	mux.Handle("POST /login", handler.RequestMagicLink(authDeps))
+	mux.Handle("POST /login", loginLimit(handler.RequestMagicLink(authDeps)))
 	mux.Handle("GET /login/magic/{token}", handler.ConsumeMagicLink(st))
 	mux.Handle("POST /logout", handler.Logout(st))
 

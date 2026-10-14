@@ -108,6 +108,15 @@ func RequestMagicLink(deps AuthDeps) http.HandlerFunc {
 	}
 }
 
+// LoginRateLimited answers a throttled POST /login with the form and a
+// message (status 200, so htmx swaps it in).
+func LoginRateLimited(w http.ResponseWriter, r *http.Request) {
+	slog.Info("login rate limited", "ip", r.RemoteAddr, "xff", r.Header.Get("X-Forwarded-For"))
+	if err := view.LoginForm("Too many sign-in requests. Wait a few minutes and try again.", r.FormValue("email")).Render(r.Context(), w); err != nil {
+		slog.Error("render error", "err", err)
+	}
+}
+
 // ConsumeMagicLink handles GET /login/magic/{token}. Atomically validates
 // and marks the token used, then starts a session and redirects to /admin.
 func ConsumeMagicLink(s *store.Store) http.HandlerFunc {
