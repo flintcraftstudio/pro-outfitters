@@ -194,11 +194,13 @@ func main() {
 	mux.Handle("GET /", handler.NotFound())
 
 	// Middleware composition. Inside-out: session attaches user
-	// context → strip trailing slash for canonical paths → request
+	// context → strip trailing slash for canonical paths → old-site
+	// redirects (ahead of the slash strip, so each is one 301) → request
 	// logging outermost so it sees the final status code.
 	srv := session.Middleware(st)(mux)
 	srv = withPath(srv)
 	srv = middleware.StripTrailingSlash(srv)
+	srv = handler.LegacyRedirects(srv)
 	srv = middleware.Logging(logger)(srv)
 
 	server := &http.Server{
