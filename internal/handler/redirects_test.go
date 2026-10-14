@@ -45,7 +45,7 @@ func TestLegacyRedirectTargetsExist(t *testing.T) {
 		"/contact": true, "/fly-fishing": true, "/bird-hunting": true,
 		"/kids-camp": true, "/blackfoot-river": true,
 		"/lodges/north-fork-crossing": true, "/lodges/sharptail": true,
-		"/lodges/yurt-at-craig": true,
+		"/lodges/yurt-at-craig":      true,
 		"/packing-lists/smith-river": true, "/packing-lists/kids-camp": true,
 		"/packing-lists/bird-hunting": true,
 	}
