@@ -50,6 +50,10 @@ func main() {
 	view.PixelID = cfg.PixelID
 	view.TurnstileSiteKey = cfg.TurnstileSiteKey
 	view.BaseURL = cfg.AppBaseURL
+	view.Indexable = cfg.AllowIndexing
+	if !cfg.AllowIndexing {
+		slog.Info("ALLOW_INDEXING not set, site is noindex")
+	}
 	if cfg.GtagID == "" {
 		slog.Info("GTAG_ID not set, Google Analytics disabled")
 	}
@@ -139,6 +143,10 @@ func main() {
 		})
 	}
 
+	// Crawler files. Both follow ALLOW_INDEXING.
+	mux.Handle("GET /robots.txt", handler.Robots(cfg.AppBaseURL, cfg.AllowIndexing))
+	mux.Handle("GET /sitemap.xml", handler.Sitemap(cfg.AppBaseURL))
+
 	// Public pages.
 	mux.Handle("GET /{$}", handler.Home())
 	mux.Handle("GET /lodges", handler.Lodges())
@@ -189,6 +197,7 @@ func main() {
 	// context → strip trailing slash for canonical paths → request
 	// logging outermost so it sees the final status code.
 	srv := session.Middleware(st)(mux)
+	srv = withPath(srv)
 	srv = middleware.StripTrailingSlash(srv)
 	srv = middleware.Logging(logger)(srv)
 
@@ -280,6 +289,14 @@ func loadEnv(path string) error {
 // chosen by file extension. Fonts and images are content-stable and get a
 // one-year lifetime; the unhashed CSS/JS change on every deploy, so they get
 // a short TTL to bound how long a client can serve stale assets.
+// withPath records the request path for the layout's canonical link. It
+// runs after StripTrailingSlash, so the path is already canonical.
+func withPath(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r.WithContext(view.WithPath(r.Context(), r.URL.Path)))
+	})
+}
+
 func cacheStatic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch strings.ToLower(filepath.Ext(r.URL.Path)) {

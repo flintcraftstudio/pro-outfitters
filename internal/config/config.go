@@ -35,6 +35,11 @@ type Config struct {
 	// a Cloudflare account.
 	TurnstileSiteKey   string
 	TurnstileSecretKey string
+
+	// AllowIndexing opts the site in to search engines. Off by default so
+	// a staging deploy is never indexed: robots.txt disallows everything
+	// and every page carries noindex. Set ALLOW_INDEXING=true at launch.
+	AllowIndexing bool
 }
 
 func Load() (*Config, error) {
@@ -60,6 +65,7 @@ func Load() (*Config, error) {
 		GtagID:              os.Getenv("GTAG_ID"),
 		TurnstileSiteKey:    os.Getenv("TURNSTILE_SITE_KEY"),
 		TurnstileSecretKey:  os.Getenv("TURNSTILE_SECRET_KEY"),
+		AllowIndexing:       os.Getenv("ALLOW_INDEXING") == "true",
 	}, nil
 }
 

@@ -1,7 +1,8 @@
 package view
 
 templ NotFoundPage() {
-	@Base("Page Not Found", "The page you're looking for doesn't exist.", notFoundContent())
+	// noindex: a 404 must not claim a canonical URL.
+	@DraftBase("Page Not Found", "The page you're looking for doesn't exist.", notFoundContent())
 }
 
 templ notFoundContent() {
