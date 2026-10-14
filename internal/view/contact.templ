@@ -1,5 +1,7 @@
 package view
 
+import "strconv"
+
 templ ContactPage(errors map[string]string, values map[string]string, success bool) {
 	@Base("Plan Your Trip", "Tell us what you're after — the water or the birds, your dates, your group — and we'll help you put the right Montana trip together.", contactContent(errors, values, success))
 }
@@ -83,9 +85,17 @@ templ ContactForm(errors map[string]string, values map[string]string, success bo
 					id="message"
 					name="message"
 					rows="5"
+					maxlength={ strconv.Itoa(ContactMaxLen["message"]) }
+					if errors["message"] != "" {
+						aria-invalid="true"
+						aria-describedby="message-error"
+					}
 					class={ fieldClass }
 					placeholder="Water or birds, experience level, anything we can plan around…"
 				>{ values["message"] }</textarea>
+				if errors["message"] != "" {
+					<p id="message-error" class="mt-1.5 text-[0.75rem] text-red-700">{ errors["message"] }</p>
+				}
 			</div>
 			// Honeypot. Off-screen and out of the tab order, so people never
 			// fill it; form-filling bots usually do. See handler.ContactSubmit.
@@ -130,6 +140,9 @@ templ field(name, label, inputType, placeholder, autocomplete string, required b
 			name={ name }
 			value={ values[name] }
 			placeholder={ placeholder }
+			if n := ContactMaxLen[name]; n > 0 {
+				maxlength={ strconv.Itoa(n) }
+			}
 			if autocomplete != "" {
 				autocomplete={ autocomplete }
 			}

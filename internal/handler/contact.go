@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/flintcraftstudio/standard-template/internal/email"
 	"github.com/flintcraftstudio/standard-template/internal/store"
@@ -114,7 +115,7 @@ func ContactSubmit(deps ContactDeps) http.HandlerFunc {
 // form with a message (status 200, so htmx swaps it in) and points the
 // visitor to the phone, which is how most guests book anyway.
 func ContactRateLimited(w http.ResponseWriter, r *http.Request) {
-	slog.Info("contact rate limited", "ip", r.RemoteAddr, "xff", r.Header.Get("X-Forwarded-For"))
+	slog.Info("contact rate limited", "ip", r.RemoteAddr)
 	// Refill what they typed so a real visitor doesn't lose it.
 	values := make(map[string]string)
 	for _, k := range []string{"name", "email", "phone", "interest", "preferred_dates", "group_size", "message"} {
@@ -138,6 +139,11 @@ func validateContact(values map[string]string) map[string]string {
 	}
 	if values["interest"] == "" {
 		errs["interest"] = "Let us know what you're interested in."
+	}
+	for k, v := range values {
+		if n := view.ContactMaxLen[k]; n > 0 && utf8.RuneCountInString(v) > n {
+			errs[k] = fmt.Sprintf("Keep this under %d characters.", n)
+		}
 	}
 	return errs
 }

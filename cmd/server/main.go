@@ -113,23 +113,25 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Per-IP limits on the two forms that send email. TrustedProxies is 1
-	// because Caddy sits in front and appends the client IP to
-	// X-Forwarded-For; with no header (local dev) RemoteAddr is used.
-	// Limits are in memory and reset on restart, which is fine at this
+	// Per-IP limits on the two forms that send email. They key on
+	// RemoteAddr, which middleware.RealIP has already set to the client
+	// IP (see the middleware composition below). Limits are in memory and reset on restart, which is fine at this
 	// scale. Contact allows a burst of 8 (validation retries count) and
 	// refills one every 10 minutes; login allows 5, then one a minute.
+	// Public form bodies are capped well above any real submission (the
+	// contact form's fields total about 6 KB at their maxlength) so a bot
+	// can't post megabytes for the server to parse and store.
+	const maxFormBytes = 64 << 10
+
 	contactLimit := middleware.RateLimit(middleware.RateLimitConfig{
-		Rate:           rate.Every(10 * time.Minute),
-		Burst:          8,
-		TrustedProxies: 1,
-		OnLimit:        handler.ContactRateLimited,
+		Rate:    rate.Every(10 * time.Minute),
+		Burst:   8,
+		OnLimit: handler.ContactRateLimited,
 	})
 	loginLimit := middleware.RateLimit(middleware.RateLimitConfig{
-		Rate:           rate.Every(time.Minute),
-		Burst:          5,
-		TrustedProxies: 1,
-		OnLimit:        handler.LoginRateLimited,
+		Rate:    rate.Every(time.Minute),
+		Burst:   5,
+		OnLimit: handler.LoginRateLimited,
 	})
 
 	// Static files. Cache-Control is set per asset class so repeat visits
@@ -180,12 +182,12 @@ func main() {
 	mux.Handle("GET /blackfoot-river", handler.Page(view.BlackfootRiverPage()))
 	mux.Handle("GET /packing-lists/{slug}", handler.PackingList())
 	mux.Handle("GET /contact", handler.Contact())
-	mux.Handle("POST /contact", contactLimit(handler.ContactSubmit(handler.ContactDeps{
+	mux.Handle("POST /contact", http.MaxBytesHandler(contactLimit(handler.ContactSubmit(handler.ContactDeps{
 		Store:     st,
 		Mailer:    mailer,
 		Turnstile: turnstileVerifier,
 		AppName:   cfg.AppName,
-	})))
+	})), maxFormBytes))
 
 	// Auth.
 	authDeps := handler.AuthDeps{
@@ -195,7 +197,7 @@ func main() {
 		AppName: cfg.AppName,
 	}
 	mux.Handle("GET /login", handler.LoginPage())
-	mux.Handle("POST /login", loginLimit(handler.RequestMagicLink(authDeps)))
+	mux.Handle("POST /login", http.MaxBytesHandler(loginLimit(handler.RequestMagicLink(authDeps)), maxFormBytes))
 	mux.Handle("GET /login/magic/{token}", handler.ConsumeMagicLink(st))
 	mux.Handle("POST /logout", handler.Logout(st))
 
@@ -216,12 +218,16 @@ func main() {
 	// Middleware composition. Inside-out: session attaches user
 	// context → strip trailing slash for canonical paths → old-site
 	// redirects (ahead of the slash strip, so each is one 301) → request
-	// logging outermost so it sees the final status code.
+	// logging, so it sees the final status code → real client IP
+	// outermost. TrustedProxies is 1: Caddy sits in front and appends the
+	// client IP to X-Forwarded-For. With no header (local dev) the
+	// connection's own address is kept.
 	srv := session.Middleware(st)(mux)
 	srv = withPath(srv)
 	srv = middleware.StripTrailingSlash(srv)
 	srv = handler.LegacyRedirects(srv)
 	srv = middleware.Logging(logger)(srv)
+	srv = middleware.RealIP(1)(srv)
 
 	server := &http.Server{
 		Addr:         cfg.Addr(),

@@ -44,6 +44,19 @@ var InquiryInterests = []string{
 	"Not sure yet",
 }
 
+// ContactMaxLen caps each contact form field, in characters. The form
+// sets maxlength from it and handler.validateContact enforces it, so a
+// bot posting directly can't fill the inbox or the notification email.
+var ContactMaxLen = map[string]int{
+	"name":            120,
+	"email":           254,
+	"phone":           40,
+	"interest":        60,
+	"preferred_dates": 120,
+	"group_size":      60,
+	"message":         5000,
+}
+
 // CTA is a call-to-action link. Primary renders as a filled button.
 type CTA struct {
 	Label   string
