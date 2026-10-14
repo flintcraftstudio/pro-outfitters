@@ -127,13 +127,15 @@
   }
 
   /* ---- Gentle reveal on scroll-in ------------------------------------- */
-  .reveal {
+  /* Hidden only once JS has run (the .js class is set inline in <head>),
+     so content stays visible to no-JS visitors and crawlers. */
+  .js .reveal {
     opacity: 0;
     transform: translateY(22px);
     transition: opacity 1.1s cubic-bezier(0.37, 0, 0.63, 1),
       transform 1.1s cubic-bezier(0.37, 0, 0.63, 1);
   }
-  .reveal.in {
+  .js .reveal.in {
     opacity: 1;
     transform: none;
   }
@@ -153,7 +155,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .js .reveal {
     opacity: 1;
     transform: none;
     transition: none;

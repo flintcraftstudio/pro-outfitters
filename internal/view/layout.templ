@@ -17,10 +17,15 @@ templ page(title, description string, noindex bool, body templ.Component) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<!-- Flag JS before first paint so .reveal content only starts
+			     hidden when site.js will be there to show it. -->
+			<script>document.documentElement.classList.add("js")</script>
 			<meta name="description" content={ description }/>
 			<title>{ title } | { SiteName }</title>
-			if noindex {
+			if noindex || !Indexable {
 				<meta name="robots" content="noindex, follow"/>
+			} else {
+				<link rel="canonical" href={ canonicalURL(ctx) }/>
 			}
 			<!-- Open Graph / Twitter share card. Scrapers require absolute
 			     image URLs, so we prefix the configured BaseURL. -->
