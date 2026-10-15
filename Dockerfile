@@ -22,11 +22,15 @@ RUN apk add --no-cache curl && \
     tailwindcss -c ./tailwind/tailwind.config.js -i tailwind/input.css -o web/static/css/site.css --minify
 
 RUN CGO_ENABLED=0 go build -o /bin/server ./cmd/server
+# The seed CLI ships too, so the first admin can be created on a server
+# that has no Go toolchain: docker compose exec app /bin/seed <email> [name]
+RUN CGO_ENABLED=0 go build -o /bin/seed ./cmd/seed
 
 FROM alpine:3.21
 RUN apk add --no-cache ca-certificates
 
 COPY --from=build /bin/server /bin/server
+COPY --from=build /bin/seed /bin/seed
 COPY --from=build /src/web /web
 
 # SQLite database location. The app creates the parent dir if missing,
