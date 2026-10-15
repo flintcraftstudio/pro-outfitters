@@ -1,6 +1,7 @@
 // Pro Outfitters — minimal, restrained interactions.
 // 1. Sticky nav: transparent over the hero, paper-blur once scrolled past it.
 // 2. Gentle reveal on scroll-in. Motion respects prefers-reduced-motion.
+// 3. Re-render Turnstile in forms htmx swaps in.
 
 (function () {
   var nav = document.getElementById("nav");
@@ -53,3 +54,19 @@
     io.observe(e);
   });
 })();
+
+// 3. Turnstile after htmx swaps. Turnstile renders its widgets once, on
+// page load. When the contact form comes back with an error, htmx swaps
+// in a fresh form whose widget container is empty, so the next submit
+// would carry no token and fail verification. Render any container that
+// has no widget yet after each swap. (Tokens are single-use, so a fresh
+// widget is what a retry needs anyway.)
+document.addEventListener("htmx:afterSwap", function () {
+  if (!window.turnstile) return;
+  document.querySelectorAll(".cf-turnstile").forEach(function (el) {
+    // A rendered widget holds its response input; a fresh one doesn't.
+    if (!el.querySelector('input[name="cf-turnstile-response"]')) {
+      window.turnstile.render(el);
+    }
+  });
+});
