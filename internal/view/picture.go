@@ -2,6 +2,7 @@ package view
 
 import (
 	"fmt"
+	"path"
 	"strings"
 )
 
@@ -9,6 +10,26 @@ import (
 // for full-bleed images. Every full-bleed source is wider than the largest
 // (1600px), so all four variants always exist.
 var imgResponsiveWidths = []int{400, 800, 1200, 1600}
+
+// imgFocus is the object-position for full-bleed images whose subject sits
+// off-centre. object-cover crops a 16:9 photo hard on a portrait phone (the
+// 68vh detail hero shows about the middle 40%), so a centred crop can drop the
+// raft or the tents entirely. Unlisted images crop from the centre. Values are
+// literal Tailwind classes so the scan of this package keeps them in the CSS.
+// The home hero is handled separately by .po-hero-img in tailwind/input.css.
+var imgFocus = map[string]string{
+	"smith-float.jpg":  "object-[90%_50%]", // raft at the right, under the ledge
+	"nfork-hero.jpg":   "object-[20%_50%]", // lit tent cabin at the left
+	"fishing-alt1.jpg": "object-[80%_50%]", // angler and bent rod at the right
+}
+
+// withFocus appends src's focal-point class, if any, to class.
+func withFocus(src, class string) string {
+	if f, ok := imgFocus[path.Base(src)]; ok {
+		return class + " " + f
+	}
+	return class
+}
 
 // imgVariant swaps the extension on a /static/img/foo.jpg path, e.g.
 // imgVariant("/static/img/foo.jpg", ".avif") == "/static/img/foo.avif".

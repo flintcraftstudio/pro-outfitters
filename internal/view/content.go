@@ -113,8 +113,10 @@ var lodges = []Lodge{
 			{Label: "Endorsements", Value: "Orvis Endorsed Fly Fishing Lodge · Orvis Endorsed Kids Camp"},
 		},
 		Gallery: []GalleryImage{
+			{Src: "nfork-grounds.jpg", Alt: "Tent cabins and the lodge above an artesian-fed pond"},
+			{Src: "nfork-tents.jpg", Alt: "Two tent cabins joined by a gravel path through the grass"},
+			{Src: "nfork-pond-aerial.jpg", Alt: "An artesian-fed pond in the pines, the tent cabins along its far bank"},
 			{Src: "nfork-dining.jpg", Alt: "The lodge dining room at North Fork Crossing"},
-			{Src: "nfork-pond.jpg", Alt: "An artesian-fed fishing pond beside the lodge"},
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},

@@ -15,7 +15,8 @@ templ picture(src, alt, class string) {
 
 // bleedPicture — a full-bleed image with responsive AVIF/WebP/JPG srcsets at
 // 100vw. Pass eager=true for the page's LCP hero (fetchpriority=high, eager);
-// false for below-the-fold bands so they don't compete with the hero.
+// false for below-the-fold bands so they don't compete with the hero. Images
+// listed in imgFocus get their focal-point class added to `class`.
 templ bleedPicture(src, alt, class string, eager bool) {
 	<picture class="contents">
 		<source type="image/avif" srcset={ imgSrcset(src, ".avif") } sizes="100vw"/>
@@ -25,7 +26,7 @@ templ bleedPicture(src, alt, class string, eager bool) {
 			srcset={ imgSrcset(src, "") }
 			sizes="100vw"
 			alt={ alt }
-			class={ class }
+			class={ withFocus(src, class) }
 			decoding="async"
 			if eager {
 				fetchpriority="high"
