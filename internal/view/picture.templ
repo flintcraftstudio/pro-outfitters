@@ -13,6 +13,26 @@ templ picture(src, alt, class string) {
 	</picture>
 }
 
+// sizedPicture — a lazy content image with responsive AVIF/WebP/JPG srcsets,
+// for images that render large enough to need them (the gallery). `sizes` is
+// the rendered-width hint for the image's placement. Requires the width
+// variants imgSrcset names; imgFocus applies as for bleedPicture.
+templ sizedPicture(src, alt, class, sizes string) {
+	<picture class="contents">
+		<source type="image/avif" srcset={ imgSrcset(src, ".avif") } sizes={ sizes }/>
+		<source type="image/webp" srcset={ imgSrcset(src, ".webp") } sizes={ sizes }/>
+		<img
+			src={ src }
+			srcset={ imgSrcset(src, "") }
+			sizes={ sizes }
+			alt={ alt }
+			class={ withFocus(src, class) }
+			loading="lazy"
+			decoding="async"
+		/>
+	</picture>
+}
+
 // bleedPicture — a full-bleed image with responsive AVIF/WebP/JPG srcsets at
 // 100vw. Pass eager=true for the page's LCP hero (fetchpriority=high, eager);
 // false for below-the-fold bands so they don't compete with the hero. Images

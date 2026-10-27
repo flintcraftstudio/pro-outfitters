@@ -11,16 +11,26 @@ import (
 // (1600px), so all four variants always exist.
 var imgResponsiveWidths = []int{400, 800, 1200, 1600}
 
-// imgFocus is the object-position for full-bleed images whose subject sits
-// off-centre. object-cover crops a 16:9 photo hard on a portrait phone (the
-// 68vh detail hero shows about the middle 40%), so a centred crop can drop the
-// raft or the tents entirely. Unlisted images crop from the centre. Values are
-// literal Tailwind classes so the scan of this package keeps them in the CSS.
-// The home hero is handled separately by .po-hero-img in tailwind/input.css.
+// imgFocus is the object-position for images whose subject sits off-centre
+// in the crop they're shown at. object-cover crops a 16:9 hero hard on a
+// portrait phone (the 68vh detail hero shows about the middle 40%), and the
+// gallery's 4:5 and 2:1 placements crop landscape photos too, so a centred
+// crop can drop the raft or the tents entirely. Gallery entries assume the
+// placement the image's position in its gallery gives it. Unlisted images crop
+// from the centre. Values are literal Tailwind classes so the scan of this
+// package keeps them in the CSS. The home hero is handled separately by
+// .po-hero-img in tailwind/input.css.
 var imgFocus = map[string]string{
+	// Full-bleed heroes and bands.
 	"smith-float.jpg":  "object-[90%_50%]", // raft at the right, under the ledge
 	"nfork-hero.jpg":   "object-[20%_50%]", // lit tent cabin at the left
 	"fishing-alt1.jpg": "object-[80%_50%]", // angler and bent rod at the right
+	// Gallery portraits (4:5) and panoramas (2:1).
+	"smith-spring-wade.jpg":  "object-[75%_50%]",  // guide and raft at the right
+	"smith-camp-evening.jpg": "object-[60%_50%]",  // cook at the grill
+	"smith-boats-camp.jpg":   "object-[50%_75%]",  // boats along the bottom
+	"nfork-tents.jpg":        "object-[80%_50%]",  // nearer tent cabin
+	"yurt-wildlife.jpg":      "object-[100%_50%]", // deer at the water's edge, far right
 }
 
 // withFocus appends src's focal-point class, if any, to class.

@@ -32,11 +32,15 @@ templ detailBlock(items []DetailItem) {
 	</div>
 }
 
-// gallery — a simple two-up photo grid.
+// gallery — an editorial photo sequence; placement rules live in gallery.go.
+// Each frame reveals on its own: the sequence runs taller than a phone screen,
+// so one wrapper-level reveal would hold every image back until well into it.
 templ gallery(images []GalleryImage) {
-	<div class="grid gap-[clamp(1.25rem,2.5vw,2rem)] sm:grid-cols-2">
-		for _, im := range images {
-			@picture("/static/img/"+im.Src, im.Alt, "aspect-[4/3] w-full rounded-sm object-cover")
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:items-start md:gap-x-[clamp(1.25rem,2.5vw,2rem)] md:gap-y-[clamp(3rem,7vw,6rem)]">
+		for _, s := range galleryLayout(images) {
+			<div class={ "reveal", s.Wrap }>
+				@sizedPicture("/static/img/"+s.Src, s.Alt, s.Img+" w-full rounded-sm object-cover", s.Sizes)
+			</div>
 		}
 	</div>
 }
