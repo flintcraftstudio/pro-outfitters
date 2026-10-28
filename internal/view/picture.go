@@ -27,12 +27,14 @@ var imgFocus = map[string]string{
 	"fishing-alt1.jpg":    "object-[80%_50%]", // angler and bent rod at the right
 	"bird-guide-dogs.jpg": "object-[70%_60%]", // guide and dogs right of centre
 	"flyfishing-hero.jpg": "object-[30%_50%]", // the river's curve at the left
+	"sharptail-point.jpg": "object-[88%_50%]", // the dog, facing right of centre
 	// Gallery portraits (4:5) and panoramas (2:1).
 	"smith-spring-wade.jpg":  "object-[75%_50%]",  // guide and raft at the right
 	"smith-camp-evening.jpg": "object-[60%_50%]",  // cook at the grill
 	"smith-boats-camp.jpg":   "object-[50%_75%]",  // boats along the bottom
 	"nfork-tents.jpg":        "object-[80%_50%]",  // nearer tent cabin
 	"yurt-wildlife.jpg":      "object-[100%_50%]", // deer at the water's edge, far right
+	"sharptail-dogs.jpg":     "object-[50%_40%]",  // headroom above the dogs
 	"bird-coulee.jpg":        "object-[50%_70%]",  // hunter and dog low in the coulee
 }
 

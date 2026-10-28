@@ -86,10 +86,19 @@ type Lodge struct {
 	CardBlurb string       // short text on the overview card
 	CardImage string       // card thumbnail filename (under /static/img)
 	Hero      string       // hero image filename (under /static/img)
+	HeroAlt   string       // what the hero shows; empty falls back to Name
 	Body      []string     // intro paragraphs on the detail page
 	Details   []DetailItem // the detail block
 	Gallery   []GalleryImage
 	CTAs      []CTA
+}
+
+// heroAlt is the hero image's alt text.
+func (l Lodge) heroAlt() string {
+	if l.HeroAlt != "" {
+		return l.HeroAlt
+	}
+	return l.Name
 }
 
 var lodges = []Lodge{
@@ -102,6 +111,7 @@ var lodges = []Lodge{
 		CardBlurb: "Tent cabins on the bank of the North Fork of the Blackfoot, with five artesian-fed ponds and an Orvis-endorsed kids camp.",
 		CardImage: "lodge-northfork.jpg",
 		Hero:      "nfork-hero.jpg",
+		HeroAlt:   "Tent cabins lit beneath the Milky Way at North Fork Crossing",
 		Body: []string{
 			"This is the water Norman Maclean wrote into A River Runs Through It — the North Fork of the Blackfoot, just outside Ovando. We've guided anglers down it for close to forty years, and our guides know every seam and riffle of it.",
 			"The lodge sits on the riverbank in the Blackfoot Valley, remote and lush, holding strong populations of native West Slope cutthroat. Our tent cabins were built to keep the intimacy of camping without giving up comfort: wood floors, custom feather beds, heat, electricity, and a private bathhouse. The main lodge opens onto a lounge and dining room overlooking five artesian-fed ponds — stocked, and perfect for an evening cast before dinner.",
@@ -131,7 +141,8 @@ var lodges = []Lodge{
 		Headline:  "Wild birds, wide open country",
 		CardBlurb: "Glamping on a homesteaded ranch with 150,000+ huntable acres of wild bird country and Orvis-endorsed wingshooting.",
 		CardImage: "sharptail-yurts.jpg",
-		Hero:      "sharptail-hero.jpg",
+		Hero:      "sharptail-point.jpg",
+		HeroAlt:   "A bird dog on point in tall autumn grass",
 		Body: []string{
 			"Watch wild birds rise into a brilliant sky over more than 150,000 huntable acres of some of the most prolific wild bird habitat in America. Our guests hunt wild birds only — sharptail grouse and Hungarian partridge to open the season, ring-neck pheasant after the first week of October.",
 			"The ranch was homesteaded in the late 1800s. The original red barn now houses our dogs; guests stay in yurts with two queen beds, private baths, and gas fireplaces, gathering in two larger yurts joined by a deck and an outdoor fire pit for meals and cocktails. The dining is excellent and the bar is stocked with beer, wine, and mixers (guests bring their own hard liquor if they'd like).",
@@ -145,8 +156,11 @@ var lodges = []Lodge{
 		},
 		Gallery: []GalleryImage{
 			{Src: "sharptail-yurts.jpg", Alt: "Guest yurts under Big Sky Country"},
+			{Src: "sharptail-hunters.jpg", Alt: "Two hunters with their birds, a flat-topped butte behind them"},
+			{Src: "sharptail-dining.jpg", Alt: "The dining yurt, with its long table and antler chandelier"},
 			{Src: "sharptail-lab-birds.jpg", Alt: "A black Lab sitting beside pheasants and a shotgun"},
-			{Src: "sharptail-dogs.jpg", Alt: "Bird dogs and the hunting truck at Sharptail Lodge"},
+			{Src: "sharptail-bedroom.jpg", Alt: "A guest yurt at sunset, its two beds lit by bedside lamps"},
+			{Src: "sharptail-dogs.jpg", Alt: "Three setters looking out of the hunting truck"},
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
@@ -162,6 +176,7 @@ var lodges = []Lodge{
 		CardBlurb: "A self-catered base on the Missouri with the fly shops, restaurants, and bars of Craig a short walk away.",
 		CardImage: "lodge-yurt.jpg",
 		Hero:      "yurt-hero.jpg",
+		HeroAlt:   "The yurt's kitchen, with a breakfast bar under the lattice walls",
 		Body: []string{
 			"Some of the finest trout water in the world runs past the front door. The Yurt at Craig is a self-catered base on the Missouri — coffee on the deck over the river in the morning, the fly shops, restaurants, and bars of Craig a short walk down the street.",
 			"Eight minutes from the Wolf Creek take-out, nineteen from Holter Lake. The main yurt has a full kitchen, living room, and two bedrooms (one queen each) plus a covered deck. Two detached guest bedrooms sleep two apiece, and the bathhouse holds two private, fully furnished bath and shower rooms.",
@@ -174,7 +189,7 @@ var lodges = []Lodge{
 		},
 		Gallery: []GalleryImage{
 			{Src: "yurt-bedroom.jpg", Alt: "A guest bedroom at The Yurt at Craig"},
-			{Src: "yurt-wildlife.jpg", Alt: "Wildlife along the Missouri River"},
+			{Src: "yurt-wildlife.jpg", Alt: "A deer at the water's edge on the Missouri"},
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
