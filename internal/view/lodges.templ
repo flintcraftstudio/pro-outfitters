@@ -58,5 +58,46 @@ templ lodgeContent(l Lodge) {
 			</div>
 		</section>
 	}
+	if l.Address != "" {
+		@lodgeGettingHere(l)
+	}
 	@closingInquiry()
+}
+
+// lodgeGettingHere — the address, a map link, and driving directions from
+// each nearby town.
+templ lodgeGettingHere(l Lodge) {
+	<section aria-labelledby="getting-here" class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal max-w-measure">
+				@goldRule()
+				<div class="mt-5"></div>
+				@eyebrow("Getting here", "")
+				<h2 id="getting-here" class="mt-4 font-display text-[clamp(2.1rem,4.4vw,3.25rem)] font-normal leading-[1.18] tracking-[-0.015em] text-po-ink">Directions to { l.Name }</h2>
+				<p class="mt-5 text-[1.0625rem] leading-[1.6] text-po-ink-soft">
+					{ l.Address }
+					<span aria-hidden="true" class="mx-2 text-po-gray-light">·</span>
+					<a href={ templ.SafeURL(l.mapsURL()) } rel="noopener" class="text-po-accent underline underline-offset-4 hover:text-po-ink">Open in Google Maps</a>
+				</p>
+				<p class="mt-2 text-[1.0625rem] leading-[1.6] text-po-ink-soft">Lost on the way? Call the office at <a href={ templ.SafeURL(BrandPhoneHref) } class="whitespace-nowrap text-po-accent underline underline-offset-4 hover:text-po-ink">{ BrandPhone }</a>.</p>
+			</div>
+			if len(l.Directions) > 0 {
+				<div class="mt-[clamp(2.5rem,5vw,4rem)] grid gap-x-[clamp(2rem,4vw,3.5rem)] gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+					for _, r := range l.Directions {
+						<div class="reveal border-t border-po-border pt-6">
+							<h3 class="text-[0.8125rem] font-semibold uppercase tracking-eyebrow text-po-gold-deep">From { r.From }</h3>
+							<ol class="mt-4 flex list-decimal flex-col gap-3 pl-5 text-[1rem] leading-[1.55] text-po-ink-soft marker:text-po-gray-light">
+								for _, s := range r.Steps {
+									<li>{ s }</li>
+								}
+							</ol>
+							if r.Arrive != "" {
+								<p class="mt-4 text-[1rem] font-semibold leading-[1.55] text-po-ink">{ r.Arrive }</p>
+							}
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</section>
 }

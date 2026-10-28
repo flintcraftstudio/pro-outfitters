@@ -1,5 +1,7 @@
 package view
 
+import "net/url"
+
 // Brand contact + identity constants. These come from the content spec
 // (pro-outfitters-content-spec.md). Phone, mailing address, license, and
 // social handle are real; keep them in sync with the spec.
@@ -91,6 +93,22 @@ type Lodge struct {
 	Details   []DetailItem // the detail block
 	Gallery   []GalleryImage
 	CTAs      []CTA
+	// Address and Directions fill the "Getting here" section; both are
+	// optional. Directions are transcribed from the old site's PDF sheets.
+	Address    string
+	Directions []DirectionRoute
+}
+
+// DirectionRoute is driving directions to a lodge from one town.
+type DirectionRoute struct {
+	From   string
+	Steps  []string
+	Arrive string // the closing landmark line
+}
+
+// mapsURL links the lodge's address to Google Maps.
+func (l Lodge) mapsURL() string {
+	return "https://www.google.com/maps/search/?api=1&query=" + url.QueryEscape(l.Address)
 }
 
 // heroAlt is the hero image's alt text.
@@ -132,6 +150,44 @@ var lodges = []Lodge{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
 			{Label: "Kids Camp", Href: "/kids-camp"},
 		},
+		Address: "328 North Fork Hill Road, Ovando, MT 59854",
+		Directions: []DirectionRoute{
+			{
+				From: "Helena",
+				Steps: []string{
+					"Take Highway 12 west out of town, about 30 miles to the junction with Highway 141 in Avon.",
+					"Turn right on Highway 141 and travel 33 miles to where it ends at a T with Highway 200.",
+					"Turn left on Highway 200 and continue west about 12 miles to Ovando, which lies on the south side of the highway. Trixie's Restaurant and Bar, on the left, is a good landmark.",
+					"Turn left at Trixie's and stay on the Ovando–Helmville Road. (If you miss it, turn left at the sign for Ovando and bear right through town onto the same road.)",
+					"It's the only paved road running south from the highway; you may see signs for Brown's Lake, Helmville, or Harry Morgan Fishing Access.",
+					"After about 2 miles the road turns from paved to dirt. Continue about another mile, until you cross the North Fork of the Blackfoot.",
+				},
+				Arrive: "North Fork Crossing is immediately on the left, just after the bridge.",
+			},
+			{
+				From: "Missoula",
+				Steps: []string{
+					"Take Interstate 90 east to Highway 200, exiting at Bonner/Milltown (about 10 miles).",
+					"Continue east on Highway 200 about 60 miles to Ovando, which lies on the south side (your right) of the highway.",
+					"Turn right at the sign for Ovando and bear right through town onto the Ovando–Helmville Road. (If you miss it, turn right at Trixie's Restaurant and Bar and keep left onto the same road.)",
+					"It's the only paved road running south from the highway; you may see signs for Brown's Lake, Helmville, or Harry Morgan Fishing Access.",
+					"After about 2 miles the road turns from paved to dirt. Continue about another mile, until you cross the North Fork of the Blackfoot.",
+				},
+				Arrive: "North Fork Crossing is immediately on the left, just after the bridge.",
+			},
+			{
+				From: "Bozeman",
+				Steps: []string{
+					"Take Interstate 90 west to Garrison Junction (about 130 miles) and exit onto Highway 12 east.",
+					"Continue about 15 miles to Avon and the junction with Highway 141.",
+					"In Avon, turn left onto Highway 141 and travel 33 miles to where it ends at a T with Highway 200.",
+					"Turn left on Highway 200 and continue west about 12 miles to Ovando. Trixie's Restaurant and Bar, on the left, is a good landmark.",
+					"Turn left at Trixie's and stay on the Ovando–Helmville Road. (If you miss it, turn left at the sign for Ovando and bear right through town onto the same road.)",
+					"After about 2 miles the road turns from paved to dirt. Continue about another mile, until you cross the North Fork of the Blackfoot.",
+				},
+				Arrive: "North Fork Crossing is immediately on the left, just after the bridge.",
+			},
+		},
 	},
 	{
 		Slug:      "sharptail",
@@ -165,6 +221,30 @@ var lodges = []Lodge{
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},
 			{Label: "Gear list", Href: "/packing-lists/bird-hunting"},
+		},
+		Address: "445 Sharptail Lane, Geyser, MT 59447",
+		Directions: []DirectionRoute{
+			{
+				From: "Great Falls",
+				Steps: []string{
+					"Head east on Highway 87/200 about 45 miles to Geyser.",
+					"From the Geyser schoolhouse (on your left), continue 1.5 miles toward Stanford on the same highway.",
+					"Turn right (south) on the gravel road immediately past mile marker 23, marked with a brown Forest Service sign for Lonetree Road.",
+					"Go straight 4.1 miles to a T, turn right, and continue 2.2 miles.",
+					"Turn left at the mailbox marked PRO.",
+				},
+				Arrive: "Sharptail Lodge is on your right.",
+			},
+			{
+				From: "Lewistown",
+				Steps: []string{
+					"Travel west on Highway 87/200 to Stanford (about 45 miles), then continue about 13 miles past Stanford.",
+					"Turn left on the gravel road just before mile marker 23.",
+					"Go straight 4.1 miles to a T, turn right, and continue 2.2 miles.",
+					"Turn left at the mailbox marked PRO.",
+				},
+				Arrive: "Sharptail Lodge is on your right.",
+			},
 		},
 	},
 	{
