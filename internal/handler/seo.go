@@ -42,7 +42,13 @@ func Sitemap(baseURL string) http.HandlerFunc {
 		for _, l := range view.Lodges() {
 			paths = append(paths, "/lodges/"+l.Slug)
 		}
-		paths = append(paths, "/smith-river", "/about", "/contact")
+		paths = append(paths, "/smith-river", "/fly-fishing", "/bird-hunting", "/kids-camp", "/blackfoot-river")
+		for _, p := range view.PackingLists() {
+			if len(p.Sections) > 0 {
+				paths = append(paths, "/packing-lists/"+p.Slug)
+			}
+		}
+		paths = append(paths, "/about", "/contact")
 
 		set := urlset{XMLNS: "http://www.sitemaps.org/schemas/sitemap/0.9"}
 		for _, p := range paths {

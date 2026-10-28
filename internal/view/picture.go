@@ -26,6 +26,7 @@ var imgFocus = map[string]string{
 	"nfork-hero.jpg":      "object-[20%_50%]", // lit tent cabin at the left
 	"fishing-alt1.jpg":    "object-[80%_50%]", // angler and bent rod at the right
 	"bird-guide-dogs.jpg": "object-[70%_60%]", // guide and dogs right of centre
+	"flyfishing-hero.jpg": "object-[30%_50%]", // the river's curve at the left
 	// Gallery portraits (4:5) and panoramas (2:1).
 	"smith-spring-wade.jpg":  "object-[75%_50%]",  // guide and raft at the right
 	"smith-camp-evening.jpg": "object-[60%_50%]",  // cook at the grill

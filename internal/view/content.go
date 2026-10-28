@@ -214,14 +214,16 @@ var Team = []TeamMember{
 	{Name: "Keith Kelly", Role: "Chef, North Fork Crossing Lodge", Photo: "team-keith.jpg", Bio: "Originally from Bourbon County, Keith has led culinary programs at premier lodges across the American West. His elevated take on rustic, wild, locally sourced cooking makes dinner its own reason to come back."},
 }
 
-// PackingSection is one titled group of items on a packing list.
+// PackingSection is one titled group of items on a packing list. Note is an
+// optional line under the title (what the outfitter provides, say).
 type PackingSection struct {
 	Title string
+	Note  string
 	Items []string
 }
 
-// PackingList is a "what to bring" page. Sections is empty while the list
-// is pending from the client; the page then renders a draft notice.
+// PackingList is a "what to bring" page. The lists are carried over from the
+// old site, lightly cleaned up; a list with no Sections renders as a draft.
 type PackingList struct {
 	Slug        string
 	Name        string
@@ -242,8 +244,56 @@ var packingLists = []PackingList{
 		Lead:        "What to bring for a multi-day float on the Smith.",
 		Description: "What to pack for a guided Smith River float trip with Pro Outfitters.",
 		LegacyURL:   "https://prooutfitters.com/smith-river-packing-list/",
-		BackLabel:   "Back to the Smith River",
-		BackHref:    "/smith-river",
+		Sections: []PackingSection{
+			{Title: "Personal", Items: []string{
+				"Biodegradable soap",
+				"Personal towel or washcloth",
+				"Hand wipes",
+				"Personal toiletries",
+			}},
+			{Title: "Clothing", Items: []string{
+				"Socks (polypro or wool)",
+				"Swimsuit",
+				"Lightweight shirts, long and short sleeved",
+				"Quick-dry shorts",
+				"Quick-dry pants, plus a casual pair (jeans or chinos)",
+				"Fleece for under waders or around camp",
+				"Polypro or Thermax long underwear",
+				"Fleece pullover or sweater",
+				"Warm jacket (no down)",
+				"Gloves",
+				"A good rain jacket",
+				"Vest or chest pack",
+				"Bootfoot waders and wading belt (recommended in cooler weather)",
+				"Wide-brimmed hat",
+			}},
+			{Title: "Footwear", Items: []string{
+				"Camp shoes, for trips to the bathroom",
+				"Wading boots or river sandals",
+				"Hiking shoes",
+			}},
+			{Title: "Sleeping bag", Note: "We'll provide one if you don't have your own. Let us know in advance."},
+			{Title: "Fishing gear", Note: "All gear can be provided at no additional cost.", Items: []string{
+				"8- or 9-foot rod, 4, 5 or 6 weight",
+				"Floating line",
+				"Hemostats and clippers",
+				"Leaders and tippet",
+				"Flies are provided, but bring your own if you like",
+				"A Montana fishing license, bought in advance",
+			}},
+			{Title: "Miscellaneous", Items: []string{
+				"Sunscreen",
+				"Polarized sunglasses",
+				"Lip balm with sunscreen",
+				"Insect repellent",
+				"Camera",
+				"Book or journal, in a zip-lock bag",
+				"Flashlight or headlamp, with spare batteries",
+			}},
+			{Title: "Beverages", Note: "We provide beverages, including beer and wine. We can't provide hard liquor, so bring your own if you'd like cocktails; we can stop for it locally on request."},
+		},
+		BackLabel: "Back to the Smith River",
+		BackHref:  "/smith-river",
 	},
 	{
 		Slug:        "kids-camp",
@@ -252,8 +302,42 @@ var packingLists = []PackingList{
 		Lead:        "What to pack for Kids Camp at North Fork Crossing Lodge.",
 		Description: "What to pack for the Pro Outfitters Kids Camp at North Fork Crossing Lodge.",
 		LegacyURL:   "https://prooutfitters.com/kids-camp-what-to-bring/",
-		BackLabel:   "Back to Kids Camp",
-		BackHref:    "/kids-camp",
+		Sections: []PackingSection{
+			{Title: "Personal", Note: "North Fork provides towels, soap, shampoo, lotion, hairdryers and bathrobes. Bring everything else for the week, like a toothbrush and toothpaste."},
+			{Title: "Clothing", Items: []string{
+				"Socks (polypro, wool or cotton)",
+				"Lightweight shirts (quick-dry fishing shirts are ideal; T-shirts are fine)",
+				"Fleece pullover or sweater",
+				"Warm jacket (mornings can be below 40 degrees)",
+				"Quick-dry pants or shorts for fishing and the day's activities",
+				"One or two pairs of casual pants, like jeans",
+				"Athletic shorts for games",
+				"Gloves and a warm hat for early mornings",
+				"Hat with a brim",
+				"Polarized sunglasses",
+				"Rain jacket",
+				"Vest or chest pack",
+			}},
+			{Title: "Footwear", Items: []string{
+				"Slip-ons for trips to the bathroom",
+				"River sandals or shoes",
+				"Sneakers or hiking boots",
+			}},
+			{Title: "Fishing gear", Note: "We'll outfit campers with gear at no additional cost if they need it.", Items: []string{
+				"8- or 9-foot fly rod, 4 to 6 weight",
+				"Reel with floating line",
+				"Fly floatant",
+				"Hemostat and clippers",
+				"Leaders and tippet",
+			}},
+			{Title: "Miscellaneous", Items: []string{
+				"Camera",
+				"Book or journal",
+				"Sunscreen and lip protection",
+			}},
+		},
+		BackLabel: "Back to Kids Camp",
+		BackHref:  "/kids-camp",
 	},
 	{
 		Slug:        "bird-hunting",
@@ -262,10 +346,36 @@ var packingLists = []PackingList{
 		Lead:        "What to pack for a hunt at Sharptail Lodge.",
 		Description: "What to pack for a guided wild-bird hunt at Sharptail Lodge with Pro Outfitters.",
 		LegacyURL:   "https://prooutfitters.com/bird-hunting-equipment-list/",
-		BackLabel:   "Back to Sharptail Lodge",
-		BackHref:    "/lodges/sharptail",
+		Sections: []PackingSection{
+			{Title: "Boots", Note: "The most important item: there's a lot of walking. Bring boots that are already broken in. A comfortable pair of lightweight hiking boots beats a new pair of leather ones."},
+			{Title: "Clothing", Items: []string{
+				"Comfortable hunting pants (heavy briar pants aren't necessary)",
+				"Loose-fitting hunting shirts, light and medium weight",
+				"A hunting vest to carry shells and a water bottle (orange preferred)",
+				"Hunting cap (orange preferred)",
+				"A weather- and wind-resistant hunting coat",
+				"A good rain coat",
+				"Good walking socks",
+			}},
+			{Title: "Gear", Items: []string{
+				"Shotgun, 20 or 12 gauge. We shoot 7s for sharptail and Huns, 6s for pheasant",
+				"A soft or hard cooler to take your birds home",
+			}},
+			{Title: "Other items", Items: []string{
+				"Fleece vest, jacket or pullover",
+				"Capilene long underwear",
+				"Shooting gloves",
+				"Shooting glasses",
+				"Stocking cap",
+			}},
+		},
+		BackLabel: "Back to Sharptail Lodge",
+		BackHref:  "/lodges/sharptail",
 	},
 }
+
+// PackingLists returns every packing list.
+func PackingLists() []PackingList { return packingLists }
 
 // PackingListBySlug returns the packing list with the given slug, or false.
 func PackingListBySlug(slug string) (PackingList, bool) {

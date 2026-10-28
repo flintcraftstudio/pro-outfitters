@@ -1,30 +1,35 @@
 package view
 
 // Experience overview pages — the equal-weight Fly Fishing and Bird Hunting
-// landing pages that sit above the lodge and trip pages. Proposed in the
-// content spec ("Not yet written") and stubbed here: structure and
-// cross-links are real; the editorial body is pending from the client.
+// landing pages that sit above the lodge and trip pages. The old site had no
+// equivalent; the copy is drawn from its river, lodge and Sharptail pages and
+// blog posts, keeping only facts stated there.
 
 // ---- Fly Fishing ---------------------------------------------------------
 templ FlyFishingPage() {
-	@DraftBase("Fly Fishing", "Guided fly fishing in Montana with Pro Outfitters — float trips on the Smith, the Missouri, and the Blackfoot, with lodges on the water.", flyFishingContent())
+	@Base("Fly Fishing", "Guided fly fishing in Montana with Pro Outfitters — float trips on the Smith, the Missouri, and the Blackfoot, with lodges on the water.", flyFishingContent())
 }
 
 templ flyFishingContent() {
-	// Hero image is a placeholder pick from existing assets.
-	@detailHero("Fly fishing · Montana", "Trout water, read by people who live on it.", "fishing-alt2.jpg", "A wild Montana trout")
+	@detailHero("Fly fishing · Montana", "Trout water, read by people who live on it.", "flyfishing-hero.jpg", "The Blackfoot River curving below red bluffs in evening light")
 	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
 				<div class="reveal max-w-measure">
-					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Float trips and day trips on the Smith, the Missouri, and the Blackfoot, guided by people who have fished them for decades.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">We guide three rivers, and each fishes differently. The Smith is a multi-day wilderness float through a limestone canyon, run on limited permits, with nights in camp on the bank. The Blackfoot is the water Norman Maclean wrote into A River Runs Through It: native westslope cutthroat, browns and rainbows, and the big stonefly hatches of June and July. The Yurt at Craig sits eight minutes from the Missouri's Wolf Creek take-out.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Day floats on the Blackfoot run from April through October, and North Fork Crossing Lodge sits on its North Fork for anglers who'd rather stay on the water. Every lodge is owner-operated, and at each one you'll find guides who know their water, meals cooked on site, and a bed that keeps the quiet of camp without giving up comfort.</p>
+					<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">Call Brandon or Elli at the office about hatches and open dates.</p>
 				</div>
 				<div class="reveal">
-					@draftNotice([]string{
-						"Overview copy: the kinds of trips offered (multi-day floats, day trips, lodge packages)",
-						"Each river's character, species, and best months",
-						"Guided day-trip details and how they're booked",
+					@detailBlock([]DetailItem{
+						{Label: "Rivers", Value: "The Smith, the Blackfoot, and the Missouri"},
+						{Label: "Species", Value: "Westslope cutthroat, rainbow and brown trout"},
+						{Label: "Trips", Value: "Multi-day Smith River floats, Blackfoot day floats, and lodge stays at North Fork Crossing and The Yurt at Craig"},
 					})
+					<div class="mt-7 flex flex-wrap gap-3">
+						@btnPrimary("Plan your trip", "/contact")
+						@btnSecondary("Smith River", "/smith-river")
+					</div>
 				</div>
 			</div>
 		</div>
@@ -51,7 +56,7 @@ templ flyFishingContent() {
 
 // ---- Bird Hunting --------------------------------------------------------
 templ BirdHuntingPage() {
-	@DraftBase("Bird Hunting", "Guided wild-bird hunting in Montana with Pro Outfitters — sharptail grouse, Hungarian partridge, and pheasant from Sharptail Lodge.", birdHuntingContent())
+	@Base("Bird Hunting", "Guided wild-bird hunting in Montana with Pro Outfitters — sharptail grouse, Hungarian partridge, and pheasant from Sharptail Lodge.", birdHuntingContent())
 }
 
 templ birdHuntingContent() {
@@ -60,19 +65,20 @@ templ birdHuntingContent() {
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
 				<div class="reveal max-w-measure">
-					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Wild birds only: sharptail grouse and Hungarian partridge to open the season, ring-neck pheasant after the first week of October. Bring your own dog or hunt behind ours.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">We hunt wild birds only, on leased ranch ground against the north side of the Little Belt Mountains in central Montana. The season opens on sharptail grouse and Hungarian partridge; ring-neck pheasant join them after about the seventh of October.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Bring your own dog or hunt behind ours. The country is a mosaic of native grassland, shrubby coulees and creek bottoms running up against timbered slopes, and the hunting starts at the door of the lodge. Packages run three or four days, and a four-day package can include a day fishing the Missouri or one of the small freestone creeks nearby.</p>
+					<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">Evenings are spent at Sharptail Lodge, on a ranch homesteaded in the late 1800s: private yurts, kennels for the dogs, and cocktails and dinner by the fire.</p>
 				</div>
 				<div class="reveal">
 					@detailBlock([]DetailItem{
 						{Label: "Species", Value: "Sharptail grouse, Hungarian partridge, ring-neck pheasant"},
 						{Label: "Season", Value: "September 1 through mid-November"},
+						{Label: "Packages", Value: "Three or four days, September through November"},
+						{Label: "Dogs", Value: "Bring your own or hunt behind ours; kennels at the lodge"},
 					})
-					<div class="mt-7">
-						@draftNotice([]string{
-							"Overview copy: the wild-bird-only approach, the dogs, a typical hunting day",
-							"Confirmed acreage figure to lead with",
-							"Licensing and what hunters need to arrange themselves",
-						})
+					<div class="mt-7 flex flex-wrap gap-3">
+						@btnPrimary("Plan your hunt", "/contact")
+						@btnSecondary("Gear list", "/packing-lists/bird-hunting")
 					</div>
 				</div>
 			</div>

@@ -1,13 +1,13 @@
 package view
 
-// Trip pages the legacy site had that the rebuild didn't carry over yet.
-// Stubbed pending client content; the legacy page URL is noted on each so
-// whoever fills it in knows where the old copy lives.
+// Trip pages carried over from the legacy site. Copy is edited from the old
+// pages (URL noted on each), keeping only facts stated there; anything the
+// old site dated or left contradictory is routed to the office instead.
 
 // ---- Kids Camp -----------------------------------------------------------
 // Legacy: https://prooutfitters.com/portfolio_page/kids-camp-prooutfitters/
 templ KidsCampPage() {
-	@DraftBase("Kids Camp", "An Orvis-endorsed fly fishing kids camp at North Fork Crossing Lodge on the Blackfoot River.", kidsCampContent())
+	@Base("Kids Camp", "An Orvis-endorsed fly fishing kids camp at North Fork Crossing Lodge on the Blackfoot River.", kidsCampContent())
 }
 
 templ kidsCampContent() {
@@ -18,14 +18,17 @@ templ kidsCampContent() {
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
 				<div class="reveal max-w-measure">
-					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Held at North Fork Crossing Lodge on the North Fork of the Blackfoot, an Orvis Endorsed Kids Camp.</p>
+					<p class="mb-6 font-display text-[1.5rem] italic leading-[1.35] text-po-ink">Fish are better than phones.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Kids Camp is a week of fly fishing at North Fork Crossing Lodge for the next generation of anglers, with two campers to every guide. Campers go home with the skills, and the itch, to pick up a fly rod on any freshwater.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">Mornings are hands-on classes led by our staff and visiting guests: reading water, entomology, fly tying and technique, and the habitat conservation that responsible fishing depends on. Afternoons are on the river, guided the same way we guide adults, casting for cutthroat, browns and rainbows in the Blackfoot valley.</p>
+					<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">Back at the lodge it's the old kind of camp: a football on the lawn, casting on the ponds, fish stories and s'mores at the fire. Campers sleep in wall tents with wood floors, feather beds, heat and electricity. Breakfast and dinner come from the lodge kitchen, and lunch is eaten on the riverbank.</p>
 				</div>
 				<div class="reveal">
-					@draftNotice([]string{
-						"Program description: ages, a typical day, what kids learn",
-						"Dates and session length",
-						"Whether parents stay at the lodge or drop off",
-						"Kids Camp photos",
+					@detailBlock([]DetailItem{
+						{Label: "Guides", Value: "Two campers to every guide"},
+						{Label: "Species", Value: "Cutthroat, rainbow and brown trout"},
+						{Label: "Location", Value: "North Fork Crossing Lodge, on the North Fork of the Blackfoot near Ovando"},
+						{Label: "Dates", Value: "One week each summer; call the office for this year's dates"},
 					})
 					<div class="mt-7 flex flex-wrap gap-3">
 						@btnPrimary("Check rates & availability", "/contact")
@@ -43,7 +46,7 @@ templ kidsCampContent() {
 // Keep-or-redirect is an open question for the client; if dropped, delete
 // this page and 301 the route to /lodges/north-fork-crossing.
 templ BlackfootRiverPage() {
-	@DraftBase("Blackfoot River", "Guided fly fishing on Montana's Blackfoot River, the water Norman Maclean wrote into A River Runs Through It.", blackfootContent())
+	@Base("Blackfoot River", "Guided fly fishing on Montana's Blackfoot River, the water Norman Maclean wrote into A River Runs Through It.", blackfootContent())
 }
 
 templ blackfootContent() {
@@ -52,14 +55,15 @@ templ blackfootContent() {
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
 				<div class="reveal max-w-measure">
-					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">The water Norman Maclean wrote into A River Runs Through It. Home to native West Slope cutthroat, and to North Fork Crossing Lodge.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">The Blackfoot is the water Norman Maclean wrote into A River Runs Through It, and it runs through one of the last undeveloped valleys in Montana. We guide day floats on it from April through October.</p>
+					<p class="mb-6 text-[1.0625rem] leading-[1.65] text-po-ink-soft">June and July bring the big stonefly hatches. The fish we're after are native westslope cutthroat, with browns and rainbows besides, and our guides know the valley well enough to put you where they're feeding.</p>
+					<p class="text-[1.0625rem] leading-[1.65] text-po-ink-soft">For a longer stay, North Fork Crossing Lodge sits on the river's North Fork outside Ovando. Call Brandon or Elli about hatches and open dates.</p>
 				</div>
 				<div class="reveal">
-					@draftNotice([]string{
-						"Decision: keep this as its own page, or fold it into North Fork Crossing",
-						"Trip types on the Blackfoot (day floats, lodge packages)",
-						"Species, best months, and sections fished",
-						"Blackfoot photos",
+					@detailBlock([]DetailItem{
+						{Label: "Trips", Value: "Guided day floats, April through October"},
+						{Label: "Species", Value: "Westslope cutthroat, brown and rainbow trout"},
+						{Label: "Hatches", Value: "Stoneflies in June and July"},
 					})
 					<div class="mt-7 flex flex-wrap gap-3">
 						@btnPrimary("Check rates & availability", "/contact")
@@ -74,7 +78,11 @@ templ blackfootContent() {
 
 // ---- Packing lists -------------------------------------------------------
 templ PackingListPage(p PackingList) {
-	@DraftBase(p.Name, p.Description, packingListContent(p))
+	if len(p.Sections) > 0 {
+		@Base(p.Name, p.Description, packingListContent(p))
+	} else {
+		@DraftBase(p.Name, p.Description, packingListContent(p))
+	}
 }
 
 templ packingListContent(p PackingList) {
@@ -91,11 +99,16 @@ templ packingListContent(p PackingList) {
 				for _, s := range p.Sections {
 					<div class="mb-10 border-t border-po-border pt-6">
 						<h2 class="font-display text-[1.6rem] font-normal leading-[1.2] text-po-ink">{ s.Title }</h2>
-						<ul class="mt-4 flex list-disc flex-col gap-2 pl-5 text-[1.0625rem] leading-[1.5] text-po-ink-soft">
-							for _, it := range s.Items {
-								<li>{ it }</li>
-							}
-						</ul>
+						if s.Note != "" {
+							<p class="mt-3 text-[1.0625rem] leading-[1.6] text-po-ink-soft">{ s.Note }</p>
+						}
+						if len(s.Items) > 0 {
+							<ul class="mt-4 flex list-disc flex-col gap-2 pl-5 text-[1.0625rem] leading-[1.5] text-po-ink-soft">
+								for _, it := range s.Items {
+									<li>{ it }</li>
+								}
+							</ul>
+						}
 					</div>
 				}
 				<div class="mt-10 flex flex-wrap gap-3">
