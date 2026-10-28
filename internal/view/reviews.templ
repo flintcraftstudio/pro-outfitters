@@ -1,0 +1,72 @@
+package view
+
+// homeReviews — guest quotes in a slow vertical marquee. Motion pauses on
+// hover, on keyboard focus, and from the visible toggle (WCAG 2.2.2), and is
+// off entirely under prefers-reduced-motion. Behaviour lives in site.js; the
+// keyframes in tailwind/input.css.
+templ homeReviews() {
+	<section aria-labelledby="reviews-title" class="bg-po-paper-deep py-[clamp(5rem,11vh,10rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			<div class="reveal flex flex-wrap items-end justify-between gap-6">
+				<div class="max-w-measure">
+					@goldRule()
+					<div class="mt-5"></div>
+					@eyebrow("From our guests", "")
+					<h2 id="reviews-title" class="mt-4 font-display text-[clamp(2.1rem,4.4vw,3.25rem)] font-normal leading-[1.18] tracking-[-0.015em] text-po-ink">In their words.</h2>
+				</div>
+				<button
+					type="button"
+					data-reviews-toggle
+					class="mb-2 hidden items-center [.js_&]:inline-flex gap-2 rounded-sm border border-po-border-strong px-4 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.1em] text-po-ink-soft transition hover:border-po-ink hover:text-po-ink motion-reduce:!hidden"
+				>
+					<span data-reviews-toggle-label>Pause reviews</span>
+				</button>
+			</div>
+			<div
+				data-reviews-grid
+				class={ "reviews-grid relative -mx-6 mt-[clamp(2.5rem,5vw,4rem)] grid h-[44rem] max-h-[140vh] grid-cols-1 items-start gap-6 overflow-hidden px-6 lg:gap-8", reviewGridCols(Reviews) }
+			>
+				for _, col := range reviewColumns(Reviews) {
+					<div class={ "review-column flex flex-col gap-6 py-4 lg:gap-8", col.Visibility } style={ col.Style }>
+						for _, item := range col.Items {
+							@reviewCard(item)
+						}
+					</div>
+				}
+				<div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-po-paper-deep"></div>
+				<div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-po-paper-deep"></div>
+			</div>
+		</div>
+	</section>
+}
+
+templ reviewCard(item reviewItem) {
+	<figure
+		class={ "review-card rounded-sm border border-po-border bg-po-surface p-7", item.Hidden }
+		style={ "--reviews-fade-delay: " + item.Delay + ";" }
+		if item.AriaHidden {
+			aria-hidden="true"
+		}
+	>
+		<blockquote>
+			<p class="font-display text-[1.35rem] italic leading-[1.35] text-po-ink">&ldquo;{ item.Quote }&rdquo;</p>
+			if item.Body != "" {
+				<p class="mt-4 text-[1rem] leading-[1.6] text-po-ink-soft">{ item.Body }</p>
+			}
+		</blockquote>
+		<figcaption class="mt-6 border-t border-po-border pt-4">
+			<span class="block text-[0.8125rem] font-semibold uppercase tracking-[0.13em] text-po-gold-deep">{ item.Author }</span>
+			if item.Trip != "" || item.Source != "" {
+				<span class="mt-1 block text-[0.875rem] text-po-gray">
+					{ item.Trip }
+					if item.Trip != "" && item.Source != "" {
+						{ " · " }
+					}
+					if item.Source != "" {
+						{ "via " + item.Source }
+					}
+				</span>
+			}
+		</figcaption>
+	</figure>
+}

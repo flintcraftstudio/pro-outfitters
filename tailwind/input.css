@@ -175,3 +175,56 @@ summary:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
+
+/* ---- Reviews marquee ------------------------------------------------- */
+/* Columns scroll upward on a slow loop once the grid is in view (site.js
+   adds .in-view). Hover, keyboard focus inside the grid, or the Pause
+   toggle (.is-paused) stop it; reduced motion turns it off entirely. */
+@keyframes reviews-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reviews-marquee {
+  to { transform: translateY(-50%); }
+}
+.js .reviews-grid .review-card {
+  opacity: 0;
+}
+.js .reviews-grid.in-view .review-card {
+  animation: reviews-fade-in 0.9s ease-out forwards;
+  animation-delay: var(--reviews-fade-delay, 0s);
+}
+.reviews-grid .review-column {
+  animation: reviews-marquee var(--reviews-duration, 120s) linear infinite;
+  animation-play-state: paused;
+}
+/* A column shows a different number of cards per breakpoint, so its loop
+   time is set per breakpoint (reviewLoopStyle in reviews.go). */
+@media (min-width: 768px) {
+  .reviews-grid .review-column {
+    animation-duration: var(--reviews-duration-md, var(--reviews-duration, 120s));
+  }
+}
+@media (min-width: 1024px) {
+  .reviews-grid .review-column {
+    animation-duration: var(--reviews-duration-lg, var(--reviews-duration-md, var(--reviews-duration, 120s)));
+  }
+}
+.reviews-grid.in-view .review-column {
+  animation-play-state: running;
+}
+.reviews-grid.in-view:hover .review-column,
+.reviews-grid.in-view:focus-within .review-column,
+.reviews-grid.in-view.is-paused .review-column {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reviews-grid .review-card,
+  .js .reviews-grid.in-view .review-card {
+    opacity: 1;
+    animation: none;
+  }
+  .reviews-grid .review-column {
+    animation: none;
+  }
+}

@@ -70,3 +70,35 @@ document.addEventListener("htmx:afterSwap", function () {
     }
   });
 });
+
+// Reviews marquee: start the scroll and card fade once the grid is in view,
+// and wire the Pause/Play toggle (CSS shows it only under .js, and keeps it
+// hidden under reduced motion, where nothing moves).
+(function () {
+  var grid = document.querySelector("[data-reviews-grid]");
+  if (!grid) return;
+  var toggle = document.querySelector("[data-reviews-toggle]");
+  if (toggle) {
+    var label = toggle.querySelector("[data-reviews-toggle-label]");
+    toggle.addEventListener("click", function () {
+      var paused = grid.classList.toggle("is-paused");
+      if (label) label.textContent = paused ? "Play reviews" : "Pause reviews";
+    });
+  }
+  if (!("IntersectionObserver" in window)) {
+    grid.classList.add("in-view");
+    return;
+  }
+  var io = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          grid.classList.add("in-view");
+          io.unobserve(grid);
+        }
+      });
+    },
+    { threshold: 0.25 }
+  );
+  io.observe(grid);
+})();
