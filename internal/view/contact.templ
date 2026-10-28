@@ -20,6 +20,8 @@ templ contactContent(errors map[string]string, values map[string]string, success
 			</div>
 		</div>
 	</section>
+	@htmxScript()
+	@turnstileScript()
 }
 
 templ contactDetails() {

@@ -53,16 +53,14 @@ templ page(title, description string, noindex bool, body templ.Component) {
 				@pixelInit()
 				<noscript><img height="1" width="1" style="display:none" src={ "https://www.facebook.com/tr?id=" + PixelID + "&ev=PageView&noscript=1" }/></noscript>
 			}
-			if TurnstileSiteKey != "" {
-				<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-			}
 			<!-- Self-hosted fonts (see tailwind/input.css). Preload the two
 			     above-the-fold latin faces so text paints without waiting on
 			     the stylesheet to be parsed first. -->
 			<link rel="preload" href="/static/fonts/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin/>
 			<link rel="preload" href="/static/fonts/librefranklin-latin-normal.woff2" as="font" type="font/woff2" crossorigin/>
 			<link rel="stylesheet" href="/static/css/site.css"/>
-			<script src="/static/js/htmx.min.js" defer></script>
+			<!-- htmx and Turnstile load only on the pages with forms; see
+			     htmxScript and turnstileScript below. -->
 			<script src="/static/js/alpine.min.js" defer></script>
 		</head>
 		<body class="min-h-screen bg-po-paper font-body text-[1.125rem] font-normal leading-[1.65] text-po-gray antialiased">
@@ -76,12 +74,27 @@ templ page(title, description string, noindex bool, body templ.Component) {
 	</html>
 }
 
+// htmxScript loads htmx on a page that has hx-* forms. Render it from the
+// page's content template, never from a fragment htmx swaps in, or the
+// swap would load it again.
+templ htmxScript() {
+	<script src="/static/js/htmx.min.js" defer></script>
+}
+
+// turnstileScript loads Cloudflare Turnstile for a page with a widget, when a
+// site key is configured. Same rule as htmxScript: page level only.
+templ turnstileScript() {
+	if TurnstileSiteKey != "" {
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	}
+}
+
 templ gtagInit() {
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-		gtag('config', '{ GtagID }');
+		gtag('config', {{ GtagID }});
 	</script>
 }
 
@@ -95,7 +108,7 @@ templ pixelInit() {
 		t.src=v;s=b.getElementsByTagName(e)[0];
 		s.parentNode.insertBefore(t,s)}(window, document,'script',
 		'https://connect.facebook.net/en_US/fbevents.js');
-		fbq('init', '{ PixelID }');
+		fbq('init', {{ PixelID }});
 		fbq('track', 'PageView');
 	</script>
 }

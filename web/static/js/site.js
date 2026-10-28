@@ -1,7 +1,8 @@
 // Pro Outfitters — minimal, restrained interactions.
 // 1. Sticky nav: transparent over the hero, paper-blur once scrolled past it.
 // 2. Gentle reveal on scroll-in. Motion respects prefers-reduced-motion.
-// 3. Re-render Turnstile in forms htmx swaps in.
+// 3. Re-render Turnstile in forms htmx swaps in (htmx and Turnstile load
+//    only on the pages with forms; this listener is inert elsewhere).
 
 (function () {
   var nav = document.getElementById("nav");
@@ -12,22 +13,21 @@
     nav.dataset.state = "scrolled";
     return;
   }
-  // Cache the threshold so the scroll handler never reads layout geometry
-  // (offsetHeight) — reading it per scroll event forces a reflow. Recompute
-  // only when the hero's height can actually change: on resize and once
-  // fonts/images have settled after load.
-  var threshold = hero.offsetHeight - 90;
-  function recompute() {
-    threshold = hero.offsetHeight - 90;
-    onScroll();
+  // Switch once the hero's bottom edge rises within 90px of the top of the
+  // viewport. An IntersectionObserver with a -90px top margin reports exactly
+  // that, without reading layout: measuring hero.offsetHeight at startup
+  // forced a full synchronous layout of the page (~300 ms on a mid-range
+  // phone), and it also tracks the hero resizing as fonts and images settle.
+  if (!("IntersectionObserver" in window)) {
+    nav.dataset.state = "scrolled";
+    return;
   }
-  function onScroll() {
-    nav.dataset.state = window.scrollY > threshold ? "scrolled" : "top";
-  }
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", recompute, { passive: true });
-  window.addEventListener("load", recompute);
+  new IntersectionObserver(
+    function (entries) {
+      nav.dataset.state = entries[0].isIntersecting ? "top" : "scrolled";
+    },
+    { rootMargin: "-90px 0px 0px 0px" }
+  ).observe(hero);
 })();
 
 (function () {
