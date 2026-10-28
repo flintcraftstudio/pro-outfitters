@@ -3,7 +3,14 @@
    inside site.css — no third-party origin, no render-blocking font-CSS round
    trip. The two body/heading faces are preloaded in layout.templ. Regenerate
    with the variable RANGE syntax (e.g. wght@300..600), never discrete weights,
-   or Google ships the whole variable font once per weight. */
+   or Google ships the whole variable font once per weight.
+   Google still serves every axis at full range, so the files are then trimmed
+   with fontTools' instancer to what the site can reach: Newsreader to
+   wght 300-600 and opsz 18-72 (no Newsreader text is set below 18px; dropping
+   the small optical sizes cut its files by a third), Libre Franklin to
+   wght 300-700. Re-trim after regenerating, e.g.
+     fonttools varLib.instancer in.woff2 wght=300:600 opsz=18:72 -o out.woff2
+   and keep the font-weight ranges below in step. */
 @font-face {
   font-family: 'Libre Franklin';
   font-style: normal;
