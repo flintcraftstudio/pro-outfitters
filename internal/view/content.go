@@ -144,8 +144,9 @@ var lodges = []Lodge{
 			{Label: "Endorsement", Value: "Orvis Endorsed Wingshooting Lodge"},
 		},
 		Gallery: []GalleryImage{
-			{Src: "sharptail-dogs.jpg", Alt: "Bird dogs and the hunting truck at Sharptail Lodge"},
 			{Src: "sharptail-yurts.jpg", Alt: "Guest yurts under Big Sky Country"},
+			{Src: "sharptail-lab-birds.jpg", Alt: "A black Lab sitting beside pheasants and a shotgun"},
+			{Src: "sharptail-dogs.jpg", Alt: "Bird dogs and the hunting truck at Sharptail Lodge"},
 		},
 		CTAs: []CTA{
 			{Label: "Check rates & availability", Href: "/contact", Primary: true},

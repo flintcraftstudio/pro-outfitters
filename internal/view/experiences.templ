@@ -55,9 +55,7 @@ templ BirdHuntingPage() {
 }
 
 templ birdHuntingContent() {
-	// Hero duplicates the Sharptail lodge hero until a distinct image is
-	// chosen.
-	@detailHero("Bird hunting · Montana", "Upland miles behind a good dog.", "sharptail-hero.jpg", "Bird hunting in Montana's upland country")
+	@detailHero("Bird hunting · Montana", "Upland miles behind a good dog.", "bird-guide-dogs.jpg", "A guide giving water to three bird dogs, mountains on the horizon")
 	<section class="bg-po-paper py-[clamp(4rem,9vh,7rem)]">
 		<div class="mx-auto max-w-container px-6 sm:px-12">
 			<div class="grid gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-[1.1fr_0.9fr]">
@@ -78,6 +76,18 @@ templ birdHuntingContent() {
 					</div>
 				</div>
 			</div>
+		</div>
+	</section>
+	<section class="bg-po-paper pb-[clamp(4rem,9vh,7rem)]">
+		<div class="mx-auto max-w-container px-6 sm:px-12">
+			@gallery([]GalleryImage{
+				{Src: "bird-hun-retrieve.jpg", Alt: "A setter carrying a Hungarian partridge through the grass"},
+				{Src: "bird-setter-run.jpg", Alt: "A setter running through tall prairie grass"},
+				{Src: "bird-flush.jpg", Alt: "A bird dog working open prairie as birds lift into a wide sky"},
+				{Src: "bird-lab-sage.jpg", Alt: "A black Lab bringing a rooster pheasant back through the sage"},
+				{Src: "bird-lab-pheasants.jpg", Alt: "A black Lab carrying pheasants back through the grass"},
+				{Src: "bird-coulee.jpg", Alt: "A hunter and dog working a coulee in the upland breaks"},
+			})
 		</div>
 	</section>
 	<section class="bg-po-paper-deep py-[clamp(4rem,9vh,7rem)]">
