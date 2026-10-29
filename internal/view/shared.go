@@ -42,8 +42,10 @@ func canonicalURL(ctx context.Context) string {
 	return BaseURL + p
 }
 
-// OGImage is the path (under BaseURL) to the default social share image.
-const OGImage = "/static/img/hero-fishing-1200w.jpg"
+// OGImage is the path (under BaseURL) to the default social share image: a
+// 1200x630 JPG (the size Facebook, LinkedIn and X expect), served under its
+// hashed URL like any other asset.
+const OGImage = "/static/img/og-image.jpg"
 
 // Year returns the current year for copyright notices.
 func Year() int {

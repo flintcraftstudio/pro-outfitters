@@ -21,6 +21,8 @@ RUN apk add --no-cache curl && \
     chmod +x /usr/local/bin/tailwindcss && \
     tailwindcss -c ./tailwind/tailwind.config.js -i tailwind/input.css -o web/static/css/site.css --minify
 
+# Static files (including the site.css built above) are embedded in the
+# binary by web/static.go, so the runtime image needs no web/ directory.
 RUN CGO_ENABLED=0 go build -o /bin/server ./cmd/server
 # The seed CLI ships too, so the first admin can be created on a server
 # that has no Go toolchain: docker compose exec app /bin/seed <email> [name]
@@ -31,7 +33,6 @@ RUN apk add --no-cache ca-certificates
 
 COPY --from=build /bin/server /bin/server
 COPY --from=build /bin/seed /bin/seed
-COPY --from=build /src/web /web
 
 # SQLite database location. The app creates the parent dir if missing,
 # but we make it explicit so an orchestrator (compose, k8s, etc.) knows

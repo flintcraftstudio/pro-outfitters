@@ -42,7 +42,7 @@ func TestFormScriptsLoadOnlyWhereNeeded(t *testing.T) {
 	defer func(k string) { TurnstileSiteKey = k }(TurnstileSiteKey)
 	TurnstileSiteKey = "test-site-key"
 
-	const htmx, turnstile = "/static/js/htmx.min.js", "challenges.cloudflare.com/turnstile"
+	htmx, turnstile := assetPath("/static/js/htmx.min.js"), "challenges.cloudflare.com/turnstile"
 	cases := []struct {
 		name          string
 		html          string

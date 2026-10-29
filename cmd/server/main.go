@@ -14,6 +14,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/flintcraftstudio/standard-template/internal/assets"
 	"github.com/flintcraftstudio/standard-template/internal/cleanup"
 	"github.com/flintcraftstudio/standard-template/internal/config"
 	"github.com/flintcraftstudio/standard-template/internal/email"
@@ -134,16 +135,18 @@ func main() {
 		OnLimit: handler.LoginRateLimited,
 	})
 
-	// Static files. Cache-Control is set per asset class so repeat visits
-	// don't re-download fonts/images; the unhashed CSS/JS get a short TTL so
-	// a deploy propagates quickly.
-	mux.Handle("GET /static/", http.StripPrefix("/static/", cacheStatic(http.FileServer(http.Dir("web/static")))))
+	// Static files, embedded in the binary and served under content-hashed
+	// names (internal/assets): hashed URLs are cached for a year, immutable;
+	// plain /static/ paths still work with a short cache. Building the
+	// handler hashes every file, so do it here rather than on first request.
+	mux.Handle("GET /static/", http.StripPrefix("/static/", assets.Handler()))
 
 	// Favicon + PWA manifest assets. Browsers and crawlers request these at
 	// the site root (/favicon.ico, /apple-touch-icon.png) regardless of the
 	// <link> tags, and the manifest's own icon srcs are root-relative — so
-	// serve them at their conventional root paths. The files live under
-	// web/static/favicon so the existing web/ COPY ships them.
+	// serve them at their conventional root paths, from the embedded
+	// web/static/favicon. These URLs can't carry a hash, so a week's cache;
+	// the ETag makes revalidation a 304.
 	for urlPath, name := range map[string]string{
 		"/favicon.ico":                  "favicon.ico",
 		"/favicon.svg":                  "favicon.svg",
@@ -153,15 +156,9 @@ func main() {
 		"/web-app-manifest-192x192.png": "web-app-manifest-192x192.png",
 		"/web-app-manifest-512x512.png": "web-app-manifest-512x512.png",
 	} {
-		file := filepath.Join("web/static/favicon", name)
+		logical := "favicon/" + name
 		mux.HandleFunc("GET "+urlPath, func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Cache-Control", "public, max-age=604800")
-			// Go doesn't know the .webmanifest extension; set the spec type
-			// so ServeFile won't sniff it to text/plain.
-			if strings.HasSuffix(name, ".webmanifest") {
-				w.Header().Set("Content-Type", "application/manifest+json")
-			}
-			http.ServeFile(w, r, file)
+			assets.ServeFile(w, r, logical, "public, max-age=604800")
 		})
 	}
 
@@ -222,7 +219,8 @@ func main() {
 	// outermost. TrustedProxies is 1: Caddy sits in front and appends the
 	// client IP to X-Forwarded-For. With no header (local dev) the
 	// connection's own address is kept.
-	srv := session.Middleware(st)(mux)
+	srv := pageCacheControl(mux)
+	srv = session.Middleware(st)(srv)
 	srv = withPath(srv)
 	srv = middleware.StripTrailingSlash(srv)
 	srv = handler.LegacyRedirects(srv)
@@ -313,10 +311,6 @@ func loadEnv(path string) error {
 	return nil
 }
 
-// cacheStatic wraps a static file handler and stamps a Cache-Control header
-// chosen by file extension. Fonts and images are content-stable and get a
-// one-year lifetime; the unhashed CSS/JS change on every deploy, so they get
-// a short TTL to bound how long a client can serve stale assets.
 // withPath records the request path for the layout's canonical link. It
 // runs after StripTrailingSlash, so the path is already canonical.
 func withPath(next http.Handler) http.Handler {
@@ -325,18 +319,13 @@ func withPath(next http.Handler) http.Handler {
 	})
 }
 
-func cacheStatic(next http.Handler) http.Handler {
+// pageCacheControl defaults every response to no-cache: pages name the
+// hashed asset URLs, so a browser must revalidate a page to pick up a new
+// deploy (cheap, and pages are tiny next to their assets). The static and
+// favicon handlers set their own Cache-Control, which replaces this.
+func pageCacheControl(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch strings.ToLower(filepath.Ext(r.URL.Path)) {
-		case ".woff2", ".woff", ".ttf", ".otf":
-			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
-		case ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico":
-			w.Header().Set("Cache-Control", "public, max-age=31536000")
-		case ".css", ".js":
-			w.Header().Set("Cache-Control", "public, max-age=3600")
-		default:
-			w.Header().Set("Cache-Control", "public, max-age=3600")
-		}
+		w.Header().Set("Cache-Control", "no-cache")
 		next.ServeHTTP(w, r)
 	})
 }

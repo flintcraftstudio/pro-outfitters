@@ -8,8 +8,8 @@ templ AdminBase(title, displayName string, body templ.Component) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<meta name="robots" content="noindex, nofollow"/>
 			<title>{ title } | { SiteName } admin</title>
-			<link rel="stylesheet" href="/static/css/site.css"/>
-			<script src="/static/js/htmx.min.js" defer></script>
+			<link rel="stylesheet" href={ assetPath("/static/css/site.css") }/>
+			<script src={ assetPath("/static/js/htmx.min.js") } defer></script>
 		</head>
 		<body class="min-h-screen font-body text-[15px] font-light antialiased">
 			@adminNav(displayName)

@@ -9,11 +9,12 @@ templ picture(src, alt, class string) {
 	<picture class="contents">
 		<source srcset={ imgVariant(src, ".avif") } type="image/avif"/>
 		<source srcset={ imgVariant(src, ".webp") } type="image/webp"/>
-		<img src={ src } alt={ alt } class={ class } loading="lazy" decoding="async"/>
+		<img src={ assetPath(src) } alt={ alt } class={ class } loading="lazy" decoding="async"/>
 	</picture>
 }
 
-// sizedPicture — a lazy content image with responsive AVIF/WebP/JPG srcsets,
+// sizedPicture — a lazy content image with responsive AVIF/WebP srcsets (the
+// base JPG is the <img> fallback),
 // for images that render large enough to need them (the gallery). `sizes` is
 // the rendered-width hint for the image's placement. Requires the width
 // variants imgSrcset names; imgFocus applies as for bleedPicture.
@@ -22,9 +23,7 @@ templ sizedPicture(src, alt, class, sizes string) {
 		<source type="image/avif" srcset={ imgSrcset(src, ".avif") } sizes={ sizes }/>
 		<source type="image/webp" srcset={ imgSrcset(src, ".webp") } sizes={ sizes }/>
 		<img
-			src={ src }
-			srcset={ imgSrcset(src, "") }
-			sizes={ sizes }
+			src={ assetPath(src) }
 			alt={ alt }
 			class={ withFocus(src, class) }
 			loading="lazy"
@@ -33,8 +32,8 @@ templ sizedPicture(src, alt, class, sizes string) {
 	</picture>
 }
 
-// bleedPicture — a full-bleed image with responsive AVIF/WebP/JPG srcsets at
-// 100vw. Pass eager=true for the page's LCP hero (fetchpriority=high, eager);
+// bleedPicture — a full-bleed image with responsive AVIF/WebP srcsets at
+// 100vw, and the base JPG as the <img> fallback. Pass eager=true for the page's LCP hero (fetchpriority=high, eager);
 // false for below-the-fold bands so they don't compete with the hero. Images
 // listed in imgFocus get their focal-point class added to `class`.
 templ bleedPicture(src, alt, class string, eager bool) {
@@ -42,9 +41,7 @@ templ bleedPicture(src, alt, class string, eager bool) {
 		<source type="image/avif" srcset={ imgSrcset(src, ".avif") } sizes="100vw"/>
 		<source type="image/webp" srcset={ imgSrcset(src, ".webp") } sizes="100vw"/>
 		<img
-			src={ src }
-			srcset={ imgSrcset(src, "") }
-			sizes="100vw"
+			src={ assetPath(src) }
 			alt={ alt }
 			class={ withFocus(src, class) }
 			decoding="async"

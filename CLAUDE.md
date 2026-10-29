@@ -133,6 +133,7 @@ Slug invariants, soft-delete patterns, image pipelines, etc. — those decisions
 
 ## Gotchas
 
+- **Static files are embedded and content-hashed.** `web/static.go` embeds `web/static`; `internal/assets` hashes every file at startup and serves `/static/<name>.<hash>.<ext>` with a one-year immutable cache (plain paths still work, 5-minute cache). In templates, reference assets as `/static/...` through `assetPath(...)` or the `picture`/`sizedPicture`/`bleedPicture` helpers, never as a bare `href="/static/..."`, or the URL won't be hashed and changes won't reach returning visitors. Because the files are compiled in, CSS, image or font changes need a rebuild/restart to show up; build the CSS before `go build`.
 - **`*_templ.go` files are gitignored.** After editing a `.templ` file, run `templ generate` (or `mage build` / `mage dev`). The build fails until you do.
 - **Migrations are embedded** — adding a `.sql` file to `internal/migrations/` is enough; the embed directive picks it up automatically. No separate registration.
 - **`./data/` is gitignored.** The SQLite DB plus its WAL/SHM sidecar files live there. Delete the directory to reset state in dev.
@@ -150,7 +151,7 @@ Slug invariants, soft-delete patterns, image pipelines, etc. — those decisions
 
 ## Deploy
 
-The Dockerfile is multi-stage: builder runs `templ generate` → `tailwindcss --minify` → `go build`; runtime is `alpine:3` with the static binary plus `web/`. CGO is disabled (modernc/sqlite is pure Go), so the binary runs anywhere.
+The Dockerfile is multi-stage: builder runs `templ generate` → `tailwindcss --minify` → `go build`; runtime is `alpine:3` with the static binary alone: `web/static` (including the built `site.css`) is embedded by `web/static.go`. CGO is disabled (modernc/sqlite is pure Go), so the binary runs anywhere.
 
 The Dockerfile sets `ENV DB_PATH=/var/lib/app/app.db` and declares `VOLUME ["/var/lib/app"]`. `docker-compose.yml` mounts a named volume `app-data` there, so the SQLite database (plus its WAL/SHM sidecars) survives `docker compose up --build` and `--force-recreate`. Don't override `DB_PATH` in `.env` to a path outside `/var/lib/app` unless you also mount that path as a volume — otherwise the DB lives inside the container and dies on rebuild.
 
