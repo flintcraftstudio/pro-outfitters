@@ -173,9 +173,12 @@ templ homeStewardship() {
 
 // ---- Closing CTA ---------------------------------------------------------
 templ homeClosing() {
-	<section class="relative isolate overflow-hidden text-center text-po-on-dark">
+	// The dark ground keeps the text readable before the photo paints. The
+	// photo is bright: the overlay holds on-dark-soft body text at 5:1 or
+	// better over its lightest areas.
+	<section class="relative isolate overflow-hidden bg-po-ground-dark text-center text-po-on-dark">
 		@bleedPicture("/static/img/fishing-alt2.jpg", "A wild Montana trout", "absolute inset-0 -z-10 h-full w-full object-cover", false)
-		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.66),rgba(16,14,11,0.78))]"></div>
+		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,14,11,0.72),rgba(16,14,11,0.84))]"></div>
 		<div class="mx-auto max-w-container px-6 py-[clamp(6rem,14vh,11rem)] sm:px-12">
 			@eyebrow("Plan your trip", "light")
 			<h2 class="mx-auto my-5 max-w-[18ch] text-balance font-display text-[clamp(2.3rem,5vw,4rem)] font-normal leading-[1.12] tracking-[-0.015em] text-po-on-dark">Tell us what kind of week you're after.</h2>
