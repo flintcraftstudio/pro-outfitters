@@ -4,11 +4,14 @@ package view
 // EST. 1970 tick. Text inherits currentColor so it works on paper or dark
 // grounds; the rule and tick stay heritage gold.
 templ wordmark() {
-	<a href="/" class="inline-flex flex-col gap-1 leading-none" aria-label="Pro Outfitters, established 1970">
-		<span class="font-display text-[1.3rem] font-medium tracking-[0.05em]">PRO&nbsp;OUTFITTERS</span>
+	// No aria-label: the link's name is its visible text, "Pro Outfitters
+	// Est. 1970", so voice-control users can say what they see. Capitals come
+	// from CSS so screen readers don't spell the words out.
+	<a href="/" class="inline-flex flex-col gap-1 leading-none">
+		<span class="font-display text-[1.3rem] font-medium uppercase tracking-[0.05em]">Pro&nbsp;Outfitters</span>
 		<span class="flex w-full items-center gap-2">
 			<span class="h-px flex-1 bg-po-gold"></span>
-			<span class="whitespace-nowrap font-body text-[0.5rem] font-semibold tracking-[0.22em] text-po-gold">EST. 1970</span>
+			<span class="whitespace-nowrap font-body text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-po-gold">Est. 1970</span>
 			<span class="h-px flex-1 bg-po-gold"></span>
 		</span>
 	</a>
