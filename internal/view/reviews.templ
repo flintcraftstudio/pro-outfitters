@@ -26,8 +26,11 @@ templ homeReviews() {
 				data-reviews-grid
 				class={ "reviews-grid relative -mx-6 mt-[clamp(2.5rem,5vw,4rem)] grid h-[44rem] max-h-[140vh] grid-cols-1 items-start gap-6 overflow-hidden px-6 lg:gap-8", reviewGridCols(Reviews) }
 			>
+				<!-- Each column loops by sliding up half its height, which lands
+				     exactly on its second copy only when top + bottom padding
+				     equals one gap: keep py at half of gap at every breakpoint. -->
 				for _, col := range reviewColumns(Reviews) {
-					<div class={ "review-column flex flex-col gap-6 py-4 lg:gap-8", col.Visibility } style={ col.Style }>
+					<div class={ "review-column flex flex-col gap-6 py-3 lg:gap-8 lg:py-4", col.Visibility } style={ col.Style }>
 						for _, item := range col.Items {
 							@reviewCard(item)
 						}

@@ -133,7 +133,7 @@ type reviewItem struct {
 
 type reviewColumn struct {
 	Items      []reviewItem
-	Visibility string // wrapper class, e.g. "hidden md:block"
+	Visibility string // wrapper class, e.g. "hidden md:flex"; flex, never block, or the column loses its gap
 	Style      string // per-breakpoint loop durations, read by input.css
 }
 
@@ -222,7 +222,7 @@ func reviewColumns(reviews []Review) []reviewColumn {
 			},
 			{
 				Items:      build(cols[1], func(int) string { return "" }),
-				Visibility: "hidden md:block",
+				Visibility: "hidden md:flex",
 				Style:      reviewLoopStyle(reviewPaceCol2, 0, len(cols[1]), 0),
 			},
 		}
@@ -257,12 +257,12 @@ func reviewColumns(reviews []Review) []reviewColumn {
 				}
 				return ""
 			}),
-			Visibility: "hidden md:block",
+			Visibility: "hidden md:flex",
 			Style:      reviewLoopStyle(reviewPaceCol2, 0, len(col2All), len(col2)),
 		},
 		{
 			Items:      build(col3All, func(int) string { return "" }),
-			Visibility: "hidden lg:block",
+			Visibility: "hidden lg:flex",
 			Style:      reviewLoopStyle(reviewPaceCol3, 0, 0, len(col3All)),
 		},
 	}

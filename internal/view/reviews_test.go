@@ -23,9 +23,9 @@ func visibleAt(classes string, bp int) bool {
 		return false
 	case has("lg:hidden") && bp >= 2:
 		return false
-	case has("hidden") && has("md:block"):
+	case has("hidden") && has("md:flex"):
 		return bp >= 1
-	case has("hidden") && has("lg:block"):
+	case has("hidden") && has("lg:flex"):
 		return bp >= 2
 	}
 	return true
@@ -38,6 +38,14 @@ func TestReviewColumnsShowEachReviewOncePerBreakpoint(t *testing.T) {
 			reviews[i] = Review{Quote: fmt.Sprint(i)}
 		}
 		cols := reviewColumns(reviews)
+		// Columns space their cards with flex gap; revealing one with
+		// md:block / lg:block would switch it to block layout and stack the
+		// cards flush against each other.
+		for ci, col := range cols {
+			if strings.Contains(col.Visibility, ":block") {
+				t.Errorf("n=%d col %d: visibility %q reveals as block; use flex", n, ci+1, col.Visibility)
+			}
+		}
 		for bp, name := range []string{"phone", "md", "lg"} {
 			seen := map[string]int{}
 			for ci, col := range cols {
