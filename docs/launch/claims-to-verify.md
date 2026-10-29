@@ -173,9 +173,11 @@ Claims a third party could check. Each needs a yes before launch.
 - **Site name.** Page titles and the footer copyright come from the
   `APP_NAME` env var. Locally they read "Standard Template"; staging reads
   "pro-outfitters". Production must set `APP_NAME="Pro Outfitters"`.
-- **Footer copyright.** "© 1970–2026 …" reads oddly; "© 2026 Pro
-  Outfitters" (or "Est. 1970" separately) is cleaner.
-- **"Rates & Seasons"** in the footer links to `/lodges`, which shows no
-  rates. Point it somewhere honest once request #13 is answered.
-- **Fixed already:** the Fly Fishing page said every lodge has "meals cooked
-  on site"; The Yurt at Craig is self-catered, so that line is gone.
+- **Fixed already:**
+  - The Fly Fishing page said every lodge has "meals cooked on site"; The
+    Yurt at Craig is self-catered, so that line is gone.
+  - The footer copyright read "© 1970–2026"; it is now "© <year> Pro
+    Outfitters". "Est. 1970" stays in the wordmark.
+  - The footer's "Rates & Seasons" link went to `/lodges`, which shows no
+    rates. It's gone; add it back if the client wants rates published
+    online.

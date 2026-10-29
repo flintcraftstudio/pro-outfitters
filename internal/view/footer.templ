@@ -25,7 +25,6 @@ templ Footer() {
 					<ul class="flex flex-col gap-3 text-[0.9375rem]">
 						<li><a href="/about" class="transition-colors hover:text-po-on-dark">Our Story</a></li>
 						<li><a href="/contact" class="transition-colors hover:text-po-on-dark">Plan your trip</a></li>
-						<li><a href="/lodges" class="transition-colors hover:text-po-on-dark">Rates &amp; Seasons</a></li>
 					</ul>
 				</div>
 				<div>
@@ -43,7 +42,7 @@ templ Footer() {
 					<span class="text-po-gold">Orvis-Endorsed Outfitter</span>
 					<span>Trout Unlimited Partner</span>
 				</div>
-				<p class="text-[0.8125rem] text-po-gray-light">&copy; 1970&ndash;{ fmt.Sprint(Year()) } { SiteName }, Montana. All rights reserved.</p>
+				<p class="text-[0.8125rem] text-po-gray-light">&copy; { fmt.Sprint(Year()) } { SiteName }, Montana. All rights reserved.</p>
 			</div>
 		</div>
 	</footer>
