@@ -148,15 +148,15 @@
   }
 
   /* ---- Mobile hero crop ----------------------------------------------- */
-  /* On phones the stacked hero photo is a fixed crop: anchoring near the
-     right edge frames the raft with the river leading in from the left.
+  /* On phones the stacked hero photo is a fixed crop: anchoring a little
+     right of centre frames the wall tent and the camp beside it.
      Desktop keeps the default centered crop, where the full scene fits. */
   .po-hero-img {
     object-position: center;
   }
   @media (max-width: 639.98px) {
     .po-hero-img {
-      object-position: 90% 50%;
+      object-position: 60% 50%;
     }
   }
 }
